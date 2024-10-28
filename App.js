@@ -1,12 +1,22 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 import {Routes} from './src/routes/Routes';
+import Toast from 'react-native-toast-message';
+import {Provider} from 'react-redux';
+import {persistor, } from './src/redux/Store';
+import { store } from './src/redux/Store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 const App = () => {
   return (
-    <View style={{flex:1}}>
-      <Routes />
-    </View>
+    <>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Routes />
+        </PersistGate>
+      </Provider>
+      <Toast />
+    </>
   );
 };
 

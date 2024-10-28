@@ -1,0 +1,27 @@
+import { masterCard } from './icons';
+
+export const Images = {
+  profile: require('../assets/images/Profile.png'),
+  pic1: require('../assets/images/Pic1.png'),
+  pic2: require('../assets/images/Pic2.png'),
+  profile1: require('../assets/images/Profile1.png'),
+  profile2: require('../assets/images/Profile2.png'),
+  logo: require('../assets/images/logo.png'),
+  profilePic: require('../assets/images/profilePic.png'),
+  map: require('../assets/images/map.png'),
+  masterCard: require('../assets/images/masterCardGroup.png'),
+  masterCard2: require('../assets/images/masterCard.png'),
+  verified: require('../assets/images/verified.png'),
+  profile3: require('../assets/images/Profile3.png'),
+  mapSmall: require('../assets/images/Map-Small.png'),
+  map3: require('../assets/images/map-pic.png'),
+  gallery: require('../assets/images/gallery.png'),
+  goldBakery: require('../assets/images/Gold-bakery.png'),
+  cinnamon: require('../assets/images/cinnamon.png'),
+  vanilla: require('../assets/images/vanilla.png'),
+  cheesePockets: require('../assets/images/cheese.png'),
+  croissant: require('../assets/images/croissant.png'),
+  muffins: require('../assets/images/muffins.png'),
+  almond: require('../assets/images/almond.png'),
+  product: require('../assets/images/product.png'),
+};

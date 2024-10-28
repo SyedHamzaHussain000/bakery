@@ -1,18 +1,40 @@
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
 import {Color} from '../assets/Utils';
+import { styles } from '../Styles';
+import { responsiveFontSize, responsiveWidth } from '../assets/Responsive_Dimensions';
 
-const Input = ({placeholder}) => {
+const Input = ({
+  placeholder,
+  placeHolderColor,
+  textAlignVertical,
+  height,
+  multiline,
+  handleInputChange,
+  value,
+  width,
+  text,
+  keyboardType
+}) => {
   return (
-    <View style={styles.inputStyle}>
+    <View style={[null, {gap:10,width: width ? '100%' : responsiveWidth(90)}]}>
+          
+          {text ? (
+            <Text style={{color: Color.black, fontSize: responsiveFontSize(1.9)}}>{text}</Text>
+            ) : null}
       <TextInput
+      keyboardType= {keyboardType ? keyboardType : null}
+        onChangeText={handleInputChange}
+        multiline={multiline}
+        value={value}
         placeholder={placeholder}
-        placeholderTextColor={Color.black}
-        style={{
+        textAlignVertical={textAlignVertical}
+        placeholderTextColor={placeHolderColor ? placeHolderColor : Color.black}
+        style={[styles.inputStyle,{
           color: Color.black,
-          fontSize: 14,
-        
-        }}
+          height: height,
+          fontSize: responsiveFontSize(1.8),
+        }]}
       />
     </View>
   );
@@ -20,26 +42,4 @@ const Input = ({placeholder}) => {
 
 export default Input;
 
-const styles = StyleSheet.create({
-  inputStyle: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    width: '90%',
-    backgroundColor: 'white',
 
-    shadowOpacity: 0.05,
-    shadowRadius: 3.84,
-    elevation: 5,
-    paddingHorizontal: 20,
-    padding:5,
-    paddingVertical: 3,
-    // height: 45,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderBottomLeftRadius: 30,
-    // borderBottomRightRadius: 0,
-  },
-});
