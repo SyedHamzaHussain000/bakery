@@ -11,11 +11,13 @@ import Header from '../../Components/Header';
 import DiscoverCategory from '../../Components/DiscoverCategory';
 import { getSubscriberProducts } from '../../GlobalFunctionns';
 import { useSelector } from 'react-redux';
+import { responsiveWidth } from '../../assets/Responsive_Dimensions';
 
 const Schedule = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const token = useSelector(state => state.user.token)
   const [products,setProducts] = useState()
+  console.log('productsss===>>>',products)
   const onDateChange = date => {
     setSelectedStartDate(date);
   };
@@ -87,22 +89,9 @@ console.log('products',products)
         </View>
 
 
-{
-  products?.map((area,index)=>{
-     return(
-      <View>
-        <FlatList numColumns={2} data={products} renderItem={()=>{
-          return(
-            <View>
-              <Text>{area.chooseCategory}</Text>
-            </View>
-          )
-        }}/>
-      </View>
-     )
-  })
-}
-
+       
+       
+  
         <Text style={{fontSize: 22, color: Color.black, marginTop: 20}}>
           Set Up{' '}
           <Text style={{fontSize: 22, color: Color.black, fontWeight: 'bold'}}>
@@ -176,7 +165,70 @@ console.log('products',products)
           </Text>
           <Ionicons size={20} color={Color.black} name="chevron-down" />
         </TouchableOpacity>
+        <FlatList columnWrapperStyle={{justifyContent:'space-between',gap:10}} contentContainerStyle={{justifyContent:'space-between',marginTop:30}} numColumns={2} data={products} renderItem={(area,index)=>{
+          console.log(area.item.productName)
+          return(
+            <TouchableOpacity style={{
+              backgroundColor: Color.white,
+              shadowColor: '#000',
+              shadowOffset: {width: 0, height: 2},
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              borderBottomLeftRadius: 5,
+              borderBottomRightRadius: 5,
+              elevation: 2,
+              marginBottom: 20,
 
+
+            }}>
+              <Image style={{height:120,width:responsiveWidth(42)}} source={{uri:`https://appsdemo.pro/Bakery/api/bakery/1727287086835-Profile`}}/>
+              {/* <Text>{area.item.productName}</Text> */}
+
+              <View style={{padding: 10}}>
+          <View>
+            <Text
+              style={{
+                color: Color.black,
+                fontSize: 16,
+                fontWeight: 'semibold',
+              }}>
+              {area.item.productName}
+            </Text>
+          </View>
+          <Text style={{color: '#B8B8B8', fontSize: 10, marginTop: 10}}>
+            Flavor - {area.item.flavor ? area.item.flavor : 'Creamy'}
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: 10,
+            }}>
+            <Text
+              style={{
+                color: Color.themeColor,
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              ${area.item.discountPrice}
+            </Text>
+            <View>
+              <Text style={{color: Color.themeColor, fontSize: 10}}>
+                View Details
+              </Text>
+              <View
+                style={{
+                  height: 1,
+                  width: '100%',
+                  backgroundColor: Color.themeColor,
+                }}></View>
+            </View>
+          </View>
+        </View>
+            </TouchableOpacity>
+          )
+        }}/>
         <Text style={{fontSize: 22, color: Color.black, marginTop: 20}}>
           Availabilty
         </Text>

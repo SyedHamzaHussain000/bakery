@@ -17,7 +17,7 @@ const Input = ({
   keyboardType
 }) => {
   return (
-    <View style={[null, {gap:10,width: width ? '100%' : responsiveWidth(90)}]}>
+    <View style={[null, {gap:10,width: width ? width : responsiveWidth(90)}]}>
           
           {text ? (
             <Text style={{color: Color.black, fontSize: responsiveFontSize(1.9)}}>{text}</Text>

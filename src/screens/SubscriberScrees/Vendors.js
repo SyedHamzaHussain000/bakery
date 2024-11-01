@@ -19,15 +19,16 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Input from '../../Components/Input';
 import Modal from 'react-native-modal';
 import Button from '../../Components/Button';
-import { useDispatch } from 'react-redux';
-import { clearToken } from '../../redux/Slices';
+import {useDispatch} from 'react-redux';
+import {clearToken} from '../../redux/Slices';
+import {responsiveWidth} from '../../assets/Responsive_Dimensions';
 const Vendors = () => {
   const refRBSheet = useRef();
   const bottomSheetRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
   // callbacks
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleSheetChanges = useCallback(index => {
     console.log('handleSheetChanges', index);
   }, []);
@@ -190,18 +191,17 @@ const Vendors = () => {
                 }}>
                 $185.60
               </Text>
-            
 
               <Button
-                  handleOnPress={()=>dispatch(clearToken())}
-                  color={Color.themeColor}
-                  txtColor={Color.white}
-                  title={'Proceed With him'}
-                  width={'auto'}
-                  fontWeight={'light'}
-                  fontSize={16}
-                  styleName={'viewDetails'}
-                />
+                handleOnPress={() => dispatch(clearToken())}
+                color={Color.themeColor}
+                txtColor={Color.white}
+                title={'Proceed With him'}
+                width={'auto'}
+                fontWeight={'light'}
+                fontSize={16}
+                styleName={'viewDetails'}
+              />
             </View>
           </View>
         </View>
@@ -379,6 +379,9 @@ const Vendors = () => {
                       alignItems: 'center',
                       borderWidth: 1,
                       margin: 10,
+                      alignSelf:'center',
+                      // width: '100%',
+                      width:responsiveWidth(95),
                       borderTopLeftRadius: 25,
                       borderColor: '#DEDEDE',
                       elevation: 3,
@@ -398,7 +401,7 @@ const Vendors = () => {
                       styles.elevationStyle,
                       {
                         height: 50,
-                        width: '100%',
+                        // width: '100%',
                         // borderWidth: 1,
                         flex: 1,
                         color: Color.black,
@@ -425,8 +428,9 @@ const Vendors = () => {
                   }}>
                   Card Holder's Name
                 </Text>
-                <View style={{padding: 10}}>
+                <View style={{padding: 10,alignSelf:'center'}}>
                   <Input
+                  width={responsiveWidth(95)}
                     placeholder={'Your name'}
                     placeHolderColor={'#C5C5C5'}
                   />
@@ -434,8 +438,8 @@ const Vendors = () => {
               </View>
 
               <View
-                style={{flexDirection: 'row', gap: 20, paddingHorizontal: 10}}>
-                <View style={{flexGrow: 1}}>
+                style={{flexDirection: 'row', gap: 20, paddingHorizontal: 10,alignItems:'center'}}>
+                <View style={{}}>
                   <Text
                     style={{
                       paddingTop: 10,
@@ -446,11 +450,12 @@ const Vendors = () => {
                     Valid Until
                   </Text>
                   <Input
+                    width={responsiveWidth(48)}
                     placeholder={'Month/Year'}
                     placeHolderColor={'#C5C5C5'}
                   />
                 </View>
-                <View style={{flexGrow: 1}}>
+                <View style={{ flexGrow: 1}}>
                   <Text
                     style={{
                       paddingTop: 10,
@@ -461,11 +466,13 @@ const Vendors = () => {
                     Valid Until
                   </Text>
                   <Input
+                    width={'100%'}
                     placeholder={'Month/Year'}
                     placeHolderColor={'#C5C5C5'}
                   />
                 </View>
               </View>
+
               <View
                 style={{
                   alignItems: 'center',
