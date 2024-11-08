@@ -77,6 +77,7 @@ const Bakeries = ({navigation}) => {
     focus && getAllProductHandler();
   }, [focus]);
   const renderItem = ({item}) => {
+    console.log('item.productImage',item.productImage)
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('ProductDetails', {id: item._id})}

@@ -16,15 +16,19 @@ import {Color} from '../../assets/Utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {getProductById} from '../../GlobalFunctionns';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {baseUrl} from '../../baseUrl';
+import Button from '../../Components/Button';
+import { addToCart } from '../../redux/Slices';
 const ProductDetails = ({navigation, route}) => {
   const {id} = route.params;
   const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch()
+  
   const [totalProducts, setTotalProducts] = useState(1);
   const [data, setData] = useState({});
-  const token = useSelector(state => state.user.token);
+  const {token,addToCartProducts} = useSelector(state => state.user);
+  console.log('totalProducts =======>',addToCartProducts)
   const getProduct = async () => {
     try {
       const response = await getProductById(id, token);
@@ -37,6 +41,14 @@ const ProductDetails = ({navigation, route}) => {
     getProduct();
   }, []);
 
+
+  const handleAddToCart = () => {
+    console.log('data',data)
+    const productData = [...addToCartProducts,{...data,quantity:totalProducts}]
+    dispatch(addToCart(productData )); 
+    
+    navigation.goBack()
+  }
   console.log(data);
   return (
     <ScrollView
@@ -109,11 +121,10 @@ const ProductDetails = ({navigation, route}) => {
         <Text style={styles.textStyle}>{data.chooseCategory}</Text>
         <Text style={styles.heading}>Availability Stock</Text>
         <Text style={styles.textStyle}>{data.stockQuantity}</Text>
-        <Text style={styles.heading}>Price</Text>
-        <Text style={styles.textStyle}> ${data.discountPrice}</Text>
+        {/* <Text style={styles.heading}>Price</Text>
+        <Text style={styles.textStyle}> ${data.discountPrice}</Text> */}
       </View>
-
-      {/* <View
+     <View
         style={{
           justifyContent: 'space-between',
           flexDirection: 'row',
@@ -148,7 +159,7 @@ const ProductDetails = ({navigation, route}) => {
             style={{color: Color.themeColor, fontSize: 20, fontWeight: 'bold'}}>
             {totalProducts}
           </Text>
-          <TouchableOpacity onPress={() => setTotalProducts(totalProducts + 1)}>
+          <TouchableOpacity onPress={() => data.stockQuantity > totalProducts ?  setTotalProducts(totalProducts + 1) : null}>
             <Feather name="plus" color={'#959595'} size={20} />
           </TouchableOpacity>
         </View>
@@ -162,7 +173,17 @@ const ProductDetails = ({navigation, route}) => {
           }}>
           <Ionicons name="cart-outline" color={Color.white} size={25} />
         </TouchableOpacity>
-      </View> */}
+      </View>
+      <Button
+          styleName={'plainButton'}
+          handleOnPress={() => handleAddToCart()}
+          fontWeight={'light'}
+          marginTop={20}
+          title={
+              'Add To Cart'
+          }
+          color={Color.themeColor}
+        />
     </ScrollView>
   );
 };

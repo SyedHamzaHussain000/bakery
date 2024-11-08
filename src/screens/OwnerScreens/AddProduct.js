@@ -20,6 +20,7 @@ import {PickImage} from '../../GlobalFunctionns/ImagePicker';
 import {AddProductIntegration} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
+import { responsiveWidth } from '../../assets/Responsive_Dimensions';
 
 const AddProduct = ({navigation}) => {
   const data = [
@@ -118,7 +119,7 @@ const AddProduct = ({navigation}) => {
             style={{width: '100%', height: 200, borderRadius: 10}}
           />
         ) : (
-          <View>
+          <View style={{alignItems:'center'}}>
             <SvgIcons xml={upload} height={'58'} width={'44'} />
             <Text style={{textAlign: 'center', color: '#616161', fontSize: 18}}>
               Upload Image
@@ -149,23 +150,22 @@ const AddProduct = ({navigation}) => {
             placeholder={'Creamy'}
           />
 
-        <View style={{ gap: 20,flexDirection:'row',justifyContent:'space-between'}}>
-          <View style={{gap: 5,  flexGrow: 1}}>
+        <View style={{ flexDirection:'row',justifyContent:'space-between',gap:10}}>
+          <View style={{gap: 5, }}>
             <Input
             text={'Price'}
-            width={20}
+            width={responsiveWidth(44)}
               keyboardType={'number-pad'}
               handleInputChange={text => onChangeText(text, 'price')}
               placeHolderColor={'#8D8D8D'}
               placeholder={'$34.00'}
             />
           </View>
-          <View style={{gap: 5,  flexGrow: 1}}>
+          <View style={{gap: 5,flexGrow:1}}>
             
             <Input
             text={'Discount Price'}
-            width={20}
-
+            width={'100%'}
               keyboardType={'number-pad'}
               handleInputChange={text => onChangeText(text, 'discountPrice')}
               placeHolderColor={'#8D8D8D'}

@@ -18,6 +18,7 @@ import AddProduct from '../screens/OwnerScreens/AddProduct';
 import ProductDetails from '../screens/OwnerScreens/ProductDetails';
 import ChooseLocation from '../screens/OwnerScreens/ChooseLocation';
 import EditProfile from '../screens/authScreens/EditProfile';
+import UserProfile from '../screens/OwnerScreens/UserProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -157,6 +158,7 @@ export function OwnerStack() {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
       <Stack.Screen name="AddProduct" component={AddProduct} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>

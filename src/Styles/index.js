@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {Color} from '../assets/Utils';
-import { responsiveFontSize } from '../assets/Responsive_Dimensions';
+import {responsiveFontSize} from '../assets/Responsive_Dimensions';
 
 export const styles = StyleSheet.create({
   viewDetails: {
@@ -59,6 +59,12 @@ export const styles = StyleSheet.create({
   extraLargeBlack: {
     fontSize: 24,
     color: Color.black,
+  },
+  navBarStyles: {
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   extraLargeBlack2: {
     fontSize: 30,

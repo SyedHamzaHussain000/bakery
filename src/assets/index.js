@@ -24,4 +24,11 @@ export const Images = {
   muffins: require('../assets/images/muffins.png'),
   almond: require('../assets/images/almond.png'),
   product: require('../assets/images/product.png'),
+  notification: require('../assets/images/notification.png'),
+  image1: require('../assets/images/image1.png'),
+  image2: require('../assets/images/image2.png'),
+  image3: require('../assets/images/image3.png'),
+  image4: require('../assets/images/image4.png'),
+  image5: require('../assets/images/image5.png'),
+  image6: require('../assets/images/image6.png'),
 };

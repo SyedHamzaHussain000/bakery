@@ -22,7 +22,7 @@ import Button from '../../Components/Button';
 import {useDispatch} from 'react-redux';
 import {clearToken} from '../../redux/Slices';
 import {responsiveWidth} from '../../assets/Responsive_Dimensions';
-const Vendors = () => {
+const Vendors = ({navigation}) => {
   const refRBSheet = useRef();
   const bottomSheetRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -65,7 +65,7 @@ const Vendors = () => {
         paddingVertical: 20,
         paddingHorizontal: 10,
       }}>
-      <Header />
+      <Header handleNavigate={()=>navigation.navigate('UserProfile')} />
       <View style={{padding: 10}}>
         <View
           style={{
@@ -193,7 +193,6 @@ const Vendors = () => {
               </Text>
 
               <Button
-                handleOnPress={() => dispatch(clearToken())}
                 color={Color.themeColor}
                 txtColor={Color.white}
                 title={'Proceed With him'}

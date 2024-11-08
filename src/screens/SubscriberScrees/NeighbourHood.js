@@ -16,7 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-const NeighbourHood = () => {
+const NeighbourHood = ({navigation}) => {
   console.log('edit subscriber');
   const data = [
     {
@@ -137,7 +137,7 @@ const NeighbourHood = () => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{backgroundColor: Color.white, flexGrow: 1}}>
-      <TouchableOpacity style={{padding: 20, alignSelf: 'flex-end'}}>
+      <TouchableOpacity onPress={()=>navigation.navigate('Notification')} style={{padding: 20, alignSelf: 'flex-end'}}>
         <SvgIcons
           color={Color.black}
           height={'30'}
@@ -168,9 +168,9 @@ const NeighbourHood = () => {
           borderColor: '#D6D6D6',
         }}>
         <View style={{flexDirection: 'row'}}>
-          <View style={{}}>
+          <TouchableOpacity onPress={()=>navigation.navigate('UserProfile')} style={{}}>
             <Image source={Images.profile} />
-          </View>
+          </TouchableOpacity>
           <View style={{gap: 5, marginTop: 5}}>
             <Text style={{fontSize: 18, color: Color.black}}>John Doe</Text>
             <Text style={{color: Color.black, fontSize: 13,fontWeight:'light'}}>

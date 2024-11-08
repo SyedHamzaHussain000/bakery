@@ -7,6 +7,7 @@ const initialState = {
   userType: '',
   token: '',
   isLoading: false,
+  addToCartProducts: [],
   error: null,
 };
 
@@ -44,7 +45,13 @@ export const authSlice = createSlice({
     clearToken: (state, action) => {
       state.token = '';
     },
-    
+
+    addToCart: (state, action) => {
+      state.addToCartProducts = action.payload;
+    },
+    clearProducts: (state, action) => {
+      state.addToCartProducts = [];
+    },
   },
   extraReducers: builder => {
     builder
@@ -64,6 +71,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const {setUserType, clearToken} = authSlice.actions;
+export const {setUserType, clearToken, addToCart,clearProducts} = authSlice.actions;
 
 export default authSlice.reducer;

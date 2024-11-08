@@ -6,7 +6,7 @@ import {cart} from '../assets/icons';
 import { Color } from '../assets/Utils';
 import { styles } from '../Styles';
 
-const Header = () => {
+const Header = ({handlePress,handleNavigate}) => {
   return (
     <View
       style={{
@@ -16,16 +16,16 @@ const Header = () => {
         paddingHorizontal: 10,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <View style={{
+        <TouchableOpacity onPress={handleNavigate} style={{
         borderRadius:15,
         backgroundColor:Color.white,
            }}>
 
         <Image  style={{height: 72, width: 72,backgroundColor:'red',borderRadius:20,resizeMode:'cover'}} source={Images.profilePic} />
-        </View>
+        </TouchableOpacity>
         <Text style={styles.extraLargeBlack}>John Doe</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handlePress}>
         <SvgIcons height={'30'} width={'35'} xml={cart} />
       </TouchableOpacity>
     </View>

@@ -12,12 +12,12 @@ import ViewOrder from '../../Components/ViewOrder';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '../../redux/Slices';
 
-const Order = () => {
+const Order = ({navigation}) => {
   const dispatch = useDispatch()
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{padding: 20, flexGrow: 1, backgroundColor: Color.white}}>
-      <SearchHeader />
+      <SearchHeader handlePress={()=>navigation.navigate('UserProfile')}/>
       <Text style={styles.header}>
         Hello <Text style={{fontWeight: 'bold'}}>John</Text>
       </Text>
@@ -148,7 +148,6 @@ const Order = () => {
             $185.60
           </Text>
           <TouchableOpacity
-          onPress={()=>dispatch(clearToken())}
             style={{
               backgroundColor: Color.themeColor,
               padding: 8,

@@ -16,6 +16,11 @@ import {
 import {useState} from 'react';
 import {Text, View} from 'react-native';
 import EditProfile from '../screens/authScreens/EditProfile';
+import UserNotification from '../screens/SubscriberScrees/UserNotification';
+import NotificationDetails from '../screens/SubscriberScrees/NotificationDetails';
+import ProductDetails from '../screens/SubscriberScrees/ProductDetails';
+import Cart from '../screens/SubscriberScrees/Cart';
+import UserProfile from '../screens/SubscriberScrees/UserProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -157,6 +162,11 @@ export function SubscriberStack() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
+      <Stack.Screen name="Notification" component={UserNotification} />
+      <Stack.Screen name="NotificationDetails" component={NotificationDetails} />
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );

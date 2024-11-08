@@ -115,7 +115,8 @@ const RoutesScreen = ({navigation}) => {
         />
       </View>
 
-      <View
+      <TouchableOpacity
+      onPress={()=>navigation.navigate('RoadWay')}
         style={{
           backgroundColor: Color.themeColor,
           flexDirection: 'row',
@@ -134,7 +135,7 @@ const RoutesScreen = ({navigation}) => {
           resizeMode="contain"
           source={Images.mapSmall}
         />
-      </View>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

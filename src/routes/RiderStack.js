@@ -20,6 +20,9 @@ import Gallery from '../screens/RiderScreens/Gallery';
 import OrderComplete from '../screens/RiderScreens/OrderComplete';
 import Map from '../screens/RiderScreens/Map';
 import EditProfile from '../screens/authScreens/EditProfile';
+import RiderNotification from '../screens/RiderScreens/RiderNotification';
+import NotifyDetailsRider from '../screens/RiderScreens/NotifyDetailsRider';
+import RoadWay from '../screens/RiderScreens/RoadWay';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -164,6 +167,9 @@ export function RiderStack() {
       <Stack.Screen name="Gallery" component={Gallery} />
       <Stack.Screen name="OrderComplete" component={OrderComplete} />
       <Stack.Screen name="Map" component={Map} />
+      <Stack.Screen name="RoadWay" component={RoadWay} />
+      <Stack.Screen name="NotificationDetails" component={NotifyDetailsRider} />
+      <Stack.Screen name="Notification" component={RiderNotification} />
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );
