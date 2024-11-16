@@ -31,4 +31,5 @@ export const Images = {
   image4: require('../assets/images/image4.png'),
   image5: require('../assets/images/image5.png'),
   image6: require('../assets/images/image6.png'),
+  dummyPic: require('../assets/images/dummyPic.png'),
 };

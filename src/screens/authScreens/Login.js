@@ -70,6 +70,7 @@ const Login = ({navigation}) => {
           styleName={'plainButton'}
           handleOnPress={() => login()}
           fontWeight={'light'}
+          color={Color.themeColor}
           title={
             isLoading ? (
               <ActivityIndicator size={'large'} color={Color.white} />
@@ -77,7 +78,6 @@ const Login = ({navigation}) => {
               'Login'
             )
           }
-          color={Color.themeColor}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('Signup')}

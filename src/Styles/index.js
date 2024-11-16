@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {Color} from '../assets/Utils';
-import {responsiveFontSize} from '../assets/Responsive_Dimensions';
+import {responsiveFontSize, responsiveHeight, responsiveWidth} from '../assets/Responsive_Dimensions';
 
 export const styles = StyleSheet.create({
   viewDetails: {
@@ -23,6 +23,19 @@ export const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  editProfile:{
+   height:responsiveHeight(4.2),
+   width:responsiveWidth(40),
+   borderRadius:10,
+   justifyContent:'center',
+   alignItems:'center'
+  },
+  productDetailsText:{
+color:Color.black,
+fontSize:responsiveFontSize(2),
+fontWeight:'400'
   },
   smallBlack: {
     fontSize: 10,
@@ -47,6 +60,48 @@ export const styles = StyleSheet.create({
   mediumBlack4: {
     fontSize: 18,
     color: Color.black,
+  },
+  dropdown: {
+    paddingVertical: 15,
+    borderRadius: 30,
+    borderBottomRightRadius: 0,
+    backgroundColor: 'white',
+    borderColor: '#d4d4d4',
+    borderWidth: 1,
+    width:responsiveWidth(90),
+    paddingHorizontal: 15,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  buttonStyle: {
+    backgroundColor: Color.themeColor,
+    borderTopRightRadius: 18,
+    borderTopLeftRadius: 15,
+    borderBottomLeftRadius: 15,
+    paddingHorizontal: 13,
+    paddingVertical: 15,
+  },
+
+  elevationStyle: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   largeBlack: {
     fontSize: responsiveFontSize(2.4),

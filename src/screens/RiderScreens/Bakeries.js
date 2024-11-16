@@ -25,7 +25,7 @@ const Bakeries = ({navigation}) => {
    
   ];
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{padding: 20}}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{padding: 20,backgroundColor:Color.white}}>
       <SearchHeader />
       <View style={{marginTop: 20}}>
         <Text style={{fontSize: 22, fontWeight: '400',color:Color.black}}>

@@ -52,6 +52,9 @@ export const authSlice = createSlice({
     clearProducts: (state, action) => {
       state.addToCartProducts = [];
     },
+    setUserData:(state,action) => {
+      state.user = action.payload
+    }
   },
   extraReducers: builder => {
     builder
@@ -71,6 +74,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const {setUserType, clearToken, addToCart,clearProducts} = authSlice.actions;
+export const {setUserType, clearToken, addToCart,clearProducts,setUserData} = authSlice.actions;
 
 export default authSlice.reducer;

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import {baseUrl} from '../baseUrl';
+import {ShowToast} from './ShowToast';
+import { clearProducts } from '../redux/Slices';
 
 export const AddProductIntegration = async (
   mime,
@@ -80,7 +82,7 @@ export const getProductById = async (id, token) => {
   }
 };
 
-export const getSubscriberProducts = async (token) => {
+export const getSubscriberProducts = async token => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -94,5 +96,52 @@ export const getSubscriberProducts = async (token) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const bookProducts = async (addToCartProducts, token,dispatch) => {
+  let allSuccessful = true;
+  for (const area of addToCartProducts) {
+    console.log('Booking product:', area._id);
+
+    const data = JSON.stringify({
+      availabilty: area.availability,
+      days: area.days,
+      quantity: area.quantity,
+      TotalPrice: area.totalPrice,
+      BakeryId: area.bakeryId,
+    });
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${baseUrl}subscriber/product-booking/${area._id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    try {
+      const res = await axios.request(config);
+      console.log(`Product ${area._id} booked successfully`);
+      if (res.data.success) {
+        allSuccessful = true;
+      } else {
+        allSuccessful = false;
+
+      }
+    } catch (error) {
+      allSuccessful = false;
+      console.log(`Error booking product ${area._id}:`, error);
+       ShowToast('error', error.message);
+    }
+  }
+  if (allSuccessful) {
+    dispatch(clearProducts())
+   return ShowToast('success', 'Products Booked Successfully');
+  } else {
+  return  ShowToast('error', 'There was an issue booking products');
   }
 };

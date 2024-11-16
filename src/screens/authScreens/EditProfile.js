@@ -18,7 +18,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Modal from 'react-native-modal';
 import Checkbox from '../../Components/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearToken} from '../../redux/Slices';
+import {clearToken, setUserData} from '../../redux/Slices';
 import DatePicker from 'react-native-date-picker';
 import {PickImage} from '../../GlobalFunctionns/ImagePicker';
 import {styles} from '../../Styles';
@@ -83,6 +83,7 @@ const EditProfile = ({navigation, route}) => {
       console.log('response', response);
       if (response.success) {
         ShowToast('success', 'Profile Updated');
+        dispatch(setUserData(response.data))
         navigation.navigate('BottomTabs');
       } else {
         ShowToast('error', response.message);

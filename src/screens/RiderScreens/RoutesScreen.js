@@ -44,9 +44,9 @@ const RoutesScreen = ({navigation}) => {
           marginLeft: 15,
           marginTop: 30,
         }}>
-        <View>
+        <TouchableOpacity>
           <Image source={Images.profile3} />
-        </View>
+        </TouchableOpacity>
         <View>
           <Text style={{fontSize: 20, color: Color.black, fontWeight: 'bold'}}>
             Dave <Text style={{fontWeight: '300'}}> Miller</Text>

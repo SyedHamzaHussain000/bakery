@@ -1,37 +1,26 @@
 import {
   View,
   Text,
-  Image,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
   FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Color} from '../../assets/Utils';
-import {Images} from '../../assets';
 import SvgIcons from '../../Components/SvgIcons';
-import {cart, category1, category2, category3, logo} from '../../assets/icons';
+import { category1,category3, logo} from '../../assets/icons';
 import Hr from '../../Components/Hr';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import CalendarPicker from 'react-native-calendar-picker';
 import Header from '../../Components/Header';
 import DiscoverCategory from '../../Components/DiscoverCategory';
 import {getSubscriberProducts} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
-import {responsiveWidth} from '../../assets/Responsive_Dimensions';
-import {baseUrl} from '../../baseUrl';
+import Products from '../../Components/Products';
 
 const Schedule = ({navigation}) => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const {token,addToCartProducts} = useSelector(state => state.user);
   const [products, setProducts] = useState();
   console.log('addToCartProducts===>>>', addToCartProducts);
-  const onDateChange = date => {
-    setSelectedStartDate(date);
-  };
-
-
   const [activeCategory, setActiveCategory] = useState('bread');
   const categoryData = [
     {
@@ -58,14 +47,13 @@ const Schedule = ({navigation}) => {
   const getProductsHandler = async () => {
     const response = await getSubscriberProducts(token);
     setProducts(response.data);
-    // console.log('response',response)
   };
 
   useEffect(() => {
     getProductsHandler();
   }, []);
 
-  console.log('products', products);
+  console.log('products', addToCartProducts.length);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -77,8 +65,7 @@ const Schedule = ({navigation}) => {
       <View style={{padding: 40, alignItems: 'center'}}>
         <SvgIcons height={'113'} width={'140'} xml={logo} />
       </View>
-      <Header  handlePress={()=>navigation.navigate('Cart')}/>
-
+      <Header handleNavigate={()=>navigation.navigate('UserProfile')} products={addToCartProducts.length > 0 ? true : false} handlePress={()=>navigation.navigate('Cart')}/>
       <View style={{marginTop: 20}}>
         <Hr />
       </View>
@@ -89,7 +76,6 @@ const Schedule = ({navigation}) => {
             Category.
           </Text>
         </Text>
-
         <View
           style={{
             flexDirection: 'row',
@@ -195,70 +181,7 @@ const Schedule = ({navigation}) => {
           renderItem={(area, index) => {
             console.log(area.item.productName);
             return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('ProductDetails', {id: area.item._id})
-                }
-                style={{
-                  backgroundColor: Color.white,
-                  shadowColor: '#000',
-                  shadowOffset: {width: 0, height: 2},
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  borderBottomLeftRadius: 5,
-                  borderBottomRightRadius: 5,
-                  elevation: 2,
-                  marginBottom: 20,
-                }}>
-                <Image
-                  style={{height: 120, width: responsiveWidth(42)}}
-                  source={{uri: `${baseUrl}bakery/${area.item.productImage}`}}
-                />
-                {/* <Text>{area.item.productName}</Text> */}
-
-                <View style={{padding: 10}}>
-                  <View>
-                    <Text
-                      style={{
-                        color: Color.black,
-                        fontSize: 16,
-                        fontWeight: 'semibold',
-                      }}>
-                      {area.item.productName}
-                    </Text>
-                  </View>
-                  <Text style={{color: '#B8B8B8', fontSize: 10, marginTop: 10}}>
-                    Flavor - {area.item.flavor ? area.item.flavor : 'Creamy'}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginTop: 10,
-                    }}>
-                    <Text
-                      style={{
-                        color: Color.themeColor,
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                      }}>
-                      ${area.item.discountPrice}
-                    </Text>
-                    <View>
-                      <Text style={{color: Color.themeColor, fontSize: 10}}>
-                        View Details
-                      </Text>
-                      <View
-                        style={{
-                          height: 1,
-                          width: '100%',
-                          backgroundColor: Color.themeColor,
-                        }}></View>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
+             <Products screen={'ProductDetails'}  routesData={area.item._id} navigation={navigation} data={area}/>
             );
           }}
         />

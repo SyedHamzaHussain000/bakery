@@ -22,13 +22,23 @@ const OrderStatus = ({navigation}) => {
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{paddingBottom: 20}}>
+      contentContainerStyle={{paddingBottom: 20,
+        backgroundColor:Color.white,
+        }}>
       <Image source={Images.map3} />
       <View
         style={{
           backgroundColor: Color.white,
           margin: 20,
           padding: 20,
+          shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 3,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
           borderBottomLeftRadius: 20,

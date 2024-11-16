@@ -5,6 +5,7 @@ import { Color } from '../assets/Utils';
 import { styles } from '../Styles';
 import Modal from 'react-native-modal';
 import Button from './Button';
+import { responsiveWidth } from '../assets/Responsive_Dimensions';
 
 const Checkbox = ({ modalVisible, setModalVisible,onSelectedItemsChange}) => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -112,14 +113,17 @@ console.log(selectedItems)
               </TouchableOpacity>
             ))}
           </View>
+          <View style={{alignItems:'center'}}>
           <Button
             handleOnPress={() => setModalVisible(!modalVisible)}
             fontWeight={'400'}
             marginTop={30}
+            width={responsiveWidth(80)}
             styleName={'plainButton'}
             title={'Submit'}
             color={Color.themeColor}
           />
+          </View>
         </View>
       </Modal>
     </>

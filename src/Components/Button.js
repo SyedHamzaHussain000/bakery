@@ -32,7 +32,7 @@ const Button = ({
           marginBottom: marginBottom,
           width:width ? width : responsiveWidth(90),
           marginTop:marginTop,
-          alignItems:'center'
+          alignItems:'center',
         },
       ]}>
       <Text

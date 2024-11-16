@@ -21,6 +21,7 @@ import {AddProductIntegration} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
 import { responsiveWidth } from '../../assets/Responsive_Dimensions';
+import { styles } from '../../Styles';
 
 const AddProduct = ({navigation}) => {
   const data = [
@@ -253,35 +254,4 @@ const AddProduct = ({navigation}) => {
 };
 
 export default AddProduct;
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    // padding: 16,
-  },
-  dropdown: {
-    paddingVertical: 15,
-    borderRadius: 30,
-    borderBottomRightRadius: 0,
-    backgroundColor: 'white',
-    borderColor: '#d4d4d4',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
-});
+
