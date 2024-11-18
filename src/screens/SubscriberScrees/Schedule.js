@@ -179,7 +179,7 @@ const Schedule = ({navigation}) => {
           numColumns={2}
           data={products}
           renderItem={(area, index) => {
-            console.log(area.item.productName);
+            console.log('area.item',area.item);
             return (
              <Products screen={'ProductDetails'}  routesData={area.item._id} navigation={navigation} data={area}/>
             );

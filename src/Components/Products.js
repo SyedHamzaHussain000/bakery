@@ -5,6 +5,7 @@ import {baseUrl} from '../baseUrl';
 import {responsiveWidth} from '../assets/Responsive_Dimensions';
 
 const Products = ({navigation, data, screen, routesData, carts}) => {
+  console.log('data', screen)
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate(screen, {productData: routesData})}
@@ -66,7 +67,7 @@ const Products = ({navigation, data, screen, routesData, carts}) => {
               fontSize: 16,
               fontWeight: 'bold',
             }}>
-            ${data.item.discountPrice}
+            ${screen === 'ProductDetails' ? data.item.discountPrice : data.item.totalPrice}
           </Text>
           <View>
             <Text style={{color: Color.themeColor, fontSize: 10}}>

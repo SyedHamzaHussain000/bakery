@@ -160,7 +160,9 @@ const Bakeries = ({navigation}) => {
         }}>
         <View
           style={{flexDirection: 'row', width: '65%', alignItems: 'center'}}>
+            <TouchableOpacity onPress={()=>navigation.navigate('EditProfile')}>
           <Image style={{height: 100, width: 100}} source={Images.goldBakery} />
+          </TouchableOpacity>
           <View style={{flex: 1}}>
             <Text
               style={{
@@ -288,6 +290,11 @@ const Bakeries = ({navigation}) => {
             <ActivityIndicator size={'large'} color={Color.black} />
           </View>
         ) : (
+          myDataMemo.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: 20, color: Color.black,fontWeight:'500' }}>No products here</Text>
+            </View>
+          ) : (
           <FlatList
             contentContainerStyle={
               {
@@ -304,6 +311,7 @@ const Bakeries = ({navigation}) => {
             data={myDataMemo}
             renderItem={renderItem}
           />
+          )
         )}
       </View>
     </ScrollView>

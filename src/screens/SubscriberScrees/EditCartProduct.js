@@ -16,20 +16,40 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {baseUrl} from '../../baseUrl';
 import Button from '../../Components/Button';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import { addToCart } from '../../redux/Slices';
 
 const EditCartProduct = ({navigation, route}) => {
   const {item} = route.params.productData;
-  console.log('route.aparams========>>>>>>>>>',route.params)
+  console.log('route.aparams========>>>>>>>>>',item._id)
   const [loading, setLoading] = useState(true);
   const products = useSelector(state => state.user.addToCartProducts);
   const [totalProducts, setTotalProducts] = useState(item?.quantity);
   const [price, setPrice] = useState(item?.totalPrice);
-  console.log('products.quantity', item);
+  const addToCartProducts = useSelector((state) => state.user.addToCartProducts); // Replace `cart` with the correct slice name.
 
+  console.log('products.quantity', item);
+  const dispatch = useDispatch()
+  const id = item._id
   useEffect(() => {
     setPrice(item.discountPrice * totalProducts);
   }, [totalProducts]);
+
+  const handleEditCart = () => {
+    const updatedProducts = addToCartProducts.map((product) => {
+      if (product._id === item._id) {
+        return {
+          ...product,
+          quantity: totalProducts,
+          totalPrice: price,
+        };
+      }
+      return product;
+    });
+
+    dispatch(addToCart(updatedProducts)); 
+    navigation.goBack()
+  };
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -164,7 +184,7 @@ const EditCartProduct = ({navigation, route}) => {
       </View>
       <Button
         styleName={'plainButton'}
-        // handleOnPress={() => handleAddToCart()}
+        handleOnPress={() => handleEditCart()}
         fontWeight={'light'}
         marginTop={20}
         title={'Edit'}

@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Color} from '../../assets/Utils';
@@ -13,7 +14,7 @@ import {styles} from '../../Styles';
 import {handleLogin} from '../../GlobalFunctionns/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
-import { responsiveFontSize } from '../../assets/Responsive_Dimensions';
+import {responsiveFontSize} from '../../assets/Responsive_Dimensions';
 const Login = ({navigation}) => {
   const {isLoading, token, userType} = useSelector(state => state.user);
   console.log('token', token);
@@ -52,17 +53,22 @@ const Login = ({navigation}) => {
         padding: 20,
       }}>
       <View style={{alignItems: 'center', marginTop: 50}}>
-        <Text style={{color: Color.themeColor, fontSize: responsiveFontSize(3)}}>Sign In</Text>
+        <Text
+          style={{color: Color.themeColor, fontSize: responsiveFontSize(3)}}>
+          Sign In
+        </Text>
         <Text style={[styles.mediumBlack3, {marginTop: 10}]}>
           Add your details to sign in
         </Text>
       </View>
       <View style={{alignItems: 'center', gap: 25, marginTop: 40}}>
         <Input
+          keyboardType={'email-address'}
           handleInputChange={text => handleChangeText(text, 'email')}
           placeholder={'Email'}
         />
         <Input
+          secure={true}
           handleInputChange={text => handleChangeText(text, 'password')}
           placeholder={'Password'}
         />
@@ -85,7 +91,13 @@ const Login = ({navigation}) => {
           <Text style={{color: '#7C7D7E', fontSize: responsiveFontSize(1.7)}}>
             Dont have an Account?
           </Text>
-          <Text style={{color: Color.themeColor, fontSize: responsiveFontSize(1.7)}}>Register!</Text>
+          <Text
+            style={{
+              color: Color.themeColor,
+              fontSize: responsiveFontSize(1.7),
+            }}>
+            Register!
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

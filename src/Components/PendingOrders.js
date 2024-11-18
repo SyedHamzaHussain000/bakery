@@ -73,7 +73,7 @@ const PendingOrders = ({area,key,navigation}) => {
           fontSize: 22,
           fontWeight: 'bold',
         }}>
-        ${area.productId.discountPrice}
+        ${area.TotalPrice}
       </Text>
     </View>
 

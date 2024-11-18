@@ -15,6 +15,7 @@ import Products from '../../Components/Products';
 
 const Cart = ({navigation}) => {
   const {addToCartProducts, token} = useSelector(state => state.user);
+  console.log('addtoCartProducts',addToCartProducts)
   const [isLoading, setIsLoading] = useState(false);
   // console.log('addToCartProducts======>>>>', addToCartProducts);
 const dispatch = useDispatch()
@@ -50,7 +51,7 @@ const dispatch = useDispatch()
           numColumns={2}
           data={addToCartProducts}
           renderItem={(area, index) => {
-            console.log('area=====>>>>>>>>',area);
+            // console.log('area=====>>>>>>>>',area);
             return (
               // <TouchableOpacity
               //   onPress={() => navigation.navigate('EditCartProduct', {area})}

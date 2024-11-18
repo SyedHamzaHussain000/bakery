@@ -72,7 +72,10 @@ elevation: 3,}} source={{uri:`${baseUrl}user/${user.profilePic}`}}/>
           <Categories vector={true} xml={logout} text={'Subscription'} />
           <Hr marginVertical={12} />
         </TouchableOpacity>
-      <TouchableOpacity onPress={() => dispatch(clearToken())}>
+      <TouchableOpacity onPress={() => {
+        dispatch(clearToken())
+        dispatch(clearProducts())
+        }}>
           <Categories vector={true} xml={logout} text={'Logout'} />
           <Hr marginVertical={12} />
         </TouchableOpacity>

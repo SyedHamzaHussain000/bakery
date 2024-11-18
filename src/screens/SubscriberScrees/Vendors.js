@@ -32,8 +32,6 @@ import PendingOrders from '../../Components/PendingOrders';
 import { styles } from '../../Styles';
 import CompletedOrders from '../../Components/CompletedOrders';
 const Vendors = ({navigation}) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalVisible2, setModalVisible2] = useState(false);
   const {token} = useSelector(state => state.user);
   const [data, setData] = useState();
   const getAllBookedProducts = () => {
@@ -62,8 +60,6 @@ const Vendors = ({navigation}) => {
     getAllBookedProducts();
   }, []);
 
-
-
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -74,7 +70,7 @@ const Vendors = ({navigation}) => {
         paddingVertical: 20,
         paddingHorizontal: 10,
       }}>
-      <Header handleNavigate={() => navigation.navigate('UserProfile')} />
+      <Header handlePress={()=>navigation.navigate('Cart')} handleNavigate={() => navigation.navigate('UserProfile')} />
       <View style={{padding: 10}}>
       <CompletedOrders/>
         {data?.map((area, index) => {

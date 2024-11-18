@@ -101,6 +101,7 @@ const Signup = ({navigation, route}) => {
           placeholder={'User name'}
         />
         <Input
+        keyboardType={'email-address'}
           handleInputChange={text => handleChangeText(text, 'email')}
           placeholder={'Email'}
         />
@@ -109,10 +110,13 @@ const Signup = ({navigation, route}) => {
           placeholder={'Address'}
         />
         <Input
+        secure={true}
           handleInputChange={text => handleChangeText(text, 'password')}
           placeholder={'Password'}
         />
         <Input
+        secure={true}
+
           handleInputChange={text => handleChangeText(text, 'confirmPassword')}
           placeholder={'Confirm Password'}
         />
