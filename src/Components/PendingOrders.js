@@ -6,7 +6,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from '../assets
 import { baseUrl } from '../baseUrl'
 import { styles } from '../Styles'
 
-const PendingOrders = ({area,key,navigation}) => {
+const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName,totalPrice,status,productName,chooseCategory}) => {
   return (
     <View
     style={[
@@ -34,7 +34,7 @@ const PendingOrders = ({area,key,navigation}) => {
         }}>
         <View>
           <Image
-        source={{uri: `${baseUrl}user/${area.BakeryId.profilePic}`}}
+        source={{uri: `${baseUrl}user/${profilePic}`}}
         style={{
               height: responsiveHeight(6),
               width: responsiveWidth(13),
@@ -55,14 +55,14 @@ const PendingOrders = ({area,key,navigation}) => {
                 fontSize: 20,
                 fontWeight: '500',
               }}>
-              {area.BakeryId.userName}
+              {userName}
             </Text>
             <Text style={{fontSize: 12, color: '#C5C5C5'}}>
               Just Now
             </Text>
           </View>
           <Text style={{color: 'gray', fontSize: 14}}>
-            {area.status}
+            {status}
           </Text>
         </View>
       </View>
@@ -73,7 +73,7 @@ const PendingOrders = ({area,key,navigation}) => {
           fontSize: 22,
           fontWeight: 'bold',
         }}>
-        ${area.TotalPrice}
+        ${totalPrice}
       </Text>
     </View>
 
@@ -88,11 +88,11 @@ const PendingOrders = ({area,key,navigation}) => {
         style={{
           color: '#C5C5C5',
           fontSize: responsiveFontSize(1.7),
-        }}>{`${area.productId.productName},${area.productId.chooseCategory}`}</Text>
+        }}>{`${productName},${chooseCategory}`}</Text>
       <Button
         color={Color.themeColor}
         txtColor={Color.white}
-        handleOnPress={()=>navigation.navigate('OrderProductDetails',{area})}
+        handleOnPress={()=>navigation.navigate(navigationScreen,{area})}
         title={'View Details'}
         width={'auto'}
         fontWeight={'light'}

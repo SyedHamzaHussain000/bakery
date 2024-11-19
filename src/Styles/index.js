@@ -77,9 +77,21 @@ fontWeight:'400'
   selectedTextStyle: {
     fontSize: 16,
   },
+  orderDetailsText:{
+    color: '#8D8D8D',
+    fontSize: 17,
+    fontWeight: 'medium',
+    marginTop: 10,
+  },
   iconStyle: {
     width: 20,
     height: 20,
+  },
+  heading: {
+    color: Color.black,
+    fontSize: 18,
+    fontWeight: 'medium',
+    marginTop: 20,
   },
   inputSearchStyle: {
     height: 40,

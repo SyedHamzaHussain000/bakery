@@ -29,7 +29,7 @@ import {
 import {baseUrl} from '../../baseUrl';
 import axios from 'axios';
 import PendingOrders from '../../Components/PendingOrders';
-import { styles } from '../../Styles';
+import {styles} from '../../Styles';
 import CompletedOrders from '../../Components/CompletedOrders';
 const Vendors = ({navigation}) => {
   const {token} = useSelector(state => state.user);
@@ -70,12 +70,26 @@ const Vendors = ({navigation}) => {
         paddingVertical: 20,
         paddingHorizontal: 10,
       }}>
-      <Header handlePress={()=>navigation.navigate('Cart')} handleNavigate={() => navigation.navigate('UserProfile')} />
+      <Header
+        handlePress={() => navigation.navigate('Cart')}
+        handleNavigate={() => navigation.navigate('UserProfile')}
+      />
       <View style={{padding: 10}}>
-      <CompletedOrders/>
+        <CompletedOrders />
         {data?.map((area, index) => {
           return (
-           <PendingOrders navigation={navigation} area={area} key={index}/>
+            <PendingOrders
+              profilePic={area.BakeryId.profilePic}
+              userName={area.BakeryId.userName}
+              status={area.status}
+              totalPrice={area.TotalPrice}
+              productName={area.productId.productName}
+              chooseCategory={area.productId.chooseCategory}
+              navigation={navigation}
+              navigationScreen={'OrderProductDetails'}
+              area={area}
+              key={index}
+            />
           );
         })}
       </View>

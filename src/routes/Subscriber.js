@@ -23,7 +23,7 @@ import Cart from '../screens/SubscriberScrees/Cart';
 import UserProfile from '../screens/SubscriberScrees/UserProfile';
 import EditCartProduct from '../screens/SubscriberScrees/EditCartProduct';
 import BookedProducts from '../screens/SubscriberScrees/BookedProducts';
-import OrderProductDetails from '../screens/SubscriberScrees/OrderProductDetails';
+import OrderDetails from '../screens/common/OrderDetails';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -165,10 +165,10 @@ export function SubscriberStack() {
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
-      <Stack.Screen name="OrderProductDetails" component={OrderProductDetails} />
       <Stack.Screen name="BookedProducts" component={BookedProducts} />
       <Stack.Screen name="EditCartProduct" component={EditCartProduct} />
       <Stack.Screen name="Notification" component={UserNotification} />
+      <Stack.Screen name="OrderDetails" component={OrderDetails} />
       <Stack.Screen
         name="NotificationDetails"
         component={NotificationDetails}

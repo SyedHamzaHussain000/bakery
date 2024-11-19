@@ -1,5 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Header from '../../Components/Header';
 import EditProHeader from '../../Components/EditProHeader';
 import SearchHeader from '../../Components/SearchHeader';
@@ -9,15 +15,49 @@ import SvgIcons from '../../Components/SvgIcons';
 import {category1, clock, Location, location, rider} from '../../assets/icons';
 import Hr from '../../Components/Hr';
 import ViewOrder from '../../Components/ViewOrder';
-import { useDispatch } from 'react-redux';
-import { clearToken } from '../../redux/Slices';
+import {useDispatch, useSelector} from 'react-redux';
+import {clearToken} from '../../redux/Slices';
+import PendingOrders from '../../Components/PendingOrders';
+import axios from 'axios';
+import {baseUrl} from '../../baseUrl';
 
 const Order = ({navigation}) => {
-  const dispatch = useDispatch()
+  const {token} = useSelector(state => state.user);
+  const [data, setData] = useState();
+  const getAllBookedProducts = () => {
+    let data = '';
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${baseUrl}subscriber/GetAllMyBookingProducts`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
 
+    axios
+      .request(config)
+      .then(response => {
+        setData(response.data.userId);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getAllBookedProducts();
+    console.log('data===>>', data);
+  }, []);
   return (
-    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{padding: 20, flexGrow: 1, backgroundColor: Color.white}}>
-      <SearchHeader handlePress={()=>navigation.navigate('UserProfile')}/>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        padding: 20,
+        flexGrow: 1,
+        backgroundColor: Color.white,
+      }}>
+      <SearchHeader handlePress={() => navigation.navigate('UserProfile')} />
       <Text style={styles.header}>
         Hello <Text style={{fontWeight: 'bold'}}>John</Text>
       </Text>
@@ -161,10 +201,25 @@ const Order = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-     <View>
-
-      <ViewOrder buttonTitle={'View Order'} name1={'Vincent Lambert'} name2={'Olivia Williams'} price1={'$130.00'} order1={'Chocolate Croissant, Muffins'} order2={'Baggette - Cuban Bread'} price2={'$165.00'}/>
-     </View>
+      <View>
+        {/* <ViewOrder buttonTitle={'View Order'} name1={'Vincent Lambert'} name2={'Olivia Williams'} price1={'$130.00'} order1={'Chocolate Croissant, Muffins'} order2={'Baggette - Cuban Bread'} price2={'$165.00'}/> */}
+        {data?.map((area, index) => {
+          return (
+            <PendingOrders
+              profilePic={area.subscriberId.profilePic}
+              userName={area.subscriberId.userName}
+              status={area.status}
+              totalPrice={area.TotalPrice}
+              productName={area.productId.productName}
+              chooseCategory={area.productId.chooseCategory}
+              navigation={navigation}
+              navigationScreen={'OrderDetails'}
+              area={area}
+              key={index}
+            />
+          );
+        })}
+      </View>
     </ScrollView>
   );
 };

@@ -17,39 +17,52 @@ import Feather from 'react-native-vector-icons/Feather';
 import {baseUrl} from '../../baseUrl';
 import Button from '../../Components/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import { addToCart } from '../../redux/Slices';
+import {addToCart} from '../../redux/Slices';
+import {Dropdown} from 'react-native-element-dropdown';
+import {responsiveHeight} from '../../assets/Responsive_Dimensions';
+import Availability from '../../Components/Availability';
 
 const EditCartProduct = ({navigation, route}) => {
   const {item} = route.params.productData;
-  console.log('route.aparams========>>>>>>>>>',item._id)
+  console.log('route.aparams========', item);
   const [loading, setLoading] = useState(true);
-  const products = useSelector(state => state.user.addToCartProducts);
   const [totalProducts, setTotalProducts] = useState(item?.quantity);
   const [price, setPrice] = useState(item?.totalPrice);
-  const addToCartProducts = useSelector((state) => state.user.addToCartProducts); // Replace `cart` with the correct slice name.
-
-  console.log('products.quantity', item);
-  const dispatch = useDispatch()
-  const id = item._id
+  const addToCartProducts = useSelector(state => state.user.addToCartProducts);
+  const [selectedDay, setSelectedDay] = useState(item.days);
+  const [selectedAvailability, setSelectedAvailability] = useState(item.availability);
+  console.log('selectedDay', selectedDay);
+  console.log('selectedAvailability<<<<<<<<<<<', selectedAvailability);
+  console.log('addToCartProducts', addToCartProducts);
+  const dispatch = useDispatch();
+  const id = item._id;
   useEffect(() => {
     setPrice(item.discountPrice * totalProducts);
   }, [totalProducts]);
 
   const handleEditCart = () => {
-    const updatedProducts = addToCartProducts.map((product) => {
+    const updatedProducts = addToCartProducts.map(product => {
       if (product._id === item._id) {
         return {
           ...product,
           quantity: totalProducts,
           totalPrice: price,
+          days:selectedDay,
+          availability:selectedAvailability
         };
       }
       return product;
     });
 
-    dispatch(addToCart(updatedProducts)); 
-    navigation.goBack()
+    dispatch(addToCart(updatedProducts));
+    navigation.goBack();
   };
+
+  useEffect(() => {
+    if (selectedAvailability == 'Daily') {
+      setSelectedDay(null);
+    }
+  }, [selectedAvailability]);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -61,7 +74,7 @@ const EditCartProduct = ({navigation, route}) => {
       }}>
       <PlainHeader
         handlePress={() => navigation.goBack()}
-        text={'Product Details'}
+        text={'Edit Product Details'}
       />
       {loading && (
         <View>
@@ -124,8 +137,14 @@ const EditCartProduct = ({navigation, route}) => {
         <Text style={styles.textStyle}>{item.stockQuantity}</Text>
         <Text style={styles.heading}>Quantity Selected for Cart</Text>
         <Text style={styles.textStyle}>{totalProducts}</Text>
-        {/* <Text style={styles.heading}>Price</Text>
-        <Text style={styles.textStyle}> ${data.discountPrice}</Text> */}
+        <Availability
+        currentAvailability={item.availability}
+        currentDay={item.days}
+          onDayChange={day => setSelectedDay(day)}
+          onAvailabilityChange={availability =>
+            setSelectedAvailability(availability)
+          }
+        />
       </View>
       <View
         style={{
@@ -191,7 +210,6 @@ const EditCartProduct = ({navigation, route}) => {
         color={Color.themeColor}
       />
     </ScrollView>
-  
   );
 };
 
