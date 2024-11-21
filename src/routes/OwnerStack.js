@@ -18,8 +18,8 @@ import AddProduct from '../screens/OwnerScreens/AddProduct';
 import ProductDetails from '../screens/OwnerScreens/ProductDetails';
 import ChooseLocation from '../screens/OwnerScreens/ChooseLocation';
 import EditProfile from '../screens/authScreens/EditProfile';
-import UserProfile from '../screens/OwnerScreens/UserProfile';
 import OrderDetails from '../screens/common/OrderDetails';
+import UserProfile from '../screens/common/UserProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

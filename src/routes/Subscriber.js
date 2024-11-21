@@ -20,10 +20,10 @@ import UserNotification from '../screens/SubscriberScrees/UserNotification';
 import NotificationDetails from '../screens/SubscriberScrees/NotificationDetails';
 import ProductDetails from '../screens/SubscriberScrees/ProductDetails';
 import Cart from '../screens/SubscriberScrees/Cart';
-import UserProfile from '../screens/SubscriberScrees/UserProfile';
 import EditCartProduct from '../screens/SubscriberScrees/EditCartProduct';
 import BookedProducts from '../screens/SubscriberScrees/BookedProducts';
 import OrderDetails from '../screens/common/OrderDetails';
+import UserProfile from '../screens/common/UserProfile';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

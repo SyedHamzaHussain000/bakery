@@ -47,7 +47,7 @@ const Order = ({navigation}) => {
   };
   useEffect(() => {
     getAllBookedProducts();
-    console.log('data===>>', data);
+    console.log('data======>', data);
   }, []);
   return (
     <ScrollView
@@ -206,6 +206,7 @@ const Order = ({navigation}) => {
         {data?.map((area, index) => {
           return (
             <PendingOrders
+            btnTitle={'View Order'}
               profilePic={area.subscriberId.profilePic}
               userName={area.subscriberId.userName}
               status={area.status}

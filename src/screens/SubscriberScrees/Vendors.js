@@ -79,6 +79,7 @@ const Vendors = ({navigation}) => {
         {data?.map((area, index) => {
           return (
             <PendingOrders
+            btnTitle={'View Details'}
               profilePic={area.BakeryId.profilePic}
               userName={area.BakeryId.userName}
               status={area.status}

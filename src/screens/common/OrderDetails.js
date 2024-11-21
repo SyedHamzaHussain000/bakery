@@ -1,5 +1,5 @@
-import {View, Text, Image, ScrollView} from 'react-native';
-import React from 'react';
+import {View, Text, Image, ScrollView, ActivityIndicator} from 'react-native';
+import React, {useState} from 'react';
 import PlainHeader from '../../Components/PlainHeader';
 import {baseUrl} from '../../baseUrl';
 import {responsiveHeight} from '../../assets/Responsive_Dimensions';
@@ -9,10 +9,26 @@ import {category1} from '../../assets/icons';
 import {styles} from '../../Styles';
 import {useSelector} from 'react-redux';
 import TextWithLabel from '../../Components/TextWithLabel';
+import Button from '../../Components/Button';
+import {orderReadyHandler} from '../../GlobalFunctionns';
 
 const OrderDetails = ({navigation, route}) => {
   const {area} = route.params;
-  const {userType} = useSelector(state => state.user);
+  const {userType, token} = useSelector(state => state.user);
+  const [isLoading, setIsLoading] = useState(false);
+  const productId = area.productId._id;
+  const handleOrderReady = async () => {
+    setIsLoading(true);
+    try {
+      const response = await orderReadyHandler(productId,token);
+      console.log('response', response);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log('error', error);
+    }
+  };
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -58,7 +74,7 @@ const OrderDetails = ({navigation, route}) => {
         </View>
       </View>
 
-      <View>
+      <View style={{marginBottom: 20}}>
         <TextWithLabel
           title={'Product Description'}
           text={area.productId.productDescp}
@@ -98,6 +114,21 @@ const OrderDetails = ({navigation, route}) => {
           title={'Email'}
         />
       </View>
+      {userType === 'Owner' ? (
+        <Button
+          styleName={'plainButton'}
+          handleOnPress={() => handleOrderReady()}
+          fontWeight={'light'}
+          color={Color.themeColor}
+          title={
+            isLoading ? (
+              <ActivityIndicator size={'large'} color={Color.white} />
+            ) : (
+              'Order Ready'
+            )
+          }
+        />
+      ) : null}
     </ScrollView>
   );
 };

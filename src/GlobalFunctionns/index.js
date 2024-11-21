@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {baseUrl} from '../baseUrl';
 import {ShowToast} from './ShowToast';
-import { clearProducts } from '../redux/Slices';
+import {clearProducts} from '../redux/Slices';
 
 export const AddProductIntegration = async (
   mime,
@@ -99,7 +99,7 @@ export const getSubscriberProducts = async token => {
   }
 };
 
-export const bookProducts = async (addToCartProducts, token,dispatch) => {
+export const bookProducts = async (addToCartProducts, token, dispatch) => {
   let allSuccessful = true;
   for (const area of addToCartProducts) {
     console.log('Booking product:', area._id);
@@ -130,18 +130,35 @@ export const bookProducts = async (addToCartProducts, token,dispatch) => {
         allSuccessful = true;
       } else {
         allSuccessful = false;
-
       }
     } catch (error) {
       allSuccessful = false;
       console.log(`Error booking product ${area._id}:`, error);
-       ShowToast('error', error.message);
+      ShowToast('error', error.message);
     }
   }
   if (allSuccessful) {
-    dispatch(clearProducts())
-   return ShowToast('success', 'Products Booked Successfully');
+    dispatch(clearProducts());
+    return ShowToast('success', 'Products Booked Successfully');
   } else {
-  return  ShowToast('error', 'There was an issue booking products');
+    return ShowToast('error', 'There was an issue booking products');
+  }
+};
+
+export const orderReadyHandler = async (id, token) => {
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}bakery/booking-ready-owner/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };

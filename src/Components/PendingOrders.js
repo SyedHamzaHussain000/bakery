@@ -6,7 +6,7 @@ import { responsiveFontSize, responsiveHeight, responsiveWidth } from '../assets
 import { baseUrl } from '../baseUrl'
 import { styles } from '../Styles'
 
-const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName,totalPrice,status,productName,chooseCategory}) => {
+const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName,totalPrice,status,productName,chooseCategory,btnTitle}) => {
   return (
     <View
     style={[
@@ -93,7 +93,7 @@ const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName
         color={Color.themeColor}
         txtColor={Color.white}
         handleOnPress={()=>navigation.navigate(navigationScreen,{area})}
-        title={'View Details'}
+        title={btnTitle}
         width={'auto'}
         fontWeight={'light'}
         styleName={'viewDetails'}
