@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../../Components/Header';
@@ -20,30 +21,26 @@ import {clearToken} from '../../redux/Slices';
 import PendingOrders from '../../Components/PendingOrders';
 import axios from 'axios';
 import {baseUrl} from '../../baseUrl';
+import {getAllBookedProductsHandler} from '../../GlobalFunctionns';
+import { responsiveHeight } from '../../assets/Responsive_Dimensions';
+import CompletedOrders from '../../Components/CompletedOrders';
 
 const Order = ({navigation}) => {
   const {token} = useSelector(state => state.user);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState();
-  const getAllBookedProducts = () => {
-    let data = '';
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `${baseUrl}subscriber/GetAllMyBookingProducts`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: data,
-    };
+  const getAllBookedProducts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getAllBookedProductsHandler(token);
+      setIsLoading(false);
+       console.log('res',response)
+      setData(response.userId);
+    } catch (error) {
+      setIsLoading(false);
 
-    axios
-      .request(config)
-      .then(response => {
-        setData(response.data.userId);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      console.log('error', error);
+    }
   };
   useEffect(() => {
     getAllBookedProducts();
@@ -63,7 +60,7 @@ const Order = ({navigation}) => {
       </Text>
       <Text style={styles.text1}>Your Todays Orders</Text>
 
-      <View
+      {/* <View
         style={[
           styles.elevation,
           {
@@ -200,26 +197,33 @@ const Order = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
-      <View>
-        {/* <ViewOrder buttonTitle={'View Order'} name1={'Vincent Lambert'} name2={'Olivia Williams'} price1={'$130.00'} order1={'Chocolate Croissant, Muffins'} order2={'Baggette - Cuban Bread'} price2={'$165.00'}/> */}
-        {data?.map((area, index) => {
-          return (
-            <PendingOrders
-            btnTitle={'View Order'}
-              profilePic={area.subscriberId.profilePic}
-              userName={area.subscriberId.userName}
-              status={area.status}
-              totalPrice={area.TotalPrice}
-              productName={area.productId.productName}
-              chooseCategory={area.productId.chooseCategory}
-              navigation={navigation}
-              navigationScreen={'OrderDetails'}
-              area={area}
-              key={index}
-            />
-          );
-        })}
+      </View> */}
+   <CompletedOrders/>
+      <View style={{flexGrow:1}}>
+        {isLoading ? (
+          <View style={{flex:1,justifyContent:'center'}}>
+          <ActivityIndicator size={'large'} color={Color.black}/>
+        </View>
+        ):
+           data?.map((area, index) => {
+            return (
+              <PendingOrders
+                btnTitle={'View Order'}
+                profilePic={area.subscriberId.profilePic}
+                userName={area.subscriberId.userName}
+                status={area.status}
+                totalPrice={area.TotalPrice}
+                productName={area.productId.productName}
+                chooseCategory={area.productId.chooseCategory}
+                navigation={navigation}
+                navigationScreen={'OrderDetails'}
+                area={area}
+                key={index}
+              />
+            );
+          })
+        }
+     
       </View>
     </ScrollView>
   );

@@ -8,6 +8,7 @@ import { clock, rider } from '../../assets/icons';
 import { Images } from '../../assets';
 import Hr from '../../Components/Hr';
 import Modal from 'react-native-modal'
+import CompletedOrders from '../../Components/CompletedOrders';
 const Bakeries = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -38,141 +39,8 @@ const Bakeries = ({navigation}) => {
       </View>
 
       <View style={{}}>
-        <View
-          style={{
-            padding: 10,
-            backgroundColor: Color.white,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderBottomLeftRadius: 10,
-            elevation: 4,
-            marginTop: 30,
-          }}>
-          <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-            <Text style={{color: Color.black, fontSize: 22}}>Dave Miller</Text>
-            <Text style={{fontSize: 12, color: '#C5C5C5'}}>Just Now</Text>
-          </View>
-
-          <View>
-            <View
-              style={{
-                backgroundColor: Color.themeColor,
-                borderTopLeftRadius: 20,
-              }}></View>
-            <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
-              <View
-                style={{
-                  backgroundColor: Color.themeColor,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderTopLeftRadius: 25,
-                  borderTopRightRadius: 25,
-                  borderBottomLeftRadius: 25,
-                  height: 55,
-                  width: 65,
-                }}>
-                <SvgIcons xml={rider} height={'30'} width={'30'} />
-              </View>
-              <View style={{flex: 1}}>
-                <Text style={{color: Color.black, fontSize: 18}}>
-                  Mary Gold Café & Bakery:
-                </Text>
-                <Text
-                  style={{
-                    color: '#C5C5C5',
-                    fontSize: 16,
-                    width: '100%',
-                    flexWrap: 'wrap',
-                    marginTop: 5,
-                  }}>
-                  Sour Dough - Baggette - Cuban Bread
-                </Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
-              <View
-                style={{
-                  backgroundColor: Color.white,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 4,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderTopLeftRadius: 25,
-                  borderTopRightRadius: 25,
-                  borderBottomRightRadius: 25,
-                  height: 55,
-                  width: 65,
-                }}>
-                <SvgIcons xml={clock} height={'30'} width={'30'} />
-              </View>
-              <View style={{flex: 1}}>
-                <Text style={{color: Color.black, fontSize: 18}}>Time:</Text>
-                <Text
-                  style={{
-                    color: '#C5C5C5',
-                    fontSize: 16,
-                    width: '100%',
-                    flexWrap: 'wrap',
-                    marginTop: 5,
-                  }}>
-                  6am - 7am, 8am - 9am, 10am - 11am
-                </Text>
-              </View>
-            </View>
-
-            <View style={{marginTop: 20, marginBottom: 10}}>
-              <Image style={{width: '100%'}} source={Images.map} />
-            </View>
-
-            <Hr />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: 20,
-                marginBottom: 10,
-              }}>
-              <Text
-                style={{
-                  fontSize: 25,
-                  color: Color.themeColor,
-                  fontWeight: 'bold',
-                }}>
-                $185.60
-              </Text>
-              {/* <TouchableOpacity onPress={()=>navigation.navigate('OrderStatus')} style={styles.buttonStyle}>
-                <Text style={{color: Color.white, fontSize: 16}}>
-                  Start Delivery
-                </Text>
-              </TouchableOpacity> */}
-               <Button
-               handleOnPress={()=>navigation.navigate('OrderStatus')}
-                  color={Color.themeColor}
-                  txtColor={Color.white}
-                  title={' Start Delivery'}
-                  width={'auto'}
-                  fontWeight={'light'}
-                  fontSize={16}
-                  styleName={'viewDetails'}
-                />
-            </View>
-          </View>
-        </View>
+   <CompletedOrders navigation={navigation}/>
+        
         {data.map((area, index) => {
           return (
             <View

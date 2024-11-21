@@ -22,6 +22,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 import {clearToken} from '../../redux/Slices';
+import MapView from 'react-native-maps';
 
 const RoutesScreen = ({navigation}) => {
   console.log('edit rider');
@@ -108,14 +109,27 @@ const RoutesScreen = ({navigation}) => {
           <Text style={style.textStyle}>Routes</Text>
           <Text style={style.textStyle}>Maps</Text>
         </View>
-        <Image
+        {/* <Image
           style={{borderRadius: 10, flex: 1}}
           resizeMode="contain"
           source={Images.mapSmall}
-        />
+        /> */}
+        <View style={{flex:1,borderRadius:10,overflow:'hidden',position:'relative',right:5}}>
+           <MapView
+           scrollEnabled={false}
+        style={{flex:1,}}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
+      </View>
       </View>
 
       <TouchableOpacity
+      activeOpacity={0.8}
       onPress={()=>navigation.navigate('RoadWay')}
         style={{
           backgroundColor: Color.themeColor,
@@ -130,11 +144,23 @@ const RoutesScreen = ({navigation}) => {
           <Text style={style.textStyle}>Setup</Text>
           <Text style={style.textStyle}>Routes</Text>
         </View>
-        <Image
+        {/* <Image
           style={{borderRadius: 10, flex: 1}}
           resizeMode="contain"
           source={Images.mapSmall}
-        />
+        /> */}
+        <View style={{flex:1,borderRadius:10,overflow:'hidden',position:'relative',right:5}}>
+           <MapView
+           scrollEnabled={false}
+        style={{flex:1,}}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
+      </View>
       </TouchableOpacity>
     </ScrollView>
   );

@@ -145,6 +145,24 @@ export const bookProducts = async (addToCartProducts, token, dispatch) => {
   }
 };
 
+export const getAllBookedProductsHandler = async token => {
+  let data = '';
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}subscriber/GetAllMyBookingProducts`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const orderReadyHandler = async (id, token) => {
   let config = {
     method: 'post',

@@ -14,6 +14,8 @@ import {Color} from '../../assets/Utils';
 import * as Progress from 'react-native-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../Components/Button';
+import { responsiveHeight } from '../../assets/Responsive_Dimensions';
+import MapView from 'react-native-maps';
 const OrderStatus = ({navigation}) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [orderCategory, setOrderCategory] = useState('Start');
@@ -25,7 +27,18 @@ const OrderStatus = ({navigation}) => {
       contentContainerStyle={{paddingBottom: 20,
         backgroundColor:Color.white,
         }}>
-      <Image source={Images.map3} />
+      {/* <Image source={Images.map3} /> */}
+           <MapView
+          //  scrollEnabled={false}
+          scrollEnabled
+        style={{height:responsiveHeight(43)}}
+        initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
       <View
         style={{
           backgroundColor: Color.white,

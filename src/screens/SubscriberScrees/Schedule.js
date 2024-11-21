@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Color} from '../../assets/Utils';
@@ -22,6 +23,7 @@ const Schedule = ({navigation}) => {
   const [products, setProducts] = useState();
   console.log('addToCartProducts===>>>', addToCartProducts);
   const [activeCategory, setActiveCategory] = useState('bread');
+  const [isLoading,setIsLoading] = useState(false)
   const categoryData = [
     {
       id: 1,
@@ -45,7 +47,9 @@ const Schedule = ({navigation}) => {
     },
   ];
   const getProductsHandler = async () => {
+    setIsLoading(true)
     const response = await getSubscriberProducts(token);
+    setIsLoading(false)
     setProducts(response.data);
   };
 
@@ -169,22 +173,36 @@ const Schedule = ({navigation}) => {
           </Text>
           <Ionicons size={20} color={Color.black} name="chevron-down" />
         </TouchableOpacity> */}
-        <FlatList
-        showsVerticalScrollIndicator={false}
-          columnWrapperStyle={{justifyContent: 'space-between', gap: 10}}
-          contentContainerStyle={{
-            justifyContent: 'space-between',
-            marginTop: 30,
-          }}
-          numColumns={2}
-          data={products}
-          renderItem={(area, index) => {
-            console.log('area.item',area.item);
-            return (
-             <Products screen={'ProductDetails'}  routesData={area.item._id} navigation={navigation} data={area}/>
-            );
-          }}
-        />
+         {/* <View style={{ backgroundColor: 'yellow', zIndex: 10, flex: 1 }}>
+  {!isLoading ? (
+    <View style={{ justifyContent: 'center', alignItems: 'center', zIndex: 30, flex: 1 }}>
+      <ActivityIndicator size={'large'} color={Color.black} />
+    </View>
+  ) : ( */}
+    <FlatList
+      showsVerticalScrollIndicator={false}
+      columnWrapperStyle={{ justifyContent: 'space-between', gap: 10 }}
+      contentContainerStyle={{
+        justifyContent: 'space-between',
+        marginTop: 30,
+      }}
+      numColumns={2}
+      data={products}
+      renderItem={(area, index) => {
+        console.log('area.item', area.item);
+        return (
+          <Products
+            screen={'ProductDetails'}
+            routesData={area.item._id}
+            navigation={navigation}
+            data={area}
+          />
+        );
+      }}
+    />
+  {/* )} */}
+{/* </View> */}
+
         {/* <Text style={{fontSize: 22, color: Color.black, marginTop: 20}}>
           Availabilty
         </Text>

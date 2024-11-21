@@ -5,9 +5,9 @@ import {ShowToast} from '../GlobalFunctionns/ShowToast';
 const initialState = {
   user: [],
   userType: '',
-  userData:{
-    userName:'',
-    email:'',
+  userData: {
+    userName: '',
+    email: '',
   },
   token: '',
   isLoading: false,
@@ -56,16 +56,15 @@ export const authSlice = createSlice({
     clearProducts: (state, action) => {
       state.addToCartProducts = [];
     },
-    setUserData:(state,action) => {
-      state.user = action.payload
+    setUserData: (state, action) => {
+      state.user = action.payload;
     },
-    setProfileData:(state,action) => {
-state.userData = action.payload
-
+    setProfileData: (state, action) => {
+      state.userData = action.payload;
     },
-    clearUserData:(state,action) => {
-      state.user = []
-    }
+    clearUserData: (state) => {
+      state.user = [];
+    },
   },
   extraReducers: builder => {
     builder
@@ -80,7 +79,7 @@ state.userData = action.payload
           userName: action.payload.data.userName,
           email: action.payload.data.email,
         };
-        console.log('action.payload',action.payload.data);
+        console.log('action.payload', action.payload.data);
       })
       .addCase(UserLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -89,6 +88,14 @@ state.userData = action.payload
   },
 });
 
-export const {setUserType, clearToken, addToCart,clearProducts,setUserData,setProfileData,clearUserData} = authSlice.actions;
+export const {
+  setUserType,
+  clearToken,
+  addToCart,
+  clearProducts,
+  setUserData,
+  setProfileData,
+  clearUserData,
+} = authSlice.actions;
 
 export default authSlice.reducer;
