@@ -109,10 +109,10 @@ const Bakeries = ({navigation}) => {
       setIsLoading(false);
     }
   };
- 
-  useEffect(() => {
-    activeCategory && getProductByCategory();
+  activeCategory && useEffect(() => {
+     getProductByCategory();
   }, [activeCategory]);
+ 
   // useEffect(() => {
   //   focus && getAllProductHandler();
   // }, [focus]);
