@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import PlainHeader from '../../Components/PlainHeader';
-import {Images} from '../../assets';
 import SvgIcons from '../../Components/SvgIcons';
 import {category1} from '../../assets/icons';
 import {Color} from '../../assets/Utils';
@@ -21,16 +20,12 @@ import {baseUrl} from '../../baseUrl';
 import Button from '../../Components/Button';
 import {addToCart} from '../../redux/Slices';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
 import {
   responsiveHeight,
   responsiveWidth,
 } from '../../assets/Responsive_Dimensions';
 import {Dropdown} from 'react-native-element-dropdown';
 import {styles} from '../../Styles';
-import DatePickerComp from '../../Components/DatePickerComp';
-import DatePicker from 'react-native-date-picker';
 const ProductDetails = ({navigation, route}) => {
   const {productData} = route.params;
   const id = productData;
@@ -70,8 +65,6 @@ const ProductDetails = ({navigation, route}) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [totalPrice, setTotalPrice] = useState(Number(0));
   const {token, addToCartProducts} = useSelector(state => state.user);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   console.log('data=====>>>>', data);
@@ -82,17 +75,8 @@ const ProductDetails = ({navigation, route}) => {
     const formattedDate = date.toDateString();
     setSelectedDate(formattedDate);
   };
-  const handleTimeChange = time => {
-    const formattedTime = time.toLocaleTimeString();
-    setSelectedTime(formattedTime);
-  };
-  const showDatePicker = () => setDatePickerVisibility(true);
-  const hideDatePicker = () => setDatePickerVisibility(false);
 
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date);
-    hideDatePicker();
-  };
+
 
   console.log('selectedAvailability', selectedAvailability);
   const getProduct = async () => {
@@ -246,7 +230,6 @@ const ProductDetails = ({navigation, route}) => {
             selectedAvailability === 'Once A Month') && (
             <View
               style={{
-                // marginTop: responsiveHeight(1),
                 gap: responsiveHeight(2),
               }}>
               <Text style={localStyles.heading}>Select A Day?</Text>
@@ -273,16 +256,8 @@ const ProductDetails = ({navigation, route}) => {
                   setIsFocus(false);
                 }}
               />
-              {/* <DatePickerComp placeHolder={'2/11/2024'} selectedResult={selectedDate} title="Select Date" mode="date" onDateChange={handleDateChange} /> */}
-              {/* {selectedDate && (
-        <Text>{selectedDate}</Text>
-      )} */}
             </View>
           )}
-          {/* <DatePickerComp placeHolder={'10:25 PM'} selectedResult={selectedTime}  onDateChange={handleTimeChange} title={'Select Time'} mode={'time'}/> */}
-          {/* {selectedTime && (
-        <Text>{selectedTime}</Text>
-      )} */}
         </View>
       </View>
 
