@@ -34,10 +34,16 @@ const Vendors = ({navigation}) => {
         handlePress={() => navigation.navigate('Cart')}
         handleNavigate={() => navigation.navigate('UserProfile')}
       />
-      <View style={{padding: 10}}>
+      <View style={{padding: 10,flex:1}}>
         <CompletedOrders />
-        <View style={{flexGrow: 1}}>
-             {data?.map((area, index) => {
+        {isLoading ? 
+        (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator size={'large'} color={Color.black} />
+          </View>
+        ) : 
+        
+             data?.reverse().map((area, index) => {
               return (
                 <PendingOrders
                   btnTitle={'View Details'}
@@ -52,9 +58,10 @@ const Vendors = ({navigation}) => {
                   area={area}
                   key={index}
                 />
-              );
-            })} 
-      </View>
+              )
+            })
+          
+        }    
       </View>
     </ScrollView>
   );

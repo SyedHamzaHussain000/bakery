@@ -33,8 +33,8 @@ import DatePickerComp from '../../Components/DatePickerComp';
 import DatePicker from 'react-native-date-picker';
 const ProductDetails = ({navigation, route}) => {
   const {productData} = route.params;
-  const id = productData
-  console.log('productData',productData)
+  const id = productData;
+  console.log('productData', productData);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const availabilityData = [
@@ -74,16 +74,16 @@ const ProductDetails = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  console.log('data=====>>>>',data)
+  console.log('data=====>>>>', data);
 
-  console.log('selectedDate',selectedDate)
-  console.log('selectedTime',selectedTime)
-  const handleDateChange = (date) => {
-    const formattedDate = date.toDateString()
+  console.log('selectedDate', selectedDate);
+  console.log('selectedTime', selectedTime);
+  const handleDateChange = date => {
+    const formattedDate = date.toDateString();
     setSelectedDate(formattedDate);
   };
-  const handleTimeChange = (time) => {
-    const formattedTime = time.toLocaleTimeString()
+  const handleTimeChange = time => {
+    const formattedTime = time.toLocaleTimeString();
     setSelectedTime(formattedTime);
   };
   const showDatePicker = () => setDatePickerVisibility(true);
@@ -94,7 +94,7 @@ const ProductDetails = ({navigation, route}) => {
     hideDatePicker();
   };
 
-  console.log('selectedAvailability',selectedAvailability)
+  console.log('selectedAvailability', selectedAvailability);
   const getProduct = async () => {
     try {
       const response = await getProductById(id, token);
@@ -242,44 +242,45 @@ const ProductDetails = ({navigation, route}) => {
               setIsFocusAvailability(false);
             }}
           />
-          {(selectedAvailability === 'Once A Week' || selectedAvailability === 'Once A Month') && (
-              <View
-                style={{
-                  // marginTop: responsiveHeight(1),
-                  gap: responsiveHeight(2),
-                }}>
-                <Text style={localStyles.heading}>Select A Day?</Text>
-                <Dropdown
-                  style={[styles.dropdown, isFocus && {borderColor: 'gray'}]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={daysData}
-                  search
-                  maxHeight={'90%'}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isFocus ? 'Monday' : '...'}
-                  searchPlaceholder="Search..."
-                  value={dayValue}
-                  onFocus={() => setIsFocus(true)}
-                  onBlur={() => setIsFocus(false)}
-                  onChange={item => {
-                    console.log(item);
-                    setDayValue(item.value);
-                    setSelectedDay(item.label);
-                    setIsFocus(false);
-                  }}
-                />
-      {/* <DatePickerComp placeHolder={'2/11/2024'} selectedResult={selectedDate} title="Select Date" mode="date" onDateChange={handleDateChange} /> */}
-      {/* {selectedDate && (
+          {(selectedAvailability === 'Once A Week' ||
+            selectedAvailability === 'Once A Month') && (
+            <View
+              style={{
+                // marginTop: responsiveHeight(1),
+                gap: responsiveHeight(2),
+              }}>
+              <Text style={localStyles.heading}>Select A Day?</Text>
+              <Dropdown
+                style={[styles.dropdown, isFocus && {borderColor: 'gray'}]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={daysData}
+                search
+                maxHeight={'90%'}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Monday' : '...'}
+                searchPlaceholder="Search..."
+                value={dayValue}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={item => {
+                  console.log(item);
+                  setDayValue(item.value);
+                  setSelectedDay(item.label);
+                  setIsFocus(false);
+                }}
+              />
+              {/* <DatePickerComp placeHolder={'2/11/2024'} selectedResult={selectedDate} title="Select Date" mode="date" onDateChange={handleDateChange} /> */}
+              {/* {selectedDate && (
         <Text>{selectedDate}</Text>
       )} */}
-              </View>
-            )}
-         {/* <DatePickerComp placeHolder={'10:25 PM'} selectedResult={selectedTime}  onDateChange={handleTimeChange} title={'Select Time'} mode={'time'}/> */}
-         {/* {selectedTime && (
+            </View>
+          )}
+          {/* <DatePickerComp placeHolder={'10:25 PM'} selectedResult={selectedTime}  onDateChange={handleTimeChange} title={'Select Time'} mode={'time'}/> */}
+          {/* {selectedTime && (
         <Text>{selectedTime}</Text>
       )} */}
         </View>
@@ -349,7 +350,6 @@ const ProductDetails = ({navigation, route}) => {
         color={Color.themeColor}
       />
     </ScrollView>
-  
   );
 };
 

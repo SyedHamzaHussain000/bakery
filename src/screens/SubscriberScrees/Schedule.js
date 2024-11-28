@@ -1,15 +1,14 @@
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Color} from '../../assets/Utils';
 import SvgIcons from '../../Components/SvgIcons';
-import { category1,category3, logo} from '../../assets/icons';
+import {category1, category3, logo} from '../../assets/icons';
 import Hr from '../../Components/Hr';
 import Header from '../../Components/Header';
 import DiscoverCategory from '../../Components/DiscoverCategory';
@@ -19,11 +18,13 @@ import Products from '../../Components/Products';
 
 const Schedule = ({navigation}) => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const {token,addToCartProducts} = useSelector(state => state.user);
+  const {token, addToCartProducts} = useSelector(state => state.user);
   const [products, setProducts] = useState();
+  const myDataMemo = useMemo(() => products, [products]);
+
   console.log('addToCartProducts===>>>', addToCartProducts);
   const [activeCategory, setActiveCategory] = useState('bread');
-  const [isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const categoryData = [
     {
       id: 1,
@@ -47,9 +48,9 @@ const Schedule = ({navigation}) => {
     },
   ];
   const getProductsHandler = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const response = await getSubscriberProducts(token);
-    setIsLoading(false)
+    setIsLoading(false);
     setProducts(response.data);
   };
 
@@ -69,11 +70,15 @@ const Schedule = ({navigation}) => {
       <View style={{padding: 40, alignItems: 'center'}}>
         <SvgIcons height={'113'} width={'140'} xml={logo} />
       </View>
-      <Header handleNavigate={()=>navigation.navigate('UserProfile')} products={addToCartProducts.length > 0 ? true : false} handlePress={()=>navigation.navigate('Cart')}/>
+      <Header
+        handleNavigate={() => navigation.navigate('UserProfile')}
+        products={addToCartProducts.length > 0 ? true : false}
+        handlePress={() => navigation.navigate('Cart')}
+      />
       <View style={{marginTop: 20}}>
         <Hr />
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 20, flex: 1}}>
         <Text style={{fontSize: 22, color: Color.black}}>
           Discover by{' '}
           <Text style={{fontSize: 22, color: Color.black, fontWeight: 'bold'}}>
@@ -106,120 +111,38 @@ const Schedule = ({navigation}) => {
             Your Delivery.
           </Text>
         </Text>
-
-        {/* <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            backgroundColor: Color.white,
-            alignItems: 'center',
-            gap: 10,
-            marginTop: 20,
-
-            borderWidth: 1,
-            borderColor: '#D4D4D4',
-            width: 170,
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            borderBottomLeftRadius: 30,
-            paddingHorizontal: 20,
-            // height:70,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 15,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-
-            elevation: 4,
-          }}>
-          <Text style={{fontSize: 16, color: Color.black}}>Once A Week</Text>
-          <Ionicons size={20} color={Color.black} name="chevron-down" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            backgroundColor: Color.white,
-            alignItems: 'center',
-            gap: 10,
-            marginTop: 15,
-            borderWidth: 1,
-            borderColor: '#D4D4D4',
-            width: 250,
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            borderBottomLeftRadius: 30,
-            paddingHorizontal: 20,
-            // height:70,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 15,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-
-            elevation: 4,
-          }}>
-          <Text style={{fontSize: 16, color: Color.black}}>
-            Once Sour Dough Bread $3
-          </Text>
-          <Ionicons size={20} color={Color.black} name="chevron-down" />
-        </TouchableOpacity> */}
-         {/* <View style={{ backgroundColor: 'yellow', zIndex: 10, flex: 1 }}>
-  {!isLoading ? (
-    <View style={{ justifyContent: 'center', alignItems: 'center', zIndex: 30, flex: 1 }}>
-      <ActivityIndicator size={'large'} color={Color.black} />
-    </View>
-  ) : ( */}
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      columnWrapperStyle={{ justifyContent: 'space-between', gap: 10 }}
-      contentContainerStyle={{
-        justifyContent: 'space-between',
-        marginTop: 30,
-      }}
-      numColumns={2}
-      data={products}
-      renderItem={(area, index) => {
-        console.log('area.item', area.item);
-        return (
-          <Products
-            screen={'ProductDetails'}
-            routesData={area.item._id}
-            navigation={navigation}
-            data={area}
-          />
-        );
-      }}
-    />
-  {/* )} */}
-{/* </View> */}
-
-        {/* <Text style={{fontSize: 22, color: Color.black, marginTop: 20}}>
-          Availabilty
-        </Text>
-        <View style={styles.container}>
-          <CalendarPicker onDateChange={onDateChange} />
-        
-        </View> */}
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          {isLoading ? (
+            <ActivityIndicator size={'large'} color={Color.black} />
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{justifyContent: 'space-between', gap: 10}}
+              contentContainerStyle={{
+                marginTop: 30,
+              }}
+              style={{
+                flexGrow: 1,
+              }}
+              numColumns={2}
+              data={myDataMemo?.reverse()}
+              renderItem={(area, index) => {
+                console.log('area.item', area.item);
+                return (
+                  <Products
+                    screen={'ProductDetails'}
+                    routesData={area.item._id}
+                    navigation={navigation}
+                    data={area}
+                  />
+                );
+              }}
+            />
+          )}
+        </View>
       </View>
     </ScrollView>
   );
 };
 
 export default Schedule;
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-});

@@ -5,7 +5,6 @@ import {clock, rider} from '../assets/icons';
 import SvgIcons from './SvgIcons';
 import Hr from './Hr';
 import Button from './Button';
-import {Images} from '../assets';
 import SubscriptionModal from './SubscriptionModal';
 import {useSelector} from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';

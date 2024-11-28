@@ -3,26 +3,20 @@ import {
   Text,
   Image,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import PlainHeader from '../../Components/PlainHeader';
-import {Images} from '../../assets';
 import SvgIcons from '../../Components/SvgIcons';
 import {category1} from '../../assets/icons';
 import {Color} from '../../assets/Utils';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
 import {getProductById} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
 import {baseUrl} from '../../baseUrl';
 const ProductDetails = ({navigation, route}) => {
   const {id} = route.params;
   const [loading, setLoading] = useState(true);
-
-  const [totalProducts, setTotalProducts] = useState(1);
   const [data, setData] = useState({});
   const token = useSelector(state => state.user.token);
   const getProduct = async () => {
@@ -73,12 +67,12 @@ const ProductDetails = ({navigation, route}) => {
           width: 300,
           borderRadius: 10,
           borderWidth: 1,
-          borderColor: Color.themeColor, // Replace 'blue' with your theme color
+          borderColor: Color.themeColor,
         }}
         source={{uri: `${baseUrl}bakery/${data.productImage}`}}
         onLoadStart={() => setLoading(true)}
         onLoad={() => setLoading(false)}
-        onError={() => setLoading(false)} // Stop loader on error as well
+        onError={() => setLoading(false)}
       />
 
       <View
@@ -112,57 +106,6 @@ const ProductDetails = ({navigation, route}) => {
         <Text style={styles.heading}>Price</Text>
         <Text style={styles.textStyle}> ${data.discountPrice}</Text>
       </View>
-
-      {/* <View
-        style={{
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 30,
-        }}>
-        <Text
-          style={{color: Color.themeColor, fontSize: 25, fontWeight: 'bold'}}>
-          ${data.discountPrice}
-        </Text>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            borderWidth: 1,
-            borderColor: Color.themeColor,
-            flexDirection: 'row',
-            alignItems: 'center',
-            width: 120,
-            paddingVertical: 5,
-            paddingHorizontal: 10,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 15,
-            borderBottomRightRadius: 15,
-          }}>
-          <TouchableOpacity
-            onPress={() =>
-              totalProducts > 0 ? setTotalProducts(totalProducts - 1) : null
-            }>
-            <Feather name="minus" color={'#959595'} size={20} />
-          </TouchableOpacity>
-          <Text
-            style={{color: Color.themeColor, fontSize: 20, fontWeight: 'bold'}}>
-            {totalProducts}
-          </Text>
-          <TouchableOpacity onPress={() => setTotalProducts(totalProducts + 1)}>
-            <Feather name="plus" color={'#959595'} size={20} />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: Color.themeColor,
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 15,
-            borderBottomRightRadius: 20,
-            padding: 12,
-          }}>
-          <Ionicons name="cart-outline" color={Color.white} size={25} />
-        </TouchableOpacity>
-      </View> */}
     </ScrollView>
   );
 };

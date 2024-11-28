@@ -145,6 +145,54 @@ export const bookProducts = async (addToCartProducts, token, dispatch) => {
   }
 };
 
+export const searchProductsHandler = async (searchValue, token) => {
+  let data = JSON.stringify({
+    searchTerm: searchValue,
+  });
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://khvw9wf1-3020.inc1.devtunnels.ms/api/bakery/SearchProductByNameAndCatagoreis',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+  // setData(response.data.products);
+};
+
+export const getProductsByCategoryHandler = async (activeCategory, token) => {
+  let data = {
+    chooseCategory: activeCategory,
+  };
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://khvw9wf1-3020.inc1.devtunnels.ms/api/bakery/GetAllProductByCatagories',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllBookedProductsHandler = async token => {
   let data = '';
   let config = {

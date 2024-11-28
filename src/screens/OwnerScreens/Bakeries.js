@@ -13,24 +13,32 @@ import {Images} from '../../assets';
 import {Color} from '../../assets/Utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SvgIcons from '../../Components/SvgIcons';
 import {category1, cookies, cupcake, donut, pastry} from '../../assets/icons';
 import SeeAll from '../../Components/SeeAll';
 import FoodCategory from '../../Components/FoodCategory';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Button from '../../Components/Button';
-import {getAllProducts} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
 import {baseUrl} from '../../baseUrl';
 import {useIsFocused} from '@react-navigation/native';
 import {styles} from '../../Styles';
+import axios from 'axios';
+import {
+  getProductsByCategoryHandler,
+  searchProductsHandler,
+} from '../../GlobalFunctionns';
+import { ShowToast } from '../../GlobalFunctionns/ShowToast';
 const Bakeries = ({navigation}) => {
   const [activeCategory, setActiveCategory] = useState('All');
   const token = useSelector(state => state.user.token);
+  const [searchedValue, setSearchedValue] = useState();
+  console.log('searched Value', searchedValue);
   // console.log(activeCategory);
   const [data, setData] = useState([]);
   const myDataMemo = useMemo(() => data, [data]);
+  // console.log('myDataMemo',myDataMemo)
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage,setErrorMessage] = useState()
   // console.log('myDataMemo', myDataMemo);
   const focus = useIsFocused();
   const categoriesData = [
@@ -60,24 +68,56 @@ const Bakeries = ({navigation}) => {
       icon: cookies,
     },
   ];
-  const getAllProductHandler = async () => {
+  // const getAllProductHandler = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await getAllProducts(token);
+  //     setIsLoading(false);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     setIsLoading(false);
+
+  //     console.log('error', error);
+  //   }
+  // };
+
+  const getProductByCategory = async () => {
+    console.log('active', activeCategory);
     setIsLoading(true);
     try {
-      const response = await getAllProducts(token);
+      const res = await getProductsByCategoryHandler(activeCategory, token);
+      console.log('res.getproducts',res.getProductbyCatagories)
+      setData(res.getProductbyCatagories);
       setIsLoading(false);
-
-      setData(response.data);
     } catch (error) {
       setIsLoading(false);
-
-      console.log('error', error);
     }
   };
+
+  const searchProduct = async () => {
+    setErrorMessage('')
+    setActiveCategory('')
+    setIsLoading(true);
+    try {
+      const res = await searchProductsHandler(searchedValue, token);
+      setData(res.products);
+      setIsLoading(false);
+    } catch (error) {
+      setData([])
+      setErrorMessage('Sorry, we couldn’t locate any products matching your search.')
+      ShowToast('error',error.response.data.message)
+      setIsLoading(false);
+    }
+  };
+ 
   useEffect(() => {
-    focus && getAllProductHandler();
-  }, [focus]);
+    activeCategory && getProductByCategory();
+  }, [activeCategory]);
+  // useEffect(() => {
+  //   focus && getAllProductHandler();
+  // }, [focus]);
   const renderItem = ({item}) => {
-    console.log('item.productImage',item.productImage)
+    // console.log('item.productImage', item.productImage);
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('ProductDetails', {id: item._id})}
@@ -160,8 +200,11 @@ const Bakeries = ({navigation}) => {
         }}>
         <View
           style={{flexDirection: 'row', width: '65%', alignItems: 'center'}}>
-            <TouchableOpacity onPress={()=>navigation.navigate('EditProfile')}>
-          <Image style={{height: 100, width: 100}} source={Images.goldBakery} />
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+            <Image
+              style={{height: 100, width: 100}}
+              source={Images.goldBakery}
+            />
           </TouchableOpacity>
           <View style={{flex: 1}}>
             <Text
@@ -177,27 +220,6 @@ const Bakeries = ({navigation}) => {
             </Text>
           </View>
         </View>
-
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate('AddProduct')}
-          style={{
-            backgroundColor: Color.themeColor,
-            height: 50,
-            width: 110,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderTopLeftRadius: 15,
-            borderBottomLeftRadius: 15,
-            borderTopRightRadius: 15,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 5,
-          }}>
-          <Text style={{color: Color.white, fontSize: 16, fontWeight: '500'}}>
-            Add Item
-          </Text>
-          <AntDesign size={18} name="plus" color={Color.white} />
-        </TouchableOpacity> */}
 
         <Button
           handleOnPress={() => navigation.navigate('AddProduct')}
@@ -222,6 +244,7 @@ const Bakeries = ({navigation}) => {
         <View style={{width: '80%'}}>
           <TextInput
             placeholderTextColor={'#D6D6D6'}
+            onChangeText={changedText => setSearchedValue(changedText)}
             placeholder={'Search Here...'}
             style={[
               styles.shadow,
@@ -243,6 +266,7 @@ const Bakeries = ({navigation}) => {
         </View>
         <View style={{flex: 1}}>
           <TouchableOpacity
+            onPress={() => searchProduct()}
             style={{
               height: 55,
               width: 55,
@@ -284,17 +308,21 @@ const Bakeries = ({navigation}) => {
         </ScrollView>
       </View>
       <SeeAll firstText={'My'} secondText={'Products'} />
-      <View style={{marginTop: 20,flex:1}}>
+      <View style={{marginTop: 20, flex: 1}}>
         {isLoading ? (
-          <View style={{flex: 1, justifyContent:'center', }}>
+          <View style={{flex: 1, justifyContent: 'center'}}>
             <ActivityIndicator size={'large'} color={Color.black} />
           </View>
+        ) : myDataMemo.length === 0 ? (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              
+            <Text style={{fontSize: 20, color: Color.black, fontWeight: '500'}}>
+              {errorMessage ? errorMessage:'No products found'}
+              
+            </Text>
+          </View>
         ) : (
-          myDataMemo.length === 0 ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 20, color: Color.black,fontWeight:'500' }}>No products here</Text>
-            </View>
-          ) : (
           <FlatList
             contentContainerStyle={
               {
@@ -306,12 +334,12 @@ const Bakeries = ({navigation}) => {
               justifyContent: 'space-between',
               // marginTop: 20,
             }}
+            // inverted
             numColumns={2}
             showsVerticalScrollIndicator={false}
             data={myDataMemo}
             renderItem={renderItem}
           />
-          )
         )}
       </View>
     </ScrollView>

@@ -6,14 +6,17 @@ import SvgIcons from './SvgIcons';
 import {User} from '../assets/icons';
 const SearchHeader = ({handlePress}) => {
   return (
-    <View style={{justifyContent: 'space-between', flexDirection: 'row',alignItems:'center'}}>
+    <View
+      style={{
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
       <TouchableOpacity>
-
-      <Ionicons size={35} color={Color.black} name="search-sharp" />
+        <Ionicons size={35} color={Color.black} name="search-sharp" />
       </TouchableOpacity>
       <TouchableOpacity onPress={handlePress}>
-
-      <SvgIcons height={'25'} width={'25'} xml={User} />
+        <SvgIcons height={'25'} width={'25'} xml={User} />
       </TouchableOpacity>
     </View>
   );

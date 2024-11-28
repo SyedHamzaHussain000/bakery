@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {Color} from '../assets/Utils';
-import {responsiveFontSize, responsiveHeight, responsiveWidth} from '../assets/Responsive_Dimensions';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from '../assets/Responsive_Dimensions';
 
 export const styles = StyleSheet.create({
   viewDetails: {
@@ -9,6 +13,17 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 17,
     paddingHorizontal: 14,
     paddingVertical: 12,
+  },
+  headerText: {
+    fontSize: 30,
+    color: Color.black,
+    fontWeight: 'light',
+    marginTop: 20,
+  },
+  text1: {
+    fontSize: 15,
+    fontWeight: 'light',
+    color: Color.black,
   },
   proceedButton: {
     borderTopRightRadius: 18,
@@ -25,17 +40,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  editProfile:{
-   height:responsiveHeight(4.2),
-   width:responsiveWidth(40),
-   borderRadius:10,
-   justifyContent:'center',
-   alignItems:'center'
+  editProfile: {
+    height: responsiveHeight(4.2),
+    width: responsiveWidth(40),
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  productDetailsText:{
-color:Color.black,
-fontSize:responsiveFontSize(2),
-fontWeight:'400'
+  productDetailsText: {
+    color: Color.black,
+    fontSize: responsiveFontSize(2),
+    fontWeight: '400',
   },
   smallBlack: {
     fontSize: 10,
@@ -68,16 +83,18 @@ fontWeight:'400'
     backgroundColor: 'white',
     borderColor: '#d4d4d4',
     borderWidth: 1,
-    width:responsiveWidth(90),
+    width: responsiveWidth(90),
     paddingHorizontal: 15,
   },
   placeholderStyle: {
+    color: Color.black,
     fontSize: 16,
   },
   selectedTextStyle: {
     fontSize: 16,
+    color:Color.black
   },
-  orderDetailsText:{
+  orderDetailsText: {
     color: '#8D8D8D',
     fontSize: 17,
     fontWeight: 'medium',
