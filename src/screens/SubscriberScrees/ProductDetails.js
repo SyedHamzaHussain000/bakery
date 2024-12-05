@@ -76,8 +76,6 @@ const ProductDetails = ({navigation, route}) => {
     setSelectedDate(formattedDate);
   };
 
-
-
   console.log('selectedAvailability', selectedAvailability);
   const getProduct = async () => {
     try {

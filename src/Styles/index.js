@@ -20,6 +20,10 @@ export const styles = StyleSheet.create({
     fontWeight: 'light',
     marginTop: 20,
   },
+  postReaction: {
+    color: Color.black,
+    fontSize: 16,
+  },
   text1: {
     fontSize: 15,
     fontWeight: 'light',
@@ -35,6 +39,12 @@ export const styles = StyleSheet.create({
   },
   plainButton: {
     height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createPostButton: {
+    height: responsiveHeight(5.5),
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
