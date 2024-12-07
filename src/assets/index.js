@@ -6,6 +6,7 @@ export const Images = {
   pic2: require('../assets/images/Pic2.png'),
   profile1: require('../assets/images/Profile1.png'),
   profile2: require('../assets/images/Profile2.png'),
+  profileImage: require('../assets/images/profileImage.png'),
   logo: require('../assets/images/logo.png'),
   profilePic: require('../assets/images/profilePic.png'),
   map: require('../assets/images/map.png'),

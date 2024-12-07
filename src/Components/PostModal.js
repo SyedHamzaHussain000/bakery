@@ -1,5 +1,12 @@
-import {View, Text, TouchableOpacity, TextInput, Image} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,14 +21,42 @@ import Button from './Button';
 import Hr from './Hr';
 import {Images} from '../assets';
 import {PickImage} from '../GlobalFunctionns/ImagePicker';
+import {createPostHandler, getAllPostHandler} from '../GlobalFunctionns';
+import {useSelector} from 'react-redux';
+import axios from 'axios';
+import {ShowToast} from '../GlobalFunctionns/ShowToast';
 
-const PostModal = ({modalVisible, setModalVisible}) => {
+const PostModal = ({modalVisible, setModalVisible,setResponse}) => {
   const [value, setValue] = useState();
-  const [imagePath, setImagePath] = useState();
+  const [imageData, setImageData] = useState();
+  const token = useSelector(state => state.user.token);
+  const [isLoading, setIsLoading] = useState(false);
+  // console.log('token', token);
+  // console.log('imageData', imageData);
   const selectImageHandler = async () => {
     const res = await PickImage();
-    setImagePath(res.path);
-    console.log('res', res.path);
+    setImageData(res);
+    // console.log('res.path', res.path);
+    // console.log('res.mime', res.mime);
+  };
+  
+  const createPost = async () => {
+    if (value && imageData) {
+      setIsLoading(true);
+      const res = await createPostHandler(value, imageData, token);
+      console.log('res======>>>>>>>>>>>>><<<<<<<<',res)
+      setResponse(res)
+      setIsLoading(false);
+      if (res.success === false) {
+        setModalVisible(false);
+        return ShowToast('error', res.message);
+      } else {
+        setModalVisible(false);
+        return ShowToast('success', 'Post Created Successfully');
+      }
+    } else {
+      return ShowToast('error', 'Plz Fill Out The Required Fields');
+    }
   };
   return (
     <Modal
@@ -111,10 +146,10 @@ const PostModal = ({modalVisible, setModalVisible}) => {
             <Ionicons name="image-outline" color={Color.themeColor} size={30} />
           </TouchableOpacity>
         </View>
-        {imagePath ? (
-          <View>
+        {imageData ? (
+          <View style={{alignSelf: 'center'}}>
             <Image
-              source={{uri: imagePath}}
+              source={{uri: imageData.path}}
               resizeMode="contain"
               style={{
                 height: responsiveHeight(20),
@@ -124,7 +159,7 @@ const PostModal = ({modalVisible, setModalVisible}) => {
               }}
             />
             <TouchableOpacity
-              onPress={() => setImagePath('')}
+              onPress={() => setImageData('')}
               style={{
                 backgroundColor: Color.themeColor,
                 height: responsiveHeight(3.6),
@@ -146,7 +181,14 @@ const PostModal = ({modalVisible, setModalVisible}) => {
         ) : null}
         <Button
           disable={value ? true : false}
-          title={'Post'}
+          title={
+            isLoading ? (
+              <ActivityIndicator size={'large'} color={Color.white} />
+            ) : (
+              'Post'
+            )
+          }
+          handleOnPress={() => createPost()}
           styleName={'createPostButton'}
           color={Color.themeColor}
           height={responsiveHeight(5.5)}

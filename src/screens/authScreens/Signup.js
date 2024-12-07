@@ -121,6 +121,7 @@ const Signup = ({navigation, route}) => {
           placeholder={'Confirm Password'}
         />
         <Button
+        disable={true}
           styleName={'plainButton'}
           handleOnPress={() => {
             handleSignUp();

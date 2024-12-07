@@ -228,3 +228,46 @@ export const orderReadyHandler = async (id, token) => {
     throw error;
   }
 };
+
+export const createPostHandler = async (caption, imageData, token) => {
+  let data = new FormData();
+  data.append('caption', caption);
+  data.append('postPicture', {
+    uri: imageData.path,
+    name: 'Pic',
+    type: imageData.mime,
+  });
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}post/createPost`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  try {
+    const response = await axios.request(config);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllPostHandler = async token => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}post/getAllPost`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

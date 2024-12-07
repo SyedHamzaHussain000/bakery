@@ -74,6 +74,7 @@ const Login = ({navigation}) => {
         />
         <Button
           styleName={'plainButton'}
+          disable={true}
           handleOnPress={() => login()}
           fontWeight={'light'}
           color={Color.themeColor}

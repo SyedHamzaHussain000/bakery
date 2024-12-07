@@ -16,7 +16,7 @@ import Hr from './Hr';
 import Button from './Button';
 import PostModal from './PostModal';
 
-const PostHeader = ({handleProfilePress}) => {
+const PostHeader = ({handleProfilePress,prevResponse}) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
@@ -80,7 +80,7 @@ const PostHeader = ({handleProfilePress}) => {
           <Ionicons name="chevron-forward" color={Color.white} size={35} />
         </TouchableOpacity>
       </View>
-      <PostModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+      <PostModal setResponse={(res)=>prevResponse(res)} modalVisible={modalVisible} setModalVisible={setModalVisible}/>
     </View>
   );
 };

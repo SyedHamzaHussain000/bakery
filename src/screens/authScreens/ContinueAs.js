@@ -27,6 +27,7 @@ const ContinueAs = ({navigation}) => {
       </View>
       <View style={{alignItems: 'center', gap: 20, marginTop: 40}}>
         <Button
+        disable={true}
           styleName={'plainButton'}
           handleOnPress={() => {
             navigation.navigate('Signup');
@@ -36,6 +37,8 @@ const ContinueAs = ({navigation}) => {
           color={Color.themeColor}
         />
         <Button
+        disable={true}
+
           styleName={'plainButton'}
           handleOnPress={() => {
             navigation.navigate('Signup');
@@ -45,6 +48,8 @@ const ContinueAs = ({navigation}) => {
           color={Color.themeColor}
         />
         <Button
+        disable={true}
+
           styleName={'plainButton'}
           handleOnPress={() => {
             navigation.navigate('Signup');
