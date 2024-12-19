@@ -121,7 +121,8 @@ const Post = ({data, setUpdateLike}) => {
         </Text>
         {data.item.PostImage && (
           <Image
-            style={{width: '100%', height: 200, borderRadius: 10}}
+          resizeMode='stretch'
+            style={{width: '100%', aspectRatio: 1.3, borderRadius: 10}}
             source={{
               uri: `https://appsdemo.pro/Bakery/api/post/${data.item.PostImage}`,
             }}

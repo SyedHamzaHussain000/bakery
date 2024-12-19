@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
-    color:Color.black
+    color: Color.black,
   },
   orderDetailsText: {
     color: '#8D8D8D',
@@ -193,5 +193,63 @@ export const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 2,
+  },
+
+  commentModal: {
+    flex: 1,
+    overflow: 'hidden',
+    margin: 0,
+    justifyContent: 'flex-end',
+  },
+  commentModalContainer: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    overflow: 'hidden',
+    backgroundColor: '#25292D',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    height: responsiveHeight(60),
+    maxHeight: responsiveHeight(60),
+    width: '100%',
+  },
+  commentCrossBtn: {
+    alignSelf: 'flex-end',
+    marginRight: responsiveHeight(2),
+    marginTop: responsiveHeight(1.5),
+  },
+  commentHeading: {
+    textAlign: 'center',
+    color: Color.white,
+    fontSize: responsiveFontSize(2.5),
+    fontWeight: '500',
+    bottom: 5,
+  },
+  commentScrollStyle: {
+    backgroundColor: '#25292D',
+    padding: 20,
+    paddingTop: 1,
+    paddingBottom: 0,
+    overflow: 'hidden',
+  },
+  commentImage: {
+    height: responsiveHeight(4.9),
+    width: responsiveWidth(10.7),
+    borderRadius: responsiveHeight(2.5),
+    backgroundColor: 'gray',
+  },
+  commentTxtInput: {
+    color: Color.black,
+    backgroundColor: '#f1f2f5',
+    marginTop: responsiveHeight(2),
+    borderRadius: responsiveHeight(1),
+    paddingHorizontal: responsiveHeight(2),
+  },
+  addCommentBtn: {
+    position: 'absolute',
+    right: 10,
+    height: '100%',
+    justifyContent: 'center',
+    marginTop: responsiveHeight(1),
   },
 });

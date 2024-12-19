@@ -20,20 +20,20 @@ const NeighbourHood = ({navigation}) => {
   const token = useSelector(state => state.user.token);
   const [isLoading, setIsLoading] = useState(false);
   const [postDetails, setPostDetails] = useState([]);
-  const [postResponse,setPostResponse] = useState(null)
-  const [updateLike,setUpdateLike] = useState()
+  const [postResponse, setPostResponse] = useState(null);
+  const [updateLike, setUpdateLike] = useState();
   console.log('edit subscriber');
   const getPosts = async () => {
-    setIsLoading(true);
+    // setIsLoading(true);
     // setPostDetails([])
     const response = await getAllPostHandler(token);
-    setIsLoading(false);
+    // setIsLoading(false);
     setPostDetails(response.data);
     console.log('res.data=============>>>>>.', response.data);
   };
   useEffect(() => {
     getPosts();
-  }, [postResponse,updateLike]);
+  }, [postResponse, updateLike]);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -50,7 +50,7 @@ const NeighbourHood = ({navigation}) => {
       </TouchableOpacity>
 
       <PostHeader
-      prevResponse={(data)=>setPostResponse(data.status)}
+        prevResponse={data => setPostResponse(data.status)}
         handleProfilePress={() => navigation.navigate('UserProfile')}
       />
       {isLoading && (
@@ -76,6 +76,7 @@ const NeighbourHood = ({navigation}) => {
         </View>
       ) : null}
       <FlatList
+        inverted
         contentContainerStyle={{paddingBottom: 20, gap: 25, marginTop: 10}}
         showsVerticalScrollIndicator={false}
         renderItem={item => {

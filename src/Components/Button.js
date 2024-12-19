@@ -24,7 +24,7 @@ const Button = ({
 }) => {
   return (
     <TouchableOpacity
-    disabled={!disable}
+    // disabled={!disable}
       onPress={handleOnPress}
       style={[
         styles[styleName],

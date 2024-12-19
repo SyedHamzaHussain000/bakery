@@ -24,6 +24,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {styles} from '../../Styles';
 import axios from 'axios';
 import {
+  getAllProducts,
   getProductsByCategoryHandler,
   searchProductsHandler,
 } from '../../GlobalFunctionns';
@@ -68,18 +69,18 @@ const Bakeries = ({navigation}) => {
       icon: cookies,
     },
   ];
-  // const getAllProductHandler = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await getAllProducts(token);
-  //     setIsLoading(false);
-  //     setData(response.data);
-  //   } catch (error) {
-  //     setIsLoading(false);
+  const getAllProductHandler = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllProducts(token);
+      setIsLoading(false);
+      setData(response.data);
+    } catch (error) {
+      setIsLoading(false);
 
-  //     console.log('error', error);
-  //   }
-  // };
+      console.log('error', error);
+    }
+  };
 
   const getProductByCategory = async () => {
     console.log('active', activeCategory);
@@ -96,7 +97,7 @@ const Bakeries = ({navigation}) => {
 
   const searchProduct = async () => {
     setErrorMessage('')
-    setActiveCategory('')
+    // setActiveCategory('')
     setIsLoading(true);
     try {
       const res = await searchProductsHandler(searchedValue, token);
@@ -110,7 +111,7 @@ const Bakeries = ({navigation}) => {
     }
   };
   activeCategory && useEffect(() => {
-     getProductByCategory();
+     getAllProductHandler();
   }, [activeCategory]);
  
   // useEffect(() => {
@@ -230,6 +231,7 @@ const Bakeries = ({navigation}) => {
           styleName={'viewDetails'}
           iconName={'plus'}
           width={'auto'}
+          disable={true}
           color={Color.themeColor}
           title={'Add Item'}
         />
@@ -293,7 +295,7 @@ const Bakeries = ({navigation}) => {
             marginTop: 20,
             paddingHorizontal: hp(3),
           }}>
-          {categoriesData.map((area, index) => {
+          {categoriesData?.map((area, index) => {
             return (
               <View key={index}>
                 <FoodCategory

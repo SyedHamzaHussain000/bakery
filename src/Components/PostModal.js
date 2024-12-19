@@ -41,7 +41,7 @@ const PostModal = ({modalVisible, setModalVisible,setResponse}) => {
   };
   
   const createPost = async () => {
-    if (value && imageData) {
+    if (value || imageData) {
       setIsLoading(true);
       const res = await createPostHandler(value, imageData, token);
       console.log('res======>>>>>>>>>>>>><<<<<<<<',res)

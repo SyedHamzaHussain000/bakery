@@ -50,7 +50,7 @@ export const getAllProducts = async token => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: `${baseUrl}bakery/all-product`,
+    url: `https://appsdemo.pro/Bakery/api/bakery/all-product`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -232,11 +232,14 @@ export const orderReadyHandler = async (id, token) => {
 export const createPostHandler = async (caption, imageData, token) => {
   let data = new FormData();
   data.append('caption', caption);
-  data.append('postPicture', {
-    uri: imageData.path,
-    name: 'Pic',
-    type: imageData.mime,
-  });
+  if (imageData && imageData.path && imageData.mime) {
+    data.append('postPicture', {
+      uri: imageData.path,
+      name: 'Pic',
+      type: imageData.mime,
+    });
+  }
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -263,6 +266,30 @@ export const getAllPostHandler = async token => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addCommentHandler = async (id, commentText, token) => {
+  let data = JSON.stringify({
+    postId: id,
+    comment: commentText,
+  });
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}post/CommentAPost`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
   };
   try {
     const response = await axios.request(config);
