@@ -18,13 +18,17 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Modal from 'react-native-modal';
 import Checkbox from '../../Components/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearToken, setUserData} from '../../redux/Slices';
+import {clearToken, setUpdatedProfile, setUserData} from '../../redux/Slices';
 import DatePicker from 'react-native-date-picker';
 import {PickImage} from '../../GlobalFunctionns/ImagePicker';
 import {styles} from '../../Styles';
 import {EditProfileHandler} from '../../GlobalFunctionns/auth';
-import { ShowToast } from '../../GlobalFunctionns/ShowToast';
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from '../../assets/Responsive_Dimensions';
+import {ShowToast} from '../../GlobalFunctionns/ShowToast';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../assets/Responsive_Dimensions';
 const EditProfile = ({navigation, route}) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -32,7 +36,9 @@ const EditProfile = ({navigation, route}) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [profileImage, setProfileImage] = useState();
-  const {token, userType} = useSelector(state => state.user);
+  const {token, userType, userData, updatedProfile} = useSelector(
+    state => state.user,
+  );
   console.log('userType', userType);
   const latLng = route?.params?.latLng || null;
   console.log('latlng', latLng);
@@ -46,8 +52,8 @@ const EditProfile = ({navigation, route}) => {
     userName: '',
     phone: '',
     city: '',
-    state:'',
-    zipCode:'',
+    state: '',
+    zipCode: '',
     bakeryName: '',
     bakeryWeb: '',
     businessHours: '',
@@ -58,8 +64,16 @@ const EditProfile = ({navigation, route}) => {
       return {...oldForm, [key]: changedText};
     });
   };
-  const {userName, phone, city,state,zipCode, bakeryName, bakeryWeb, businessHours} =
-    form;
+  const {
+    userName,
+    phone,
+    city,
+    state,
+    zipCode,
+    bakeryName,
+    bakeryWeb,
+    businessHours,
+  } = form;
   const editHandler = async () => {
     setIsLoading(true);
     try {
@@ -80,11 +94,15 @@ const EditProfile = ({navigation, route}) => {
         latLng,
         token,
       );
-      console.log('response', response);
+      // console.log('response', response);
       if (response.success) {
+        dispatch(setUserData(response.data));
+
+        dispatch(setUpdatedProfile(response.data.updatedProfile));
+      
+
+        console.log('respooooooooosnnse', response.data.updatedProfile);
         ShowToast('success', 'Profile Updated');
-        dispatch(setUserData(response.data))
-        navigation.navigate('BottomTabs');
       } else {
         ShowToast('error', response.message);
       }
@@ -95,7 +113,7 @@ const EditProfile = ({navigation, route}) => {
     }
   };
   const handleSelectedItems = items => {
-    setSelectedItems(items); 
+    setSelectedItems(items);
   };
   return (
     <ScrollView
@@ -107,7 +125,18 @@ const EditProfile = ({navigation, route}) => {
         paddingHorizontal: 20,
       }}>
       <View style={{}}>
-        <EditProHeader handleOnPress={() => navigation.navigate('BottomTabs')} />
+        <EditProHeader
+          handleOnPress={() => {
+            if (userData.updatedProfile == 0) {
+              return ShowToast(
+                'error',
+                'Plz Set Your Profile In Order To Proceed',
+              );
+            } else {
+              navigation.navigate('BottomTabs');
+            }
+          }}
+        />
       </View>
 
       <TouchableOpacity
@@ -163,7 +192,9 @@ const EditProfile = ({navigation, route}) => {
           placeholder={'081234567892'}
         />
         <View style={{gap: 10}}>
-          <Text style={{color: Color.black, fontSize: responsiveFontSize(1.9)}}>Date of Birth</Text>
+          <Text style={{color: Color.black, fontSize: responsiveFontSize(1.9)}}>
+            Date of Birth
+          </Text>
           <TouchableOpacity
             onPress={() => setOpen(true)}
             style={[
@@ -270,7 +301,8 @@ const EditProfile = ({navigation, route}) => {
                   backgroundColor: Color.white,
                   paddingVertical: 13,
                 }}>
-                <Text style={{color: '#8D8D8D', fontSize: responsiveFontSize(1.7)}}>
+                <Text
+                  style={{color: '#8D8D8D', fontSize: responsiveFontSize(1.7)}}>
                   {latLng ? latLng.location : 'Dummy Street,...'}
                 </Text>
                 <FontAwesome6

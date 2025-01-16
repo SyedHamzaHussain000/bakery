@@ -23,6 +23,7 @@ import EditProfile from '../screens/authScreens/EditProfile';
 import RiderNotification from '../screens/RiderScreens/RiderNotification';
 import NotifyDetailsRider from '../screens/RiderScreens/NotifyDetailsRider';
 import RoadWay from '../screens/RiderScreens/RoadWay';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -160,17 +161,35 @@ function BottomTabs() {
 }
 
 export function RiderStack() {
+  const updatedProfile = useSelector(state => state.user.updatedProfile);
+  console.log('updatedProfile', updatedProfile);
+
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="OrderStatus" component={OrderStatus} />
-      <Stack.Screen name="Gallery" component={Gallery} />
-      <Stack.Screen name="OrderComplete" component={OrderComplete} />
-      <Stack.Screen name="Map" component={Map} />
-      <Stack.Screen name="RoadWay" component={RoadWay} />
-      <Stack.Screen name="NotificationDetails" component={NotifyDetailsRider} />
-      <Stack.Screen name="Notification" component={RiderNotification} />
-      <Stack.Screen name="BottomTabs" component={BottomTabs} />
+    <Stack.Navigator
+      // initialRouteName={updatedProfile === 0 ?  'EditProfile' : 'BottomTabs'}
+      initialRouteName='BottomTabs'
+      screenOptions={{headerShown: false}}>
+      {updatedProfile == 0 ? (
+        <>
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="OrderStatus" component={OrderStatus} />
+          <Stack.Screen name="Gallery" component={Gallery} />
+          <Stack.Screen name="OrderComplete" component={OrderComplete} />
+          <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+
+          <Stack.Screen name="RoadWay" component={RoadWay} />
+          <Stack.Screen
+            name="NotificationDetails"
+            component={NotifyDetailsRider}
+          />
+          <Stack.Screen name="Notification" component={RiderNotification} />
+          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }

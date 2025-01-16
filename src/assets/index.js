@@ -8,6 +8,7 @@ export const Images = {
   profile2: require('../assets/images/Profile2.png'),
   profileImage: require('../assets/images/profileImage.png'),
   logo: require('../assets/images/logo.png'),
+  user: require('../assets/images/user.jpg'),
   profilePic: require('../assets/images/profilePic.png'),
   map: require('../assets/images/map.png'),
   masterCard: require('../assets/images/masterCardGroup.png'),

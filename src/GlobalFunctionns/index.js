@@ -102,7 +102,7 @@ export const getSubscriberProducts = async token => {
 export const bookProducts = async (addToCartProducts, token, dispatch) => {
   let allSuccessful = true;
   for (const area of addToCartProducts) {
-    console.log('Booking product:', area._id);
+    // console.log('Booking product:', area._id);
 
     const data = JSON.stringify({
       availabilty: area.availability,
@@ -145,15 +145,16 @@ export const bookProducts = async (addToCartProducts, token, dispatch) => {
   }
 };
 
-export const searchProductsHandler = async (searchValue, token) => {
+export const searchProductsHandler = async (searchValue, token, id) => {
   let data = JSON.stringify({
     searchTerm: searchValue,
+    bakeryId: id,
   });
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'https://khvw9wf1-3020.inc1.devtunnels.ms/api/bakery/SearchProductByNameAndCatagoreis',
+    url: 'https://appsdemo.pro/Bakery/api/bakery/SearchProductByNameAndCatagoreis',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -169,15 +170,20 @@ export const searchProductsHandler = async (searchValue, token) => {
   // setData(response.data.products);
 };
 
-export const getProductsByCategoryHandler = async (activeCategory, token) => {
+export const getProductsByCategoryHandler = async (
+  activeCategory,
+  token,
+  id,
+) => {
   let data = {
     chooseCategory: activeCategory,
+    bakeryId: id,
   };
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'https://khvw9wf1-3020.inc1.devtunnels.ms/api/bakery/GetAllProductByCatagories',
+    url: 'https://appsdemo.pro/Bakery/api/bakery/GetAllProductByCatagories',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -294,6 +300,23 @@ export const addCommentHandler = async (id, commentText, token) => {
   try {
     const response = await axios.request(config);
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllReadyBookingHandler = async token => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/get-all-ready-booking`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response;
   } catch (error) {
     throw error;
   }

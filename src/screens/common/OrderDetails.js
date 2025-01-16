@@ -11,16 +11,25 @@ import {useSelector} from 'react-redux';
 import TextWithLabel from '../../Components/TextWithLabel';
 import Button from '../../Components/Button';
 import {orderReadyHandler} from '../../GlobalFunctionns';
+import { ShowToast } from '../../GlobalFunctionns/ShowToast';
 
 const OrderDetails = ({navigation, route}) => {
   const {area} = route.params;
   const {userType, token} = useSelector(state => state.user);
   const [isLoading, setIsLoading] = useState(false);
-  const productId = area.productId._id;
+  const productId = area._id;
+  console.log('area area',productId)
   const handleOrderReady = async () => {
     setIsLoading(true);
     try {
       const response = await orderReadyHandler(productId,token);
+      if(response.message === 'Order is now ready'){
+        navigation.goBack()
+
+        return ShowToast('success',response.message)
+      }else{
+        return ShowToast('error',response.message)
+      }
       console.log('response', response);
       setIsLoading(false);
     } catch (error) {
@@ -95,7 +104,7 @@ const OrderDetails = ({navigation, route}) => {
             color: Color.black,
             marginTop: responsiveHeight(2),
           }}>
-          {userType === 'Subscriber' ? 'Owner' : 'User'} Details
+          {userType === 'Subscriber' ? 'Owner' : 'Customer'} Details
         </Text>
         <TextWithLabel
           text={

@@ -20,6 +20,9 @@ import ChooseLocation from '../screens/OwnerScreens/ChooseLocation';
 import EditProfile from '../screens/authScreens/EditProfile';
 import OrderDetails from '../screens/common/OrderDetails';
 import UserProfile from '../screens/common/UserProfile';
+import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -152,18 +155,30 @@ function BottomTabs() {
 }
 
 export function OwnerStack() {
+  const {userData} = useSelector(state => state.user);
+  console.log('updatedprofile=======<<<<<<<<', userData.updatedProfile);
+
   return (
     <Stack.Navigator
-      initialRouteName="EditProfile"
+      initialRouteName={ 'BottomTabs'}
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
-      <Stack.Screen name="AddProduct" component={AddProduct} />
-      <Stack.Screen name="UserProfile" component={UserProfile} />
-      <Stack.Screen name="ProductDetails" component={ProductDetails} />
-      <Stack.Screen name="OrderDetails" component={OrderDetails} />
-      <Stack.Screen name="BottomTabs" component={BottomTabs} />
+      {userData.updatedProfile == 0 ? (
+        <>
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
 
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
+          <Stack.Screen name="AddProduct" component={AddProduct} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="ProductDetails" component={ProductDetails} />
+          <Stack.Screen name="OrderDetails" component={OrderDetails} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }

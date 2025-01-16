@@ -6,10 +6,14 @@ import {useSelector} from 'react-redux';
 import PendingOrders from '../../Components/PendingOrders';
 import CompletedOrders from '../../Components/CompletedOrders';
 import {getAllBookedProductsHandler} from '../../GlobalFunctionns';
+import {useIsFocused} from '@react-navigation/native';
+
 const Vendors = ({navigation}) => {
   const {token} = useSelector(state => state.user);
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const focus = useIsFocused();
+
   const getAllBookedProducts = async () => {
     setIsLoading(true);
     const response = await getAllBookedProductsHandler(token);
@@ -17,8 +21,11 @@ const Vendors = ({navigation}) => {
     setIsLoading(false);
   };
   useEffect(() => {
-    getAllBookedProducts();
-  }, []);
+    if(focus){
+      getAllBookedProducts();
+
+    }
+  }, [focus]);
 
   return (
     <ScrollView
@@ -44,15 +51,16 @@ const Vendors = ({navigation}) => {
         ) : 
         
              data?.reverse().map((area, index) => {
+              console.log('area===>>>',area)
               return (
                 <PendingOrders
                   btnTitle={'View Details'}
-                  profilePic={area.BakeryId.profilePic}
-                  userName={area.BakeryId.userName}
-                  status={area.status}
-                  totalPrice={area.TotalPrice}
-                  productName={area.productId.productName}
-                  chooseCategory={area.productId.chooseCategory}
+                  profilePic={area.BakeryId?.profilePic}
+                  userName={area.BakeryId?.userName}
+                  status={area?.status}
+                  totalPrice={area?.TotalPrice}
+                  productName={area.productId?.productName}
+                  chooseCategory={area.productId?.chooseCategory}
                   navigation={navigation}
                   navigationScreen={'OrderDetails'}
                   area={area}

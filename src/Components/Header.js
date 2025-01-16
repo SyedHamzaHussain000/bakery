@@ -9,8 +9,11 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../assets/Responsive_Dimensions';
+import { useSelector } from 'react-redux';
+import { baseUrl } from '../baseUrl';
 
 const Header = ({handlePress, handleNavigate, products}) => {
+  const {userData} = useSelector(state => state.user)
   console.log('carts', cart);
   return (
     <View
@@ -32,13 +35,13 @@ const Header = ({handlePress, handleNavigate, products}) => {
               height: 72,
               width: 72,
               backgroundColor: 'red',
-              borderRadius: 20,
+              borderRadius:12,
               resizeMode: 'cover',
             }}
-            source={Images.profilePic}
+            source={userData?.profilePic ? {uri: `${baseUrl}user/${userData.profilePic}`} : Images.user} 
           />
         </TouchableOpacity>
-        <Text style={styles.extraLargeBlack}>John Doe</Text>
+        <Text style={styles.extraLargeBlack}>{userData.userName}</Text>
       </View>
 
         {products ? (

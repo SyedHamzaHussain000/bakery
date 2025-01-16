@@ -15,9 +15,13 @@ import {
 import Hr from './Hr';
 import Button from './Button';
 import PostModal from './PostModal';
+import { useSelector } from 'react-redux';
+import { baseUrl } from '../baseUrl';
 
 const PostHeader = ({handleProfilePress,prevResponse}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const {userData} = useSelector(state => state.user)
+  console.log('uussserdaataaa',userData)
   return (
     <View>
       <View
@@ -41,10 +45,17 @@ const PostHeader = ({handleProfilePress,prevResponse}) => {
         }}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={handleProfilePress} style={{}}>
-            <Image source={Images.profile} />
+            <Image 
+            // source={Images.profile} 
+            style={userData?.profilePic ? {height: responsiveHeight(9.8),width:responsiveWidth(18.4),borderRadius:responsiveHeight(0.5),marginRight:responsiveHeight(1)}:{
+              height: responsiveHeight(9),width:responsiveWidth(17.5),borderRadius:responsiveHeight(0.5),marginRight:responsiveHeight(1)
+            }}
+            source={userData?.profilePic ? {uri: `${baseUrl}user/${userData.profilePic}`} : Images.user} 
+
+            />
           </TouchableOpacity>
           <View style={{gap: 5, marginTop: 5}}>
-            <Text style={{fontSize: 18, color: Color.black}}>John Doe</Text>
+            <Text style={{fontSize: 18, color: Color.black}}>{userData.userName}</Text>
             <Text
               style={{color: Color.black, fontSize: 13, fontWeight: 'light'}}>
               What do you want to talk about?

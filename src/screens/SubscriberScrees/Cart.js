@@ -10,7 +10,7 @@ import Products from '../../Components/Products';
 
 const Cart = ({navigation}) => {
   const {addToCartProducts, token} = useSelector(state => state.user);
-  console.log('addtoCartProducts', addToCartProducts);
+  // console.log('addtoCartProducts', addToCartProducts);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const handlePlaceOrder = async () => {
@@ -33,7 +33,7 @@ const Cart = ({navigation}) => {
         handlePress={() => navigation.goBack()}
         text={'Carts'}
       />
-      {addToCartProducts.length ? (
+      {addToCartProducts?.length ? (
         <FlatList
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={{justifyContent: 'space-between', gap: 10}}
@@ -68,7 +68,7 @@ const Cart = ({navigation}) => {
           </Text>
         </View>
       )}
-      {addToCartProducts.length ? (
+      {addToCartProducts?.length ? (
          <Button
         styleName={'plainButton'}
         handleOnPress={() => handlePlaceOrder()}

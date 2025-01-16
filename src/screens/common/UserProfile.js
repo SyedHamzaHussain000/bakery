@@ -17,9 +17,9 @@ import {baseUrl} from '../../baseUrl';
 import { Images } from '../../assets';
 const UserProfile = ({navigation}) => {
   const dispatch = useDispatch();
-  const {user, userType} = useSelector(state => state.user);
+  const {user, userType,updatedProfile} = useSelector(state => state.user);
   const userdata = useSelector(state => state.user.userData)
-  console.log('user.profilePic============>>>>>>', user.profilePic);
+  console.log('userData.profilePic============>>>>>>', updatedProfile);
   return (
     <View style={{flex: 1, padding: 20}}>
       <PlainHeader
@@ -44,7 +44,7 @@ const UserProfile = ({navigation}) => {
               borderRadius: responsiveHeight(8),
               backgroundColor: 'lightgray',
               borderWidth: 1,
-              shadowColor: '#000',
+              // shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 2,
@@ -55,7 +55,7 @@ const UserProfile = ({navigation}) => {
               elevation: 3,
             }}
             
-           source={user.profilePic ? {uri: `${baseUrl}user/${user.profilePic}`} : Images.dummyPic} 
+           source={userdata?.profilePic ? {uri: `${baseUrl}user/${userdata.profilePic}`} : Images.user} 
           />
           <View style={{justifyContent: 'space-around'}}>
             <View>
@@ -65,11 +65,11 @@ const UserProfile = ({navigation}) => {
                   fontSize: responsiveFontSize(2),
                   fontWeight: 'bold',
                 }}>
-                {user.length > 0 ?  user.userName : userdata.userName}
+                {userdata ?  userdata.userName : userdata.userName}
               </Text>
               <Text
                 style={{color: Color.black, fontSize: responsiveFontSize(1.8)}}>
-                {user.length > 0 ? user.email : userdata.email}
+                {userdata ? userdata.email : userdata.email}
               </Text>
             </View>
             <Button

@@ -28,18 +28,19 @@ import {
   getProductsByCategoryHandler,
   searchProductsHandler,
 } from '../../GlobalFunctionns';
-import { ShowToast } from '../../GlobalFunctionns/ShowToast';
+import {ShowToast} from '../../GlobalFunctionns/ShowToast';
+import { responsiveHeight } from '../../assets/Responsive_Dimensions';
 const Bakeries = ({navigation}) => {
   const [activeCategory, setActiveCategory] = useState('All');
-  const token = useSelector(state => state.user.token);
+  const {token,userData} = useSelector(state => state.user);
   const [searchedValue, setSearchedValue] = useState();
-  console.log('searched Value', searchedValue);
+  console.log('userData', userData.id);
   // console.log(activeCategory);
   const [data, setData] = useState([]);
   const myDataMemo = useMemo(() => data, [data]);
   // console.log('myDataMemo',myDataMemo)
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage,setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState();
   // console.log('myDataMemo', myDataMemo);
   const focus = useIsFocused();
   const categoriesData = [
@@ -69,51 +70,54 @@ const Bakeries = ({navigation}) => {
       icon: cookies,
     },
   ];
-  const getAllProductHandler = async () => {
-    setIsLoading(true);
-    try {
-      const response = await getAllProducts(token);
-      setIsLoading(false);
-      setData(response.data);
-    } catch (error) {
-      setIsLoading(false);
+  // const getAllProductHandler = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await getAllProducts(token);
+  //     setIsLoading(false);
+  //     setData(response.data);
+  //   } catch (error) {
+  //     setIsLoading(false);
 
-      console.log('error', error);
-    }
-  };
+  //     console.log('error', error);
+  //   }
+  // };
 
   const getProductByCategory = async () => {
     console.log('active', activeCategory);
     setIsLoading(true);
     try {
-      const res = await getProductsByCategoryHandler(activeCategory, token);
-      console.log('res.getproducts',res.getProductbyCatagories)
+      const res = await getProductsByCategoryHandler(activeCategory, token, userData._id);
+      console.log('res.getproducts', res.getProductbyCatagories);
       setData(res.getProductbyCatagories);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
   };
-
   const searchProduct = async () => {
-    setErrorMessage('')
-    // setActiveCategory('')
+    setActiveCategory(null);
+    setErrorMessage('');
     setIsLoading(true);
     try {
-      const res = await searchProductsHandler(searchedValue, token);
+      const res = await searchProductsHandler(searchedValue, token,userData._id);
       setData(res.products);
       setIsLoading(false);
     } catch (error) {
-      setData([])
-      setErrorMessage('Sorry, we couldn’t locate any products matching your search.')
-      ShowToast('error',error.response.data.message)
+      setData([]);
+      setErrorMessage(
+        'Sorry, we couldn’t locate any products matching your search.',
+      );
+      ShowToast('error', error.response.data.message);
       setIsLoading(false);
     }
   };
-  activeCategory && useEffect(() => {
-     getAllProductHandler();
-  }, [activeCategory]);
- 
+  useEffect(() => {
+    if (activeCategory) {
+      getProductByCategory();
+    }
+  }, [activeCategory, focus]);
+
   // useEffect(() => {
   //   focus && getAllProductHandler();
   // }, [focus]);
@@ -203,8 +207,10 @@ const Bakeries = ({navigation}) => {
           style={{flexDirection: 'row', width: '65%', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Image
-              style={{height: 100, width: 100}}
-              source={Images.goldBakery}
+              style={{height: 90, width: 90,borderRadius:responsiveHeight(1),marginRight:responsiveHeight(1)}}
+              source={userData?.profilePic ? {uri: `${baseUrl}user/${userData.profilePic}`} : Images.user} 
+
+              // source={Images.goldBakery}
             />
           </TouchableOpacity>
           <View style={{flex: 1}}>
@@ -214,10 +220,10 @@ const Bakeries = ({navigation}) => {
                 fontSize: 20,
                 fontWeight: '500',
               }}>
-              Gold Bakery
+              {userData.bakeryName}
             </Text>
             <Text style={{fontSize: 12, color: '#676767'}}>
-              47 W 13th St, New York, NY 10011, USA
+             {userData.city}
             </Text>
           </View>
         </View>
@@ -318,10 +324,8 @@ const Bakeries = ({navigation}) => {
         ) : myDataMemo.length === 0 ? (
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              
             <Text style={{fontSize: 20, color: Color.black, fontWeight: '500'}}>
-              {errorMessage ? errorMessage:'No products found'}
-              
+              {errorMessage ? errorMessage : 'No products found'}
             </Text>
           </View>
         ) : (

@@ -5,8 +5,10 @@ import { Color } from '../assets/Utils'
 import { responsiveFontSize, responsiveHeight, responsiveWidth } from '../assets/Responsive_Dimensions'
 import { baseUrl } from '../baseUrl'
 import { styles } from '../Styles'
+import { Images } from '../assets'
 
 const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName,totalPrice,status,productName,chooseCategory,btnTitle}) => {
+  // console.log('profilePic', profilePic)
   return (
     <View
     style={[
@@ -33,8 +35,8 @@ const PendingOrders = ({area,key,navigation,navigationScreen,profilePic,userName
           alignItems: 'center',
         }}>
         <View>
-          <Image
-        source={{uri: `${baseUrl}user/${profilePic}`}}
+        <Image
+        source={profilePic ? {uri: `${baseUrl}user/${profilePic}`} : require('../assets/images/user.jpg')}
         style={{
               height: responsiveHeight(6),
               width: responsiveWidth(13),

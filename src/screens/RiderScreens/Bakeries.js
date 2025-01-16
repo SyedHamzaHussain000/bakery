@@ -1,5 +1,5 @@
 import {View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchHeader from '../../Components/SearchHeader';
 import {Color} from '../../assets/Utils';
 import Button from '../../Components/Button';
@@ -9,22 +9,30 @@ import { Images } from '../../assets';
 import Hr from '../../Components/Hr';
 import Modal from 'react-native-modal'
 import CompletedOrders from '../../Components/CompletedOrders';
+import { getAllReadyBookingHandler } from '../../GlobalFunctionns';
+import { useSelector } from 'react-redux';
 const Bakeries = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const data = [
-    {
-      name: 'John Davis',
-      text: 'Chocolate Croissant, Muffins',
-      price: '$175.00',
-    },
-    {
-      name: 'Elijah Dav',
-      text: 'Baggette - Cuban Bread',
-      price: '$200.00',
-    },
-   
-  ];
+  const {token} = useSelector(state => state.user)
+  console.log('token',token)
+  const [data,setData] = useState([])
+  
+  console.log('data',data)
+ 
+
+  const getReadyBookings = async () => {
+    try {
+      const res = await getAllReadyBookingHandler(token);
+      // console.log('Response:', res); // Check if data is returned as expected
+      setData(res.data.data);
+    } catch (error) {
+      console.log('Error:', error); // Check for errors
+    }
+  };
+  useEffect(()=>{
+   getReadyBookings()
+  },[])
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{padding: 20,backgroundColor:Color.white}}>
       <SearchHeader />
@@ -41,7 +49,7 @@ const Bakeries = ({navigation}) => {
       <View style={{}}>
    <CompletedOrders navigation={navigation}/>
         
-        {data.map((area, index) => {
+     {data?.map((area, index) => {
           return (
             <View
               style={[
@@ -72,7 +80,7 @@ const Bakeries = ({navigation}) => {
                       fontSize: 20,
                       fontWeight: '500',
                     }}>
-                    {area.name}
+                    {area.bakeryName}
                   </Text>
                   <Text style={{fontSize: 12, color: '#C5C5C5'}}>Just Now</Text>
                 </View>
@@ -83,7 +91,7 @@ const Bakeries = ({navigation}) => {
                     fontSize: 22,
                     fontWeight: 'bold',
                   }}>
-                  {area.price}
+                  $10
                 </Text>
               </View>
 
@@ -94,11 +102,11 @@ const Bakeries = ({navigation}) => {
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
-                <Text style={{color: '#C5C5C5'}}>{area.text}</Text>
+                <Text style={{color: '#C5C5C5'}}>{area.productName}</Text>
                   <Button
                   color={Color.themeColor}
                   txtColor={Color.white}
-                  title={'View Order'}
+                  title={'View Details'}
                   width={'auto'}
                   fontWeight={'light'}
                   fontSize={16}
@@ -107,11 +115,17 @@ const Bakeries = ({navigation}) => {
               </View>
             </View>
           );
-        })}
+        })} 
      
 
     
       </View>
+
+      {/* <Modal isVisible style={{flex:1}}>
+        <View>
+
+        </View>
+      </Modal> */}
     </ScrollView>
   );
 };

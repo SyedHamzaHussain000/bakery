@@ -24,6 +24,7 @@ import EditCartProduct from '../screens/SubscriberScrees/EditCartProduct';
 import BookedProducts from '../screens/SubscriberScrees/BookedProducts';
 import OrderDetails from '../screens/common/OrderDetails';
 import UserProfile from '../screens/common/UserProfile';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -159,21 +160,33 @@ function BottomTabs() {
   );
 }
 export function SubscriberStack() {
+  const updatedProfile = useSelector(state => state.user.updatedProfile);
+  console.log('updatedProfile', updatedProfile);
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="ProductDetails" component={ProductDetails} />
-      <Stack.Screen name="Cart" component={Cart} />
-      <Stack.Screen name="UserProfile" component={UserProfile} />
-      <Stack.Screen name="BookedProducts" component={BookedProducts} />
-      <Stack.Screen name="EditCartProduct" component={EditCartProduct} />
-      <Stack.Screen name="Notification" component={UserNotification} />
-      <Stack.Screen name="OrderDetails" component={OrderDetails} />
-      <Stack.Screen
-        name="NotificationDetails"
-        component={NotificationDetails}
-      />
-      <Stack.Screen name="BottomTabs" component={BottomTabs} />
+    <Stack.Navigator
+      // initialRouteName={updatedProfile === 0 ?  'EditProfile' : 'BottomTabs'}
+      screenOptions={{headerShown: false}}>
+      {updatedProfile == 0 ? (
+        <>
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen name="ProductDetails" component={ProductDetails} />
+          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="UserProfile" component={UserProfile} />
+          <Stack.Screen name="BookedProducts" component={BookedProducts} />
+          <Stack.Screen name="EditCartProduct" component={EditCartProduct} />
+          <Stack.Screen name="Notification" component={UserNotification} />
+          <Stack.Screen name="OrderDetails" component={OrderDetails} />
+          <Stack.Screen
+            name="NotificationDetails"
+            component={NotificationDetails}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 }

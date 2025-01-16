@@ -5,10 +5,8 @@ import {ShowToast} from '../GlobalFunctionns/ShowToast';
 const initialState = {
   user: [],
   userType: '',
-  userData: {
-    userName: '',
-    email: '',
-  },
+  userData: {},
+  updatedProfile: null,
   token: '',
   isLoading: false,
   addToCartProducts: [],
@@ -57,7 +55,10 @@ export const authSlice = createSlice({
       state.addToCartProducts = [];
     },
     setUserData: (state, action) => {
-      state.user = action.payload;
+      state.userData = action.payload;
+    },
+    setUpdatedProfile:(state,action) => {
+    state.updatedProfile = action.payload
     },
     setProfileData: (state, action) => {
       state.userData = action.payload;
@@ -75,11 +76,12 @@ export const authSlice = createSlice({
       .addCase(UserLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.data.token;
-        state.userData = {
-          userName: action.payload.data.userName,
-          email: action.payload.data.email,
-        };
-        console.log('action.payload', action.payload.data);
+        console.log('action.payloaaaad<<<<=====',action.payload)
+        // if(state.updatedProfile == 0){
+          // state.userData = action.payload.data;
+        // }
+        state.userData = action.payload.data
+        // console.log('action.payload', action.payload);
       })
       .addCase(UserLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -96,6 +98,7 @@ export const {
   setUserData,
   setProfileData,
   clearUserData,
+  setUpdatedProfile
 } = authSlice.actions;
 
 export default authSlice.reducer;

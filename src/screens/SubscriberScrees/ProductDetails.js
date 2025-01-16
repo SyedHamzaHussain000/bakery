@@ -27,7 +27,7 @@ import {
 import {Dropdown} from 'react-native-element-dropdown';
 import {styles} from '../../Styles';
 const ProductDetails = ({navigation, route}) => {
-  const {productData} = route.params;
+  const {productData} = route?.params;
   const id = productData;
   console.log('productData', productData);
   const [loading, setLoading] = useState(true);
