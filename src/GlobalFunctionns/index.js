@@ -1,7 +1,7 @@
 import axios from 'axios';
-import {baseUrl} from '../baseUrl';
-import {ShowToast} from './ShowToast';
-import {clearProducts} from '../redux/Slices';
+import { baseUrl } from '../baseUrl';
+import { ShowToast } from './ShowToast';
+import { clearProducts } from '../redux/Slices';
 
 export const AddProductIntegration = async (
   mime,
@@ -321,3 +321,54 @@ export const getAllReadyBookingHandler = async token => {
     throw error;
   }
 };
+
+
+export const acceptOrderHandler = async (orderData) => {
+  let data = JSON.stringify({
+    "bookingId": orderData.bookingId,
+    "riderId": orderData.riderId,
+    "type": orderData.type,
+    "riderStatus": orderData.riderStatus,
+    "orderStatus": orderData.orderStatus
+  });
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/accept-booking`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: data
+  };
+  try {
+    const response = await axios.request(config)
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const rejectOrderHandler = async (orderData) => {
+  let data = JSON.stringify({
+    "bookigId": orderData.bookingId,
+    "riderId": orderData.riderId,
+    "type": orderData.type,
+    "riderStatus": orderData.riderStatus
+  });
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/rejected-booking`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: data
+  };
+  try {
+    const response = await axios.request(config)
+    return response
+  } catch (error) {
+    throw error
+  }
+}

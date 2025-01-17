@@ -20,7 +20,8 @@ const Button = ({
   iconSize,
   marginTop,
   styleName,
-  disable
+  height,
+  disable,
 }) => {
   return (
     <TouchableOpacity
@@ -31,6 +32,7 @@ const Button = ({
         {
           backgroundColor: disable === false ? 'lightgray' : color,
           flexDirection: iconName ? 'row' : null,
+          height:height ? height : null,
           gap: iconName ? 10 : null,
           marginBottom: marginBottom,
           width: width ? width : responsiveWidth(90),
