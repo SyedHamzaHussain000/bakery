@@ -96,7 +96,7 @@ const OrderDetails = ({navigation, route}) => {
         <TextWithLabel title={'Quantity'} text={area.quantity} />
         <TextWithLabel title={'Availability'} text={area.availabilty} />
         <TextWithLabel title={'Days'} text={area.days} />
-        <TextWithLabel title={'Status'} text={area.status} />
+        <TextWithLabel title={'Status'} text={area.orderStatus} />
         <Text
           style={{
             fontSize: 22,

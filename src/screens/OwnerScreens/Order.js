@@ -57,7 +57,7 @@ const Order = ({navigation}) => {
                 btnTitle={'View Order'}
                 profilePic={area.subscriberId.profilePic}
                 userName={area.subscriberId.userName}
-                status={area.status}
+                status={area.orderStatus}
                 totalPrice={area.TotalPrice}
                 productName={area.productId.productName}
                 chooseCategory={area.productId.chooseCategory}
