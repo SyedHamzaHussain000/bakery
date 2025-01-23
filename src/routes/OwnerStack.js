@@ -16,13 +16,13 @@ import {Text, View} from 'react-native';
 import SvgIcons from '../Components/SvgIcons';
 import AddProduct from '../screens/OwnerScreens/AddProduct';
 import ProductDetails from '../screens/OwnerScreens/ProductDetails';
-import ChooseLocation from '../screens/OwnerScreens/ChooseLocation';
 import EditProfile from '../screens/authScreens/EditProfile';
 import OrderDetails from '../screens/common/OrderDetails';
 import UserProfile from '../screens/common/UserProfile';
 import {useSelector} from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
+import ChooseLocation from '../screens/common/ChooseLocation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

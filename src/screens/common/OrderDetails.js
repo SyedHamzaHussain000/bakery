@@ -30,8 +30,6 @@ const OrderDetails = ({navigation, route}) => {
       }else{
         return ShowToast('error',response.message)
       }
-      console.log('response', response);
-      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
 
@@ -123,9 +121,10 @@ const OrderDetails = ({navigation, route}) => {
           title={'Email'}
         />
       </View>
-      {userType === 'Owner' ? (
+      {userType === 'Owner' && area.orderStatus == 'Pending' ? (
         <Button
           styleName={'plainButton'}
+          height={responsiveHeight(7)}
           handleOnPress={() => handleOrderReady()}
           fontWeight={'light'}
           color={Color.themeColor}

@@ -34,7 +34,6 @@ const Header = ({handlePress, handleNavigate, products}) => {
             style={{
               height: 72,
               width: 72,
-              backgroundColor: 'red',
               borderRadius:12,
               resizeMode: 'cover',
             }}
@@ -49,7 +48,6 @@ const Header = ({handlePress, handleNavigate, products}) => {
             <View style={{zIndex: 10}}>
               <View
                 style={{
-                  backgroundColor: 'red',
                   height: responsiveHeight(1.7),
                   width: responsiveWidth(3.5),
                   borderRadius: responsiveHeight(2),

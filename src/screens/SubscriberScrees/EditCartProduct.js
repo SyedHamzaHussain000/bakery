@@ -202,6 +202,7 @@ const EditCartProduct = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <Button
+      height={responsiveHeight(7)}
         styleName={'plainButton'}
         handleOnPress={() => handleEditCart()}
         fontWeight={'light'}

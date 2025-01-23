@@ -20,12 +20,15 @@ import {
   subscription,
 } from '../../assets/icons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {clearToken} from '../../redux/Slices';
 import MapView from 'react-native-maps';
 
 const RoutesScreen = ({navigation}) => {
   console.log('edit rider');
+  const {userData} = useSelector(state => state.user)
+  const split = userData.userName.split(' ');
+  console.log('split', split);
   const dispatch = useDispatch();
   return (
     <ScrollView
@@ -50,10 +53,10 @@ const RoutesScreen = ({navigation}) => {
         </TouchableOpacity>
         <View>
           <Text style={{fontSize: 20, color: Color.black, fontWeight: 'bold'}}>
-            Dave <Text style={{fontWeight: '300'}}> Miller</Text>
+            {split[0]} <Text style={{fontWeight: '300'}}> {split[1]}</Text>
           </Text>
           <Text style={{color: Color.black, fontSize: 13}}>
-            davemiller21276@gmail.com
+           {userData.email}
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('EditProfile')}

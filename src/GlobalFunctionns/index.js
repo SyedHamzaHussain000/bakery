@@ -125,7 +125,7 @@ export const bookProducts = async (addToCartProducts, token, dispatch) => {
 
     try {
       const res = await axios.request(config);
-      console.log(`Product ${area._id} booked successfully`);
+      console.log(`res.data`, res.data);
       if (res.data.success) {
         allSuccessful = true;
       } else {
@@ -217,6 +217,24 @@ export const getAllBookedProductsHandler = async token => {
     throw error;
   }
 };
+
+export const getAllAcceptedBookings = async (token) => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/get-all-accepted-booking`,
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  try {
+    const response = await axios.request(config)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+}
+
 export const orderReadyHandler = async (id, token) => {
   let config = {
     method: 'post',
@@ -322,7 +340,61 @@ export const getAllReadyBookingHandler = async token => {
   }
 };
 
+export const riderStatusHandler = async (
+  bookingId,
+  bookingStatus,
+  token,
+  picPath,
+  picMime,
+) => {
+  let formData = new FormData();
+  formData.append('BookingId', bookingId);
+  formData.append('bookingStatus', bookingStatus);
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/order-book-from-rider`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`,
+    },
+    data: formData,
+  };
 
+  try {
+    const response = await axios.request(config);
+    console.log('response.data.message', response.data.message);
+    if (response.data.success) {
+      ShowToast('success', response.data.message);
+    } else {
+      ShowToast('error', response.data.message);
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error in riderStatusHandler:', error);
+    throw error;
+  }
+};
+
+
+export const completedOrdersHandler = async (token) => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/get-all-accepted-completed-booking`,
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  };
+  try {
+    const response = await axios.request(config)
+    return response.data
+  } catch (error) {
+    throw error
+  }
+
+
+}
 export const acceptOrderHandler = async (orderData) => {
   let data = JSON.stringify({
     "bookingId": orderData.bookingId,
@@ -350,10 +422,10 @@ export const acceptOrderHandler = async (orderData) => {
 
 export const rejectOrderHandler = async (orderData) => {
   let data = JSON.stringify({
-    "bookigId": orderData.bookingId,
+    "bookingId": orderData.bookingId,
     "riderId": orderData.riderId,
     "type": orderData.type,
-    "riderStatus": orderData.riderStatus
+    "riderStatus": 'Rejected'
   });
 
   let config = {

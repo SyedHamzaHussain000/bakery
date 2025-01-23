@@ -13,6 +13,8 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 17,
     paddingHorizontal: 14,
     paddingVertical: 12,
+    alignItems:'center',
+    justifyContent:'center'
   },
   headerText: {
     fontSize: 30,
@@ -51,8 +53,6 @@ export const styles = StyleSheet.create({
   },
 
   editProfile: {
-    height: responsiveHeight(4.2),
-    width: responsiveWidth(40),
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

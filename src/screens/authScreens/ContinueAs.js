@@ -1,19 +1,19 @@
-import {View, Text, ScrollView} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
-import {Color} from '../../assets/Utils';
+import { Color } from '../../assets/Utils';
 import Button from '../../Components/Button';
-import {useDispatch} from 'react-redux';
-import {setUserType} from '../../redux/Slices';
-import {responsiveFontSize} from '../../assets/Responsive_Dimensions';
-const ContinueAs = ({navigation}) => {
+import { useDispatch } from 'react-redux';
+import { setUserType } from '../../redux/Slices';
+import { responsiveFontSize, responsiveHeight } from '../../assets/Responsive_Dimensions';
+const ContinueAs = ({ navigation }) => {
   const dispatch = useDispatch();
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{flexGrow: 1, padding: 20}}>
-      <View style={{alignItems: 'center', marginTop: 50}}>
+      contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
+      <View style={{ alignItems: 'center', marginTop: 50 }}>
         <Text
-          style={{color: Color.themeColor, fontSize: responsiveFontSize(3)}}>
+          style={{ color: Color.themeColor, fontSize: responsiveFontSize(3) }}>
           Continue As
         </Text>
         <Text
@@ -25,9 +25,10 @@ const ContinueAs = ({navigation}) => {
           Select Your User Type To Proceed
         </Text>
       </View>
-      <View style={{alignItems: 'center', gap: 20, marginTop: 40}}>
+      <View style={{ alignItems: 'center', gap: 20, marginTop: 40 }}>
         <Button
-        disable={true}
+          disable={true}
+          height={responsiveHeight(7)}
           styleName={'plainButton'}
           handleOnPress={() => {
             navigation.navigate('Signup');
@@ -37,7 +38,8 @@ const ContinueAs = ({navigation}) => {
           color={Color.themeColor}
         />
         <Button
-        disable={true}
+          disable={true}
+          height={responsiveHeight(7)}
 
           styleName={'plainButton'}
           handleOnPress={() => {
@@ -48,7 +50,8 @@ const ContinueAs = ({navigation}) => {
           color={Color.themeColor}
         />
         <Button
-        disable={true}
+          disable={true}
+          height={responsiveHeight(7)}
 
           styleName={'plainButton'}
           handleOnPress={() => {

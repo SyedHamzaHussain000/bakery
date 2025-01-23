@@ -1,7 +1,7 @@
-import {Text, TouchableOpacity} from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
-import {Color} from '../assets/Utils';
-import {styles} from '../Styles';
+import { Color } from '../assets/Utils';
+import { styles } from '../Styles';
 import {
   responsiveFontSize,
   responsiveWidth,
@@ -20,19 +20,19 @@ const Button = ({
   iconSize,
   marginTop,
   styleName,
-  height,
+  padding,
   disable,
 }) => {
   return (
     <TouchableOpacity
-    // disabled={!disable}
+      // disabled={!disable}
       onPress={handleOnPress}
       style={[
         styles[styleName],
         {
           backgroundColor: disable === false ? 'lightgray' : color,
           flexDirection: iconName ? 'row' : null,
-          height:height ? height : null,
+          padding: padding ? padding : null,
           gap: iconName ? 10 : null,
           marginBottom: marginBottom,
           width: width ? width : responsiveWidth(90),

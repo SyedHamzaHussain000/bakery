@@ -1,6 +1,6 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {ShowToast} from '../GlobalFunctionns/ShowToast';
+import { ShowToast } from '../GlobalFunctionns/ShowToast';
 
 const initialState = {
   user: [],
@@ -15,14 +15,14 @@ const initialState = {
 
 export const UserLogin = createAsyncThunk(
   'auth/UserLogin',
-  async (config, {rejectWithValue}) => {
+  async (config, { rejectWithValue }) => {
     await axios.request(config);
     try {
       const response = await axios(config);
       console.log('response===>>>', JSON.stringify(response.data.success));
       if (response.data.success) {
         ShowToast('success', 'Login Successful');
-        console.log('responseeee', response.data.data);
+        console.log('responseeee====>>>>>', response.data.data);
         return response.data;
       } else {
         ShowToast('error', response.data.message);
@@ -57,8 +57,8 @@ export const authSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload;
     },
-    setUpdatedProfile:(state,action) => {
-    state.updatedProfile = action.payload
+    setUpdatedProfile: (state, action) => {
+      state.updatedProfile = action.payload
     },
     setProfileData: (state, action) => {
       state.userData = action.payload;
@@ -76,9 +76,9 @@ export const authSlice = createSlice({
       .addCase(UserLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.data.token;
-        console.log('action.payloaaaad<<<<=====',action.payload)
+        console.log('action.payloaaaad<<<<=====', action.payload)
         // if(state.updatedProfile == 0){
-          // state.userData = action.payload.data;
+        // state.userData = action.payload.data;
         // }
         state.userData = action.payload.data
         // console.log('action.payload', action.payload);

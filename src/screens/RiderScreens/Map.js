@@ -1,10 +1,11 @@
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import MapView from 'react-native-maps';
 import Button from '../../Components/Button';
-import {Color} from '../../assets/Utils';
+import { Color } from '../../assets/Utils';
+import { responsiveHeight } from '../../assets/Responsive_Dimensions';
 
-const Map = ({navigation}) => {
+const Map = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <MapView
@@ -24,6 +25,7 @@ const Map = ({navigation}) => {
           alignSelf: 'center',
         }}>
         <Button
+          height={responsiveHeight(7)}
           styleName={'plainButton'}
           handleOnPress={() => navigation.navigate('BottomTabs')}
           marginBottom={20}

@@ -1,18 +1,36 @@
-import {View, Text, Image} from 'react-native';
-import React, {useState} from 'react';
-import {Color} from '../assets/Utils';
-import {clock, rider} from '../assets/icons';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { Color } from '../assets/Utils';
+import { clock, rider } from '../assets/icons';
 import SvgIcons from './SvgIcons';
 import Hr from './Hr';
 import Button from './Button';
 import SubscriptionModal from './SubscriptionModal';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MapView from 'react-native-maps';
-import {responsiveHeight} from '../assets/Responsive_Dimensions';
-const CompletedOrders = ({navigation}) => {
+import { responsiveHeight, responsiveWidth } from '../assets/Responsive_Dimensions';
+import { riderStatusHandler } from '../GlobalFunctionns';
+const CompletedOrders = ({ navigation, data }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const {userType} = useSelector(state => state.user);
+  const { userType, token } = useSelector(state => state.user);
+  const [isLoading, setIsLoading] = useState(false)
+  console.log('data====?>>>>', data)
+
+  const startDeliveryHandler = async () => {
+    setIsLoading(true)
+    try {
+      const res = await riderStatusHandler(data?._id, 'Start', token)
+      setIsLoading(false)
+      if (!res.success) {
+        navigation.navigate('OrderStatus', { data })
+      }
+      console.log('response', res)
+    } catch (error) {
+      setIsLoading(false)
+      console.log('error', error)
+    }
+  }
   return (
     <View
       style={{
@@ -31,11 +49,11 @@ const CompletedOrders = ({navigation}) => {
         elevation: 4,
         marginTop: 30,
       }}>
-      <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <Text style={{color: Color.black, fontSize: 22, fontWeight: '500'}}>
-          Dave Miller
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <Text style={{ color: Color.black, fontSize: 22, fontWeight: '500' }}>
+          {data?.BakeryId?.userName}
         </Text>
-        <Text style={{fontSize: 12, color: '#C5C5C5'}}>Just Now</Text>
+        <Text style={{ fontSize: 12, color: '#C5C5C5' }}>Just Now</Text>
       </View>
 
       <View>
@@ -44,7 +62,7 @@ const CompletedOrders = ({navigation}) => {
             backgroundColor: Color.themeColor,
             borderTopLeftRadius: 20,
           }}></View>
-        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
+        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
           <View
             style={{
               backgroundColor: Color.themeColor,
@@ -58,9 +76,9 @@ const CompletedOrders = ({navigation}) => {
             }}>
             <SvgIcons xml={rider} height={'30'} width={'30'} />
           </View>
-          <View style={{flex: 1}}>
-            <Text style={{color: Color.black, fontSize: 17, fontWeight: '500'}}>
-              Mary Gold Café & Bakery:
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: Color.black, fontSize: 17, fontWeight: '500' }}>
+              {data?.BakeryId?.bakeryName}:
             </Text>
             <Text
               style={{
@@ -71,12 +89,12 @@ const CompletedOrders = ({navigation}) => {
                 flexWrap: 'wrap',
                 marginTop: 5,
               }}>
-              Sour Dough - Baggette - Cuban Bread
+              {data?.productId?.productName} - {data?.productId?.flavor} - {data?.productId?.chooseCategory}
             </Text>
           </View>
         </View>
 
-        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
+        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
           <View
             style={{
               backgroundColor: Color.white,
@@ -98,8 +116,8 @@ const CompletedOrders = ({navigation}) => {
             }}>
             <SvgIcons xml={clock} height={'30'} width={'30'} />
           </View>
-          <View style={{flex: 1}}>
-            <Text style={{color: Color.black, fontSize: 17, fontWeight: '500'}}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: Color.black, fontSize: 17, fontWeight: '500' }}>
               {userType === 'Owner' ? 'Time Duration' : 'Time:'}
             </Text>
             <Text
@@ -112,7 +130,7 @@ const CompletedOrders = ({navigation}) => {
               }}>
               {userType === 'Owner'
                 ? 'In 30 Mins'
-                : '6am - 7am, 8am - 9am, 10am - 11am'}
+                : data?.BakeryId?.businessHours}
             </Text>
           </View>
         </View>
@@ -145,8 +163,8 @@ const CompletedOrders = ({navigation}) => {
               }}>
               <Entypo name="location-pin" size={25} color={Color.white} />
             </View>
-            <View style={{flex: 1}}>
-              <Text style={{color: Color.black, fontSize: 15}}>Location</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: Color.black, fontSize: 15 }}>Location</Text>
               <Text
                 style={{
                   color: '#C5C5C5',
@@ -174,7 +192,7 @@ const CompletedOrders = ({navigation}) => {
             <MapView
               //  scrollEnabled={false}
               scrollEnabled
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               initialRegion={{
                 latitude: 37.78825,
                 longitude: -122.4324,
@@ -209,19 +227,22 @@ const CompletedOrders = ({navigation}) => {
             txtColor={Color.white}
             handleOnPress={() => {
               userType === 'Rider'
-                ? navigation.navigate('OrderStatus')
+                ? startDeliveryHandler()
                 : userType === 'Subscriber'
-                ? setModalVisible(true)
-                : null;
+                  ? setModalVisible(true)
+                  : null;
             }}
             title={
-              userType === 'Subscriber'
+              isLoading ? (
+                <ActivityIndicator size='large' color={Color.white} />
+              ) : userType === 'Subscriber'
                 ? 'Proceed With him'
                 : userType === 'Rider'
-                ? 'Start Delivery'
-                : 'Order Complete'
+                  ? 'Start Delivery'
+                  : 'Order Complete'
             }
-            width={'auto'}
+            height={responsiveHeight(6)}
+            width={responsiveWidth(30)}
             fontWeight={'light'}
             fontSize={16}
             styleName={'viewDetails'}

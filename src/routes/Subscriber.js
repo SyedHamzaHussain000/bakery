@@ -25,6 +25,7 @@ import BookedProducts from '../screens/SubscriberScrees/BookedProducts';
 import OrderDetails from '../screens/common/OrderDetails';
 import UserProfile from '../screens/common/UserProfile';
 import {useSelector} from 'react-redux';
+import ChooseLocation from '../screens/common/ChooseLocation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -176,6 +177,7 @@ export function SubscriberStack() {
           <Stack.Screen name="ProductDetails" component={ProductDetails} />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
           <Stack.Screen name="UserProfile" component={UserProfile} />
           <Stack.Screen name="BookedProducts" component={BookedProducts} />
           <Stack.Screen name="EditCartProduct" component={EditCartProduct} />

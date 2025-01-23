@@ -74,7 +74,9 @@ const UserProfile = ({navigation}) => {
             </View>
             <Button
               styleName={'editProfile'}
-              width={responsiveWidth(35)}
+              width={responsiveWidth(32)}
+              padding={responsiveHeight(0.6)}
+              // height={responsiveHeight(4)}
               handleOnPress={() => navigation.navigate('EditProfile')}
               fontWeight={'light'}
               color={Color.themeColor}

@@ -315,6 +315,7 @@ const ProductDetails = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <Button
+      height={responsiveHeight(7)}
         styleName={'plainButton'}
         handleOnPress={() => handleAddToCart()}
         fontWeight={'light'}

@@ -13,7 +13,7 @@ import {styles} from '../../Styles';
 import {useSelector} from 'react-redux';
 import {registeration} from '../../GlobalFunctionns/auth';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
-import { responsiveFontSize } from '../../assets/Responsive_Dimensions';
+import { responsiveFontSize, responsiveHeight } from '../../assets/Responsive_Dimensions';
 const Signup = ({navigation, route}) => {
   const userType = useSelector(state => state.user.userType);
   const [isLoading, setIsLoading] = useState(false);
@@ -121,6 +121,8 @@ const Signup = ({navigation, route}) => {
           placeholder={'Confirm Password'}
         />
         <Button
+                height={responsiveHeight(7)}
+        
         disable={true}
           styleName={'plainButton'}
           handleOnPress={() => {

@@ -20,7 +20,7 @@ import {PickImage} from '../../GlobalFunctionns/ImagePicker';
 import {AddProductIntegration} from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
-import {responsiveWidth} from '../../assets/Responsive_Dimensions';
+import {responsiveHeight, responsiveWidth} from '../../assets/Responsive_Dimensions';
 import {styles} from '../../Styles';
 
 const AddProduct = ({navigation}) => {
@@ -244,6 +244,7 @@ const AddProduct = ({navigation}) => {
         <Button
           handleOnPress={() => addProductHandler()}
           marginTop={20}
+          height={responsiveHeight(7)}
           styleName={'plainButton'}
           marginBottom={20}
           title={
