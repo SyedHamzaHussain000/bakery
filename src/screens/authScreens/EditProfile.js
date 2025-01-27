@@ -7,93 +7,58 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { Color } from '../../assets/Utils';
+import React, {useEffect, useState} from 'react';
+import {Color} from '../../assets/Utils';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
 import EditProHeader from '../../Components/EditProHeader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Modal from 'react-native-modal';
 import Checkbox from '../../Components/Checkbox';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearToken, setUpdatedProfile, setUserData } from '../../redux/Slices';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUpdatedProfile, setUserData} from '../../redux/Slices';
 import DatePicker from 'react-native-date-picker';
-import { PickImage } from '../../GlobalFunctionns/ImagePicker';
-import { styles } from '../../Styles';
-import { EditProfileHandler } from '../../GlobalFunctionns/auth';
-import { ShowToast } from '../../GlobalFunctionns/ShowToast';
-import Geolocation from '@react-native-community/geolocation';
-
+import {PickImage} from '../../GlobalFunctionns/ImagePicker';
+import {styles} from '../../Styles';
+import {EditProfileHandler} from '../../GlobalFunctionns/auth';
+import {ShowToast} from '../../GlobalFunctionns/ShowToast';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from '../../assets/Responsive_Dimensions';
-const EditProfile = ({ navigation, route }) => {
+import {getCurrentLocationHandler} from '../../GlobalFunctionns';
+const EditProfile = ({navigation, route}) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [profileImage, setProfileImage] = useState();
-  const { token, userType, userData, updatedProfile } = useSelector(
-    state => state.user,
-  );
-  console.log('userType============>>>>>>>>>>>>', userType);
+  const {token, userType, userData} = useSelector(state => state.user);
   const latLng = route?.params?.latLng || null;
-  const [currentLocation, setCurrentLocation] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [currentLocation, setCurrentLocation] = useState({});
+  const [loading, setLoading] = useState(false);
   console.log('latlng', latLng);
   const dispatch = useDispatch();
-  console.log('currentLocation==>>>', currentLocation);
-  const API_KEY = 'AIzaSyA8roKrUBUJzWBySsm9v5ig05B_wJNY2hE';
+  console.log('currentLocationnnnn==>>>>>>', currentLocation);
   useEffect(() => {
-    setCurrentLocation(latLng)
-  }, [latLng])
+    setCurrentLocation(latLng);
+  }, [latLng]);
   const handleImage = async () => {
     const image = await PickImage();
     setProfileImage(image);
   };
-  const getCurrentLocation = () => {
-    setLoading(true)
 
-    Geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        // Reverse Geocoding
-        const location = await getLocationName(latitude, longitude);
-        setCurrentLocation({ latitude, longitude, location })
-        setLoading(false)
-
-      },
-      (error) => {
-        console.error('Error getting location:', error.message);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
-    );
-  };
-
-  const getLocationName = async (latitude, longitude) => {
+  const getCurrentLocation = async () => {
+    setLoading(true);
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`
-      );
-      const data = await response.json();
-
-      if (data.status === 'OK') {
-        // The formatted address contains the human-readable location name
-        const address = data.results[0]?.formatted_address;
-        return address;
-      } else {
-        console.error('Geocoding error:', data.error_message);
-        return null;
-      }
+      const response = await getCurrentLocationHandler();
+      setCurrentLocation(response);
     } catch (error) {
-      console.error('Error during reverse geocoding:', error.message);
-      return null;
+      console.log('error', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +75,7 @@ const EditProfile = ({ navigation, route }) => {
 
   const onChangeText = (changedText, key) => {
     setForm(oldForm => {
-      return { ...oldForm, [key]: changedText };
+      return {...oldForm, [key]: changedText};
     });
   };
   const {
@@ -204,7 +169,7 @@ const EditProfile = ({ navigation, route }) => {
               borderColor: Color.themeColor,
               borderRadius: 100,
             }}
-            source={{ uri: profileImage.path }}
+            source={{uri: profileImage.path}}
           />
         ) : null}
         <TouchableOpacity
@@ -222,7 +187,7 @@ const EditProfile = ({ navigation, route }) => {
           <AntDesign name="plus" size={25} color={Color.themeColor} />
         </TouchableOpacity>
       </TouchableOpacity>
-      <View style={{ gap: 20, marginTop: 40 }}>
+      <View style={{gap: 20, marginTop: 40}}>
         <Input
           handleInputChange={changedText =>
             onChangeText(changedText, 'userName')
@@ -237,8 +202,8 @@ const EditProfile = ({ navigation, route }) => {
           placeHolderColor={'#8D8D8D'}
           placeholder={'081234567892'}
         />
-        <View style={{ gap: 10 }}>
-          <Text style={{ color: Color.black, fontSize: responsiveFontSize(1.9) }}>
+        <View style={{gap: 10}}>
+          <Text style={{color: Color.black, fontSize: responsiveFontSize(1.9)}}>
             Date of Birth
           </Text>
           <TouchableOpacity
@@ -317,7 +282,7 @@ const EditProfile = ({ navigation, route }) => {
               placeHolderColor={'#8D8D8D'}
               placeholder={'09:00 - 06:00'}
             />
-            <View style={{ gap: 10 }}>
+            <View style={{gap: 10}}>
               <Text style={myStyles.textStyle}>Categories</Text>
               <Checkbox
                 setModalVisible={() => setOpenModal(!openModal)}
@@ -337,10 +302,12 @@ const EditProfile = ({ navigation, route }) => {
         )}
 
         {userType !== 'Rider' && (
-          <View style={{ gap: 10 }}>
+          <View style={{gap: 10}}>
             <Text style={myStyles.textStyle}>Choose Location</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('ChooseLocation')}
+              onPress={() =>
+                navigation.navigate('ChooseLocation', {type: 'editProfile'})
+              }
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -364,12 +331,15 @@ const EditProfile = ({ navigation, route }) => {
                 paddingVertical: 13,
               }}>
               <Text
-                style={{ color: '#8D8D8D', fontSize: responsiveFontSize(1.7) }}>
+                style={{color: '#8D8D8D', fontSize: responsiveFontSize(1.7)}}>
                 {currentLocation ? currentLocation.location : 'Dummy Street...'}
               </Text>
               <TouchableOpacity onPress={() => getCurrentLocation()}>
                 {loading ? (
-                  <ActivityIndicator size={'small'} color={Color.themeColor} />
+                  <ActivityIndicator
+                    size={responsiveHeight(3)}
+                    color={Color.themeColor}
+                  />
                 ) : (
                   <FontAwesome6
                     name="location-crosshairs"
@@ -377,17 +347,15 @@ const EditProfile = ({ navigation, route }) => {
                     size={20}
                   />
                 )}
-
               </TouchableOpacity>
             </TouchableOpacity>
           </View>
         )}
 
-
-        <View style={{ marginTop: 10 }}>
+        <View style={{marginTop: 10}}>
           <Button
             styleName={'plainButton'}
-            height={responsiveHeight(7)}
+            padding={responsiveHeight(1.8)}
             handleOnPress={() => editHandler()}
             title={
               isLoading ? (
@@ -398,12 +366,6 @@ const EditProfile = ({ navigation, route }) => {
             }
             color={Color.themeColor}
           />
-          {/* <Button
-            styleName={'plainButton'}
-            handleOnPress={() => dispatch(clearToken())}
-            title={isLoading ? (<ActivityIndicator size={'large'} color={Color.white}/>) : 'Submit'}
-            color={Color.themeColor}
-          /> */}
         </View>
       </View>
 

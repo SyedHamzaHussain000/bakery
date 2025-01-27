@@ -74,7 +74,7 @@ const Login = ({ navigation }) => {
         />
         <Button
           styleName={'plainButton'}
-          height={responsiveHeight(7)}
+          padding={responsiveHeight(1.8)}
           disable={true}
           handleOnPress={() => login()}
           fontWeight={'light'}

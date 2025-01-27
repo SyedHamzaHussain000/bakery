@@ -124,7 +124,7 @@ const OrderDetails = ({navigation, route}) => {
       {userType === 'Owner' && area.orderStatus == 'Pending' ? (
         <Button
           styleName={'plainButton'}
-          height={responsiveHeight(7)}
+          padding={responsiveHeight(1.9)}
           handleOnPress={() => handleOrderReady()}
           fontWeight={'light'}
           color={Color.themeColor}

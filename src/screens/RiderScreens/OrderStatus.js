@@ -6,46 +6,66 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { Images } from '../../assets';
+import React, {useEffect, useState} from 'react';
+import {Images} from '../../assets';
 import SvgIcons from '../../Components/SvgIcons';
-import { clock, rider } from '../../assets/icons';
-import { Color } from '../../assets/Utils';
+import {clock, rider} from '../../assets/icons';
+import {Color} from '../../assets/Utils';
 import * as Progress from 'react-native-progress';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from '../../Components/Button';
-import { responsiveHeight } from '../../assets/Responsive_Dimensions';
+import {responsiveHeight} from '../../assets/Responsive_Dimensions';
 import MapView from 'react-native-maps';
-import { riderStatusHandler } from '../../GlobalFunctionns';
-import { useSelector } from 'react-redux';
-import { PickImage } from '../../GlobalFunctionns/ImagePicker';
-const OrderStatus = ({ navigation, route }) => {
+import {
+  getCurrentLocationHandler,
+  riderStatusHandler,
+} from '../../GlobalFunctionns';
+import {useSelector} from 'react-redux';
+import {PickImage} from '../../GlobalFunctionns/ImagePicker';
+import MapViewDirections from 'react-native-maps-directions';
+import {Apikey} from '../../assets/ApiKey';
+const OrderStatus = ({navigation, route}) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [orderCategory, setOrderCategory] = useState('Start');
-  const { token } = useSelector(state => state.user)
-  const { data } = route.params
+  const {token} = useSelector(state => state.user);
+  const [currentLocation, setCurrentLocation] = useState();
+  const [pickupOrder,setPickupOrder] = useState(false)
+  const  currentOrigin = {latitude:currentLocation?.latitude,longitude:currentLocation?.longitude}
+  const {data, pickup, dropoff} = route.params;
   console.log('orderCategory==========<<<<<<<<<<<< ', orderCategory);
   const startDeliveryHandler = async () => {
     try {
-      const res = await riderStatusHandler(data?._id, 'Pick', token)
-      console.log('res', res)
+      const res = await riderStatusHandler(data?._id, 'Pick', token);
+      setPickupOrder(true)
+      console.log('res', res);
     } catch (error) {
-      console.log('error', error)
+      console.log('error', error);
     }
-  }
+  };
+
   useEffect(() => {
     if (orderCategory == 'Pick') {
-      startDeliveryHandler()
+      startDeliveryHandler();
     }
-  }, [orderCategory])
-
+  }, [orderCategory]);
+  const getCurrentLocation = async () => {
+    try {
+      const response = await getCurrentLocationHandler();
+      setCurrentLocation(response);
+      console.log('current Location', currentLocation);
+    } catch (error) {
+      console.log('error', error.message);
+    }finally{
+      console.log('first')
+    }
+  };
   const takePictureHandler = async () => {
-    const response = await PickImage()
-    console.log('pathhh', response)
+    const response = await PickImage();
+    console.log('pathhh', response);
     if (response.path) {
-      navigation.navigate('Gallery', { response, data })
+      navigation.navigate('Gallery', {response, data});
     }
-  }
+  };
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -57,20 +77,27 @@ const OrderStatus = ({ navigation, route }) => {
       <MapView
         //  scrollEnabled={false}
         scrollEnabled
-        style={{ height: responsiveHeight(43) }}
+        style={{height: responsiveHeight(43)}}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude:  currentOrigin?.latitude,
+          longitude: currentOrigin?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
-        }}
-      />
+        }}>
+        <MapViewDirections
+          origin={pickupOrder ? pickup : currentOrigin}
+          strokeColor="red"
+          strokeWidth={4}
+          destination={dropoff}
+          apikey={Apikey}
+        />
+      </MapView>
       <View
         style={{
           backgroundColor: Color.white,
           margin: 20,
           padding: 20,
-          shadowColor: "#000",
+          shadowColor: '#000',
           shadowOffset: {
             width: 0,
             height: 2,
@@ -82,10 +109,10 @@ const OrderStatus = ({ navigation, route }) => {
           borderTopRightRadius: 20,
           borderBottomLeftRadius: 20,
         }}>
-        <Text style={{ fontSize: 24, color: Color.black, fontWeight: '500' }}>
+        <Text style={{fontSize: 24, color: Color.black, fontWeight: '500'}}>
           {data.BakeryId.userName}
         </Text>
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
           <View
             style={{
               backgroundColor: Color.themeColor,
@@ -99,8 +126,8 @@ const OrderStatus = ({ navigation, route }) => {
             }}>
             <SvgIcons xml={rider} height={'30'} width={'30'} />
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Color.black, fontSize: 18 }}>
+          <View style={{flex: 1}}>
+            <Text style={{color: Color.black, fontSize: 18}}>
               {data.BakeryId.bakeryName}:
             </Text>
             <Text
@@ -111,11 +138,12 @@ const OrderStatus = ({ navigation, route }) => {
                 flexWrap: 'wrap',
                 marginTop: 5,
               }}>
-              {data.productId.productName} - {data.productId.flavor} - {data.productId.chooseCategory}
+              {data.productId.productName} - {data.productId.flavor} -{' '}
+              {data.productId.chooseCategory}
             </Text>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
           <View
             style={{
               backgroundColor: Color.white,
@@ -137,8 +165,8 @@ const OrderStatus = ({ navigation, route }) => {
             }}>
             <SvgIcons xml={clock} height={'30'} width={'30'} />
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Color.black, fontSize: 18 }}>Time:</Text>
+          <View style={{flex: 1}}>
+            <Text style={{color: Color.black, fontSize: 18}}>Time:</Text>
             <Text
               style={{
                 color: '#C5C5C5',
@@ -152,7 +180,7 @@ const OrderStatus = ({ navigation, route }) => {
           </View>
         </View>
 
-        <Text style={{ color: Color.black, marginTop: 20, fontSize: 18 }}>
+        <Text style={{color: Color.black, marginTop: 20, fontSize: 18}}>
           Order Status
         </Text>
 
@@ -162,7 +190,7 @@ const OrderStatus = ({ navigation, route }) => {
             justifyContent: 'space-between',
             marginTop: 20,
           }}>
-          <Text style={[style.textStyle, { color: Color.themeColor }]}>
+          <Text style={[style.textStyle, {color: Color.themeColor}]}>
             Start
           </Text>
           <Text style={style.textStyle}>Pick</Text>
@@ -174,7 +202,7 @@ const OrderStatus = ({ navigation, route }) => {
       </View>
      <View style={{backgroundColor:'#D4D4D4',height:5,flex:1}}></View>
       </View> */}
-        <View style={{ width: '100%', marginTop: 10 }}>
+        <View style={{width: '100%', marginTop: 10}}>
           <Progress.Bar
             borderColor="lightgray"
             height={4}
@@ -203,6 +231,7 @@ const OrderStatus = ({ navigation, route }) => {
               $185.60
             </Text>
             <TouchableOpacity
+            onPress={getCurrentLocation()}
               style={{
                 justifyContent: 'center',
                 marginTop: 10,
@@ -215,7 +244,7 @@ const OrderStatus = ({ navigation, route }) => {
                 width: 120,
                 padding: 12,
               }}>
-              <Text style={{ color: Color.themeColor }}>Ongoing</Text>
+              <Text style={{color: Color.themeColor}}>Ongoing</Text>
             </TouchableOpacity>
           </View>
           <View>
@@ -234,7 +263,7 @@ const OrderStatus = ({ navigation, route }) => {
                 borderBottomLeftRadius: 25,
                 borderTopLeftRadius: 25,
               }}>
-              <Text style={{ color: Color.themeColor, fontSize: 15 }}>
+              <Text style={{color: Color.themeColor, fontSize: 15}}>
                 Order Status
               </Text>
               <Ionicons
@@ -318,13 +347,13 @@ const OrderStatus = ({ navigation, route }) => {
           </View>
         </View>
       </View>
-      <View style={{ paddingHorizontal: 20 }}>
+      <View style={{paddingHorizontal: 20}}>
         {orderCategory === 'Drop' ? (
           <Button
             handleOnPress={() => takePictureHandler()}
             VectorIcon={Ionicons}
+            padding={responsiveHeight(1.9)}
             iconSize={25}
-            height={responsiveHeight(7)}
             styleName={'plainButton'}
             iconName={'camera-outline'}
             color={Color.themeColor}

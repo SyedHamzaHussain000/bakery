@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
-import { ShowToast } from '../GlobalFunctionns/ShowToast';
+import {ShowToast} from '../GlobalFunctionns/ShowToast';
 
 const initialState = {
   user: [],
@@ -10,12 +10,14 @@ const initialState = {
   token: '',
   isLoading: false,
   addToCartProducts: [],
+  pickupLocation: {},
+  dropoffLocation: {},
   error: null,
 };
 
 export const UserLogin = createAsyncThunk(
   'auth/UserLogin',
-  async (config, { rejectWithValue }) => {
+  async (config, {rejectWithValue}) => {
     await axios.request(config);
     try {
       const response = await axios(config);
@@ -58,12 +60,18 @@ export const authSlice = createSlice({
       state.userData = action.payload;
     },
     setUpdatedProfile: (state, action) => {
-      state.updatedProfile = action.payload
+      state.updatedProfile = action.payload;
     },
     setProfileData: (state, action) => {
       state.userData = action.payload;
     },
-    clearUserData: (state) => {
+    setPickupLocation: (state, action) => {
+      state.pickupLocation = action.payload;
+    },
+    setDropoffLocation: (state, action) => {
+      state.dropoffLocation = action.payload;
+    },
+    clearUserData: state => {
       state.user = [];
     },
   },
@@ -76,12 +84,8 @@ export const authSlice = createSlice({
       .addCase(UserLogin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.data.token;
-        console.log('action.payloaaaad<<<<=====', action.payload)
-        // if(state.updatedProfile == 0){
-        // state.userData = action.payload.data;
-        // }
-        state.userData = action.payload.data
-        // console.log('action.payload', action.payload);
+        console.log('action.payloaaaad<<<<=====', action.payload);
+        state.userData = action.payload.data;
       })
       .addCase(UserLogin.rejected, (state, action) => {
         state.isLoading = false;
@@ -98,7 +102,9 @@ export const {
   setUserData,
   setProfileData,
   clearUserData,
-  setUpdatedProfile
+  setUpdatedProfile,
+  setPickupLocation,
+  setDropoffLocation,
 } = authSlice.actions;
 
 export default authSlice.reducer;

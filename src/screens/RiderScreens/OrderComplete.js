@@ -23,7 +23,8 @@ const OrderComplete = ({ navigation }) => {
           </View>
         </View>
       </View>
-      <Button height={responsiveHeight(7)} styleName={'plainButton'} handleOnPress={() => navigation.navigate('BottomTabs')} width={'90%'} title={'Back To Home'} fontWeight={'400'} color={Color.themeColor} />
+      
+      <Button padding={responsiveHeight(1.9)} styleName={'plainButton'} handleOnPress={() => navigation.navigate('BottomTabs')} width={'90%'} title={'Back To Home'} fontWeight={'400'} color={Color.themeColor} />
     </View>
   )
 }

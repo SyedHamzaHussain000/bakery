@@ -121,7 +121,7 @@ const Signup = ({navigation, route}) => {
           placeholder={'Confirm Password'}
         />
         <Button
-                height={responsiveHeight(7)}
+          padding={responsiveHeight(1.8)}
         
         disable={true}
           styleName={'plainButton'}

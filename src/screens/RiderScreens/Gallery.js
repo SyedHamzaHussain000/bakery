@@ -1,23 +1,26 @@
-import { View, Text, Image, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
-import { Images } from '../../assets'
-import Button from '../../Components/Button'
-import { Color } from '../../assets/Utils'
-import { responsiveHeight, responsiveWidth } from '../../assets/Responsive_Dimensions'
-import { riderStatusHandler } from '../../GlobalFunctionns'
-import { useSelector } from 'react-redux'
-import { baseUrl } from '../../baseUrl'
-import axios from 'axios'
-import { ShowToast } from '../../GlobalFunctionns/ShowToast'
+import {View, Text, Image, ActivityIndicator} from 'react-native';
+import React, {useState} from 'react';
+import {Images} from '../../assets';
+import Button from '../../Components/Button';
+import {Color} from '../../assets/Utils';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from '../../assets/Responsive_Dimensions';
+import {riderStatusHandler} from '../../GlobalFunctionns';
+import {useSelector} from 'react-redux';
+import {baseUrl} from '../../baseUrl';
+import axios from 'axios';
+import {ShowToast} from '../../GlobalFunctionns/ShowToast';
 
-const Gallery = ({ navigation, route }) => {
-  const { response, data } = route.params
-  const { token } = useSelector(state => state.user)
-  console.log('response.path', response.path)
-  console.log('response.mime', response.mime)
-  const [isLoading, setIsLoading] = useState(false)
+const Gallery = ({navigation, route}) => {
+  const {response, data} = route.params;
+  const {token} = useSelector(state => state.user);
+  console.log('response.path', response.path);
+  console.log('response.mime', response.mime);
+  const [isLoading, setIsLoading] = useState(false);
 
-  console.log('isLoading',isLoading)
+  console.log('isLoading', isLoading);
   // const handleDropOrder = async () => {
   //   setIsLoading(true);
   //   try {
@@ -38,7 +41,7 @@ const Gallery = ({ navigation, route }) => {
 
   const handleDropOrder = async () => {
     let formData = new FormData();
-    formData.append('BookingId', data._id);  // Ensure BookingId is valid
+    formData.append('BookingId', data._id); // Ensure BookingId is valid
     formData.append('bookingStatus', 'Drop');
 
     if (response.path && response.mime) {
@@ -61,45 +64,63 @@ const Gallery = ({ navigation, route }) => {
     };
 
     try {
-    setIsLoading(true)
+      setIsLoading(true);
 
       const response = await axios.request(config);
-      setIsLoading(false)
+      setIsLoading(false);
 
       console.log('response.data.message', response.data.message);
       if (response.data.success) {
         ShowToast('success', response.data.message);
-        navigation.navigate('OrderComplete')
+        navigation.navigate('OrderComplete');
       } else {
         ShowToast('error', response.data.message);
       }
       return response.data;
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
 
       console.error('Error in riderStatusHandler:', error);
       throw error;
     }
   };
   return (
-    <View style={{ backgroundColor: '#AFAFAF', flex: 1, padding: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-
+    <View
+      style={{
+        backgroundColor: '#AFAFAF',
+        flex: 1,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
         <Image
-          source={{ uri: response.path }}
-          style={{ height: responsiveHeight(50), width: responsiveWidth(85), borderRadius: responsiveHeight(2) }}
+          source={{uri: response.path}}
+          style={{
+            height: responsiveHeight(50),
+            width: responsiveWidth(85),
+            borderRadius: responsiveHeight(2),
+          }}
           resizeMode="stretch" // Adjust as needed
         />
       </View>
 
-
-      <Button height={responsiveHeight(7)} styleName={'plainButton'} handleOnPress={() => handleDropOrder()}
-         title={isLoading ? 
-          <ActivityIndicator size={'large'} color={Color.white} /> 
-          : 'Submit'
-        }  color={Color.themeColor} marginBottom={20} />
+      <Button
+        padding={responsiveHeight(1.9)}
+        styleName={'plainButton'}
+        handleOnPress={() => handleDropOrder()}
+        title={
+          isLoading ? (
+            <ActivityIndicator size={'large'} color={Color.white} />
+          ) : (
+            'Submit'
+          )
+        }
+        color={Color.themeColor}
+        marginBottom={20}
+      />
     </View>
-  )
-}
+  );
+};
 
-export default Gallery
+export default Gallery;

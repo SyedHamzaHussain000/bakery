@@ -1,36 +1,54 @@
-import { View, Text, Image, ActivityIndicator } from 'react-native';
-import React, { useState } from 'react';
-import { Color } from '../assets/Utils';
-import { clock, rider } from '../assets/icons';
+import {View, Text, Image, ActivityIndicator} from 'react-native';
+import React, {useState} from 'react';
+import {Color} from '../assets/Utils';
+import {clock, rider} from '../assets/icons';
 import SvgIcons from './SvgIcons';
 import Hr from './Hr';
 import Button from './Button';
 import SubscriptionModal from './SubscriptionModal';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MapView from 'react-native-maps';
-import { responsiveHeight, responsiveWidth } from '../assets/Responsive_Dimensions';
-import { riderStatusHandler } from '../GlobalFunctionns';
-const CompletedOrders = ({ navigation, data }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const { userType, token } = useSelector(state => state.user);
-  const [isLoading, setIsLoading] = useState(false)
-  console.log('data====?>>>>', data)
+import MapViewDirections from 'react-native-maps-directions';
 
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from '../assets/Responsive_Dimensions';
+import {riderStatusHandler} from '../GlobalFunctionns';
+import {Apikey} from '../assets/ApiKey';
+const CompletedOrders = ({navigation, data, startLoc}) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const {userType, token} = useSelector(state => state.user);
+  const [isLoading, setIsLoading] = useState(false);
+  const bakeryLocation = data?.BakeryId?.Location?.coordinates;
+  const subscriberLocation = data?.subscriberId?.Location?.coordinates;
+  const pickup = {latitude: bakeryLocation[1], longitude: bakeryLocation[0]};
+  const dropoff = {
+    latitude: subscriberLocation[1],
+    longitude: subscriberLocation[0],
+  };
+  // const dropoff =  {latitude: 37.421998333333335, longitude: -122.084}
+  const origin = {latitude: startLoc?.latitude, longitude: startLoc?.longitude};
+  const destination = {
+    latitude: bakeryLocation[1],
+    longitude: bakeryLocation[0],
+  };
   const startDeliveryHandler = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const res = await riderStatusHandler(data?._id, 'Start', token)
-      setIsLoading(false)
-      if (!res.success) {
-        navigation.navigate('OrderStatus', { data })
+      const res = await riderStatusHandler(data?._id, 'Start', token);
+      setIsLoading(false);
+      if (res.success || res.message == 'Order already booked from rider.') {
+        // console.log('dropoff data',dropoff)
+        navigation.navigate('OrderStatus', {data, pickup, dropoff});
       }
-      console.log('response', res)
+      console.log('response', res);
     } catch (error) {
-      setIsLoading(false)
-      console.log('error', error)
+      setIsLoading(false);
+      console.log('error', error);
     }
-  }
+  };
   return (
     <View
       style={{
@@ -49,11 +67,11 @@ const CompletedOrders = ({ navigation, data }) => {
         elevation: 4,
         marginTop: 30,
       }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <Text style={{ color: Color.black, fontSize: 22, fontWeight: '500' }}>
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+        <Text style={{color: Color.black, fontSize: 22, fontWeight: '500'}}>
           {data?.BakeryId?.userName}
         </Text>
-        <Text style={{ fontSize: 12, color: '#C5C5C5' }}>Just Now</Text>
+        <Text style={{fontSize: 12, color: '#C5C5C5'}}>Just Now</Text>
       </View>
 
       <View>
@@ -62,7 +80,7 @@ const CompletedOrders = ({ navigation, data }) => {
             backgroundColor: Color.themeColor,
             borderTopLeftRadius: 20,
           }}></View>
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
           <View
             style={{
               backgroundColor: Color.themeColor,
@@ -76,8 +94,8 @@ const CompletedOrders = ({ navigation, data }) => {
             }}>
             <SvgIcons xml={rider} height={'30'} width={'30'} />
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Color.black, fontSize: 17, fontWeight: '500' }}>
+          <View style={{flex: 1}}>
+            <Text style={{color: Color.black, fontSize: 17, fontWeight: '500'}}>
               {data?.BakeryId?.bakeryName}:
             </Text>
             <Text
@@ -89,12 +107,13 @@ const CompletedOrders = ({ navigation, data }) => {
                 flexWrap: 'wrap',
                 marginTop: 5,
               }}>
-              {data?.productId?.productName} - {data?.productId?.flavor} - {data?.productId?.chooseCategory}
+              {data?.productId?.productName} - {data?.productId?.flavor} -{' '}
+              {data?.productId?.chooseCategory}
             </Text>
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+        <View style={{flexDirection: 'row', gap: 10, marginTop: 20}}>
           <View
             style={{
               backgroundColor: Color.white,
@@ -116,8 +135,8 @@ const CompletedOrders = ({ navigation, data }) => {
             }}>
             <SvgIcons xml={clock} height={'30'} width={'30'} />
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: Color.black, fontSize: 17, fontWeight: '500' }}>
+          <View style={{flex: 1}}>
+            <Text style={{color: Color.black, fontSize: 17, fontWeight: '500'}}>
               {userType === 'Owner' ? 'Time Duration' : 'Time:'}
             </Text>
             <Text
@@ -163,8 +182,8 @@ const CompletedOrders = ({ navigation, data }) => {
               }}>
               <Entypo name="location-pin" size={25} color={Color.white} />
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ color: Color.black, fontSize: 15 }}>Location</Text>
+            <View style={{flex: 1}}>
+              <Text style={{color: Color.black, fontSize: 15}}>Location</Text>
               <Text
                 style={{
                   color: '#C5C5C5',
@@ -192,14 +211,21 @@ const CompletedOrders = ({ navigation, data }) => {
             <MapView
               //  scrollEnabled={false}
               scrollEnabled
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
+                latitude: origin?.latitude,
+                longitude: origin?.longitude,
                 latitudeDelta: 0.0952,
                 longitudeDelta: 0.0451,
-              }}
-            />
+              }}>
+              <MapViewDirections
+                origin={origin}
+                strokeColor="red"
+                strokeWidth={4}
+                destination={destination}
+                apikey={Apikey}
+              />
+            </MapView>
           </View>
         )}
 
@@ -229,17 +255,19 @@ const CompletedOrders = ({ navigation, data }) => {
               userType === 'Rider'
                 ? startDeliveryHandler()
                 : userType === 'Subscriber'
-                  ? setModalVisible(true)
-                  : null;
+                ? setModalVisible(true)
+                : null;
             }}
             title={
               isLoading ? (
-                <ActivityIndicator size='large' color={Color.white} />
-              ) : userType === 'Subscriber'
-                ? 'Proceed With him'
-                : userType === 'Rider'
-                  ? 'Start Delivery'
-                  : 'Order Complete'
+                <ActivityIndicator size="large" color={Color.white} />
+              ) : userType === 'Subscriber' ? (
+                'Proceed With him'
+              ) : userType === 'Rider' ? (
+                'Start Delivery'
+              ) : (
+                'Order Complete'
+              )
             }
             height={responsiveHeight(6)}
             width={responsiveWidth(30)}

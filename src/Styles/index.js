@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   plainButton: {
-    height: 60,
+    // height: 60,
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',

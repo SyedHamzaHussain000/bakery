@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Color} from '../assets/Utils';
 import SvgIcons from './SvgIcons';
 import {User} from '../assets/icons';
-const SearchHeader = ({handlePress}) => {
+const SearchHeader = ({handlePress,handleSearchPress}) => {
   return (
     <View
       style={{
@@ -12,7 +12,7 @@ const SearchHeader = ({handlePress}) => {
         flexDirection: 'row',
         alignItems: 'center',
       }}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleSearchPress}>
         <Ionicons size={35} color={Color.black} name="search-sharp" />
       </TouchableOpacity>
       <TouchableOpacity onPress={handlePress}>

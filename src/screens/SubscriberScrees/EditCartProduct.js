@@ -30,7 +30,9 @@ const EditCartProduct = ({navigation, route}) => {
   const [price, setPrice] = useState(item?.totalPrice);
   const addToCartProducts = useSelector(state => state.user.addToCartProducts);
   const [selectedDay, setSelectedDay] = useState(item.days);
-  const [selectedAvailability, setSelectedAvailability] = useState(item.availability);
+  const [selectedAvailability, setSelectedAvailability] = useState(
+    item.availability,
+  );
   console.log('selectedDay', selectedDay);
   console.log('selectedAvailability<<<<<<<<<<<', selectedAvailability);
   console.log('addToCartProducts', addToCartProducts);
@@ -47,8 +49,8 @@ const EditCartProduct = ({navigation, route}) => {
           ...product,
           quantity: totalProducts,
           totalPrice: price,
-          days:selectedDay,
-          availability:selectedAvailability
+          days: selectedDay,
+          availability: selectedAvailability,
         };
       }
       return product;
@@ -138,8 +140,8 @@ const EditCartProduct = ({navigation, route}) => {
         <Text style={styles.heading}>Quantity Selected for Cart</Text>
         <Text style={styles.textStyle}>{totalProducts}</Text>
         <Availability
-        currentAvailability={item.availability}
-        currentDay={item.days}
+          currentAvailability={item.availability}
+          currentDay={item.days}
           onDayChange={day => setSelectedDay(day)}
           onAvailabilityChange={availability =>
             setSelectedAvailability(availability)
@@ -202,7 +204,7 @@ const EditCartProduct = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <Button
-      height={responsiveHeight(7)}
+        padding={responsiveHeight(1.9)}
         styleName={'plainButton'}
         handleOnPress={() => handleEditCart()}
         fontWeight={'light'}

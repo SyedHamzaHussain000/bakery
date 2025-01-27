@@ -42,7 +42,7 @@ const Vendors = ({navigation}) => {
         handleNavigate={() => navigation.navigate('UserProfile')}
       />
       <View style={{padding: 10,flex:1}}>
-        <CompletedOrders />
+        {/* <CompletedOrders /> */}
         {isLoading ? 
         (
           <View style={{flex: 1, justifyContent: 'center'}}>

@@ -1,0 +1,1 @@
+export const Apikey = 'AIzaSyA8roKrUBUJzWBySsm9v5ig05B_wJNY2hE'

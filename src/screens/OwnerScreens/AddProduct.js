@@ -244,7 +244,7 @@ const AddProduct = ({navigation}) => {
         <Button
           handleOnPress={() => addProductHandler()}
           marginTop={20}
-          height={responsiveHeight(7)}
+          padding={responsiveHeight(1.9)}
           styleName={'plainButton'}
           marginBottom={20}
           title={
