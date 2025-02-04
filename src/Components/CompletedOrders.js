@@ -29,7 +29,11 @@ const CompletedOrders = ({navigation, data, startLoc}) => {
     longitude: subscriberLocation[0],
   };
   // const dropoff =  {latitude: 37.421998333333335, longitude: -122.084}
-  const origin = {latitude: startLoc?.latitude, longitude: startLoc?.longitude};
+  const currentLocation = {
+    latitude: startLoc?.latitude,
+    longitude: startLoc?.longitude,
+  };
+  console.log('current loaction',currentLocation);
   const destination = {
     latitude: bakeryLocation[1],
     longitude: bakeryLocation[0],
@@ -39,9 +43,14 @@ const CompletedOrders = ({navigation, data, startLoc}) => {
     try {
       const res = await riderStatusHandler(data?._id, 'Start', token);
       setIsLoading(false);
-      if (res.success || res.message == 'Order already booked from rider.') {
+      if (res.success || res.message === 'Order already booked from rider.') {
         // console.log('dropoff data',dropoff)
-        navigation.navigate('OrderStatus', {data, pickup, dropoff});
+        navigation.navigate('OrderStatus', {
+          data,
+          currentLocation,
+          pickup,
+          dropoff,
+        });
       }
       console.log('response', res);
     } catch (error) {
@@ -213,13 +222,13 @@ const CompletedOrders = ({navigation, data, startLoc}) => {
               scrollEnabled
               style={{flex: 1}}
               initialRegion={{
-                latitude: origin?.latitude,
-                longitude: origin?.longitude,
+                latitude: currentLocation?.latitude,
+                longitude: currentLocation?.longitude,
                 latitudeDelta: 0.0952,
                 longitudeDelta: 0.0451,
               }}>
               <MapViewDirections
-                origin={origin}
+                origin={currentLocation}
                 strokeColor="red"
                 strokeWidth={4}
                 destination={destination}

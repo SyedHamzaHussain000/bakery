@@ -19,7 +19,6 @@ import {
   getAllAcceptedBookings,
   getAllReadyBookingHandler,
   getCurrentLocationHandler,
-  orderReadyHandler,
   rejectOrderHandler,
 } from '../../GlobalFunctionns';
 import {useSelector} from 'react-redux';
@@ -28,7 +27,6 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../assets/Responsive_Dimensions';
-import {useIsFocused} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ShowToast} from '../../GlobalFunctionns/ShowToast';
@@ -39,21 +37,13 @@ import MapViewDirections from 'react-native-maps-directions';
 const Bakeries = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const {token, userData} = useSelector(state => state.user);
-
   const [isLoading, setIsLoading] = useState(false);
   const [pendingLoading, setPendingLoading] = useState(false);
   const [rejectLoading, setRejectLoading] = useState(false);
   const [acceptedOrders, setAcceptedOrders] = useState([]);
-  const [currentLocation, setCurrentLocation] = useState({
-    latitude: 37.421998333333335,
-    location:
-      'Google Building 43, 43 Amphitheatre Pkwy, Mountain View, CA 94043, USA',
-    longitude: -122.084,
-  });
-  console.log('current Location', currentLocation);
+  const [currentLocation, setCurrentLocation] = useState();
   const [reLoadApi, setReloadApi] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
-  const focus = useIsFocused();
   const [data, setData] = useState([]);
   const [productDetails, setProductDetails] = useState();
   const [emptyData, setEmptyData] = useState('');
@@ -65,19 +55,18 @@ const Bakeries = ({navigation}) => {
     orderStatus: 'Ready',
   };
   const [activeCategory, setActiveCategory] = useState('Completed');
-  console.log('productDetails=====>>>>', productDetails);
   const origin = {
     latitude: productDetails?.Location?.coordinates[1],
     longitude: productDetails?.Location?.coordinates[0],
   };
   const destination = {
-    latitude: Number(productDetails?.subscriberLocation?.coordinates[1]),
-    longitude: Number(productDetails?.subscriberLocation?.coordinates[0]),
+    latitude: Number(productDetails?.deliveryLocation?.coordinates[1]),
+    longitude: Number(productDetails?.deliveryLocation?.coordinates[0]),
   };
 
-  console.log('origin', origin);
-  console.log('destination', destination);
-  const [statusData, setStatusData] = useState([
+  console.log('productDetails=====>>>>', productDetails);
+
+  const [statusData] = useState([
     {
       id: 1,
       category: 'Completed',
@@ -99,9 +88,6 @@ const Bakeries = ({navigation}) => {
     } catch (error) {
       console.log('error', error.message);
     }
-    // finally{
-    //   console.log('first')
-    // }
   };
   const getCompletedOrders = async () => {
     setPendingLoading(true);
@@ -133,10 +119,9 @@ const Bakeries = ({navigation}) => {
       // setNewData(res.data);
       // console.log('response of  orders', res.data);
       // console.log('response of accepted orders', newData);
-
-      // if (res.data.length < 1) {
-      //   setEmptyData('No Accepted Orders To Show');
-      // }
+      if (res.data.length < 1) {
+        setEmptyData('No Accepted Orders To Show');
+      }
       setPendingLoading(false);
     } catch (error) {
       setPendingLoading(false);
@@ -409,8 +394,8 @@ const Bakeries = ({navigation}) => {
                     initialRegion={{
                       latitude: origin.latitude,
                       longitude: origin.longitude,
-                      latitudeDelta: 0.1, // Adjust to zoom out (this will show a city-sized area)
-                      longitudeDelta: 0.1,
+                      latitudeDelta: 0.02,  // Increased value = zoomed out slightly
+                      longitudeDelta: 0.008,
                     }}>
                     <MapViewDirections
                       origin={{
@@ -418,7 +403,7 @@ const Bakeries = ({navigation}) => {
                         longitude: origin.longitude,
                       }}
                       strokeColor="red"
-                      strokeWidth={6}
+                      strokeWidth={4}
                       destination={{
                         latitude: destination.latitude, // Ensure different coordinates
                         longitude: destination.longitude,
@@ -546,7 +531,6 @@ const Bakeries = ({navigation}) => {
                     )
                   }
                   handleOnPress={acceptOrder}
-                  // height={responsiveHeight(5.5)}
                   padding={responsiveHeight(1.5)}
                   width={'100%'}
                   fontWeight={'bold'}

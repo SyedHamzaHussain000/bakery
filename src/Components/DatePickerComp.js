@@ -14,17 +14,31 @@ const DatePickerComp = ({
   onDateChange,
   selectedResult,
   placeHolder,
+  txtColor,
+  mrgnTop,
+  headingMrgn,
+  height,
+  width,
+  bgColor,
 }) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
   return (
     <View>
-      <Text style={localStyles.heading}>{title}</Text>
+    <Text style={[localStyles.heading,{marginTop:headingMrgn ? headingMrgn : 10,}]}>{title}</Text>
       <TouchableOpacity
-        style={localStyles.viewStyle}
+        style={[
+          localStyles.viewStyle,
+          {backgroundColor: bgColor ? bgColor : Color.white,marginTop:mrgnTop ? mrgnTop : responsiveHeight(1),
+            height:height ? height : responsiveHeight(6),
+            width:width ? width : responsiveWidth(90),
+          },
+        ]}
         onPress={() => setOpen(true)}>
-        <Text>{selectedResult ? selectedResult : placeHolder}</Text>
+        <Text style={{color: txtColor}}>
+          {selectedResult ? selectedResult : placeHolder}
+        </Text>
       </TouchableOpacity>
       <DatePicker
         modal
@@ -56,23 +70,18 @@ const localStyles = StyleSheet.create({
     color: Color.black,
     fontSize: 18,
     fontWeight: 'medium',
-    marginTop: 10,
   },
 
   viewStyle: {
     zIndex: 10,
-    marginTop: responsiveHeight(1),
-    height: responsiveHeight(6),
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    backgroundColor:Color.white,
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    width: responsiveWidth(90),
     borderTopLeftRadius: 30,
     borderWidth: 1,
     borderColor: '#D4D4D4',

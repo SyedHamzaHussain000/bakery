@@ -1,13 +1,11 @@
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Images} from '../../assets';
 import SvgIcons from '../../Components/SvgIcons';
 import {clock, rider} from '../../assets/icons';
 import {Color} from '../../assets/Utils';
@@ -28,15 +26,25 @@ const OrderStatus = ({navigation, route}) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const [orderCategory, setOrderCategory] = useState('Start');
   const {token} = useSelector(state => state.user);
-  const [currentLocation, setCurrentLocation] = useState();
-  const [pickupOrder,setPickupOrder] = useState(false)
-  const  currentOrigin = {latitude:currentLocation?.latitude,longitude:currentLocation?.longitude}
-  const {data, pickup, dropoff} = route.params;
-  console.log('orderCategory==========<<<<<<<<<<<< ', orderCategory);
-  const startDeliveryHandler = async () => {
+  const [pickupOrder, setPickupOrder] = useState(false);
+  const {data, currentLocation, pickup} = route.params;
+  const [deliveryLocation, setDeliveryLocation] = useState();
+  const destination = {
+    latitude: deliveryLocation?.[1], // Latitude at index 1
+    longitude: deliveryLocation?.[0], // Longitude at index 0
+  };
+  console.log('destination', destination);
+  const currentOrigin = {
+    latitude: currentLocation?.latitude,
+    longitude: currentLocation?.longitude,
+  };
+  console.log('currentLocation==========<<<<<<<<<<<< ', currentLocation);
+  console.log('pickup==========<<<<<<<<<<<< ', pickup);
+  const pickOrderHandler = async () => {
     try {
       const res = await riderStatusHandler(data?._id, 'Pick', token);
-      setPickupOrder(true)
+      setPickupOrder(true);
+      setDeliveryLocation(res.data.deliveryLocation.coordinates);
       console.log('res', res);
     } catch (error) {
       console.log('error', error);
@@ -44,21 +52,11 @@ const OrderStatus = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if (orderCategory == 'Pick') {
-      startDeliveryHandler();
+    if (orderCategory === 'Pick') {
+      pickOrderHandler();
     }
   }, [orderCategory]);
-  const getCurrentLocation = async () => {
-    try {
-      const response = await getCurrentLocationHandler();
-      setCurrentLocation(response);
-      console.log('current Location', currentLocation);
-    } catch (error) {
-      console.log('error', error.message);
-    }finally{
-      console.log('first')
-    }
-  };
+
   const takePictureHandler = async () => {
     const response = await PickImage();
     console.log('pathhh', response);
@@ -79,7 +77,7 @@ const OrderStatus = ({navigation, route}) => {
         scrollEnabled
         style={{height: responsiveHeight(43)}}
         initialRegion={{
-          latitude:  currentOrigin?.latitude,
+          latitude: currentOrigin?.latitude,
           longitude: currentOrigin?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
@@ -88,7 +86,7 @@ const OrderStatus = ({navigation, route}) => {
           origin={pickupOrder ? pickup : currentOrigin}
           strokeColor="red"
           strokeWidth={4}
-          destination={dropoff}
+          destination={pickupOrder ? destination : pickup}
           apikey={Apikey}
         />
       </MapView>
@@ -231,7 +229,6 @@ const OrderStatus = ({navigation, route}) => {
               $185.60
             </Text>
             <TouchableOpacity
-            onPress={getCurrentLocation()}
               style={{
                 justifyContent: 'center',
                 marginTop: 10,

@@ -1,22 +1,116 @@
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useState, useRef} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import MapView, {Marker} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
+import {useDispatch, useSelector} from 'react-redux';
 import PlainHeader from '../../Components/PlainHeader';
 import {Color} from '../../assets/Utils';
-import MapView, {Marker} from 'react-native-maps';
-import {styles} from '../../Styles';
 import {
+  responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from '../../assets/Responsive_Dimensions';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import GetSearchedLocation from '../../Components/GetLocation';
 import Input from '../../Components/Input';
 import Button from '../../Components/Button';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import DatePickerComp from '../../Components/DatePickerComp';
+import {setRoutes} from '../../GlobalFunctionns';
+import {Apikey} from '../../assets/ApiKey';
+import {ShowToast} from '../../GlobalFunctionns/ShowToast';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import {setEndRoute, setStartRoute} from '../../redux/Slices';
 const RoadWay = ({navigation}) => {
-  const mapRef = useRef(null);
-  const [latLng, setLatLng] = useState(null);
+  const mapRef = useRef(null); // Create a ref for the MapView
+  const [pickupLocation, setPickupLocation] = useState(null);
+  const [dropoffLocation, setDropoffLocation] = useState(null);
+  const [selectedDate, setSelectedDate] = useState();
+  const [checkPoints, setCheckPoints] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [radius, setRadius] = useState();
+  const dispatch = useDispatch();
+  const {_id, token, userType} = useSelector(state => state.user.userData);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log('pickuplocation', pickupLocation);
+  console.log('dropofflocation', dropoffLocation);
+  const addCheckpoint = () => {
+    if (selectedLocation) {
+      setCheckPoints(prev => [...prev, selectedLocation]);
+      setSelectedLocation(null); // Clear input after adding
+    }
+  };
+  const handlePickupLocationSelect = location => {
+    setDropoffLocation(location);
+
+    // Pan the map to the pickup location
+    if (mapRef.current && location) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          latitudeDelta: 0.04, // Zoom level
+          longitudeDelta: 0.04, // Zoom level
+        },
+        500,
+      ); // Animation duration in ms
+    }
+  };
+
+  const setRouteHandler = async () => {
+    setIsLoading(true);
+    console.log('checkpoints', checkPoints);
+    try {
+      const response = await setRoutes(
+        checkPoints,
+        _id,
+        selectedDate,
+        pickupLocation.locationName,
+        pickupLocation,
+        dropoffLocation.locationName,
+        dropoffLocation,
+        radius,
+        token,
+      );
+      setIsLoading(false);
+      dispatch(
+        setStartRoute({
+          latitude: parseFloat(response?.data?.startLocation?.coordinates[1]),
+          longitude: parseFloat(response?.data?.startLocation?.coordinates[0]),
+        }),
+      );
+      dispatch(
+        setEndRoute({
+          latitude: parseFloat(response?.data?.endLocation?.coordinates[1]),
+          longitude: parseFloat(response?.data?.endLocation?.coordinates[0]),
+        }),
+      );
+      console.log('response.data.endlocation', response.data.endLocation);
+      console.log('response.startlocation', response.data.startLocation);
+      if (response.success) {
+        return ShowToast('success', 'Routes Added Successfully');
+      } else {
+        return ShowToast('error', response.message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.log('error', error.response.data.message);
+    }
+  };
+  const handleDelete = index => {
+    setCheckPoints(prevCheckPoints =>
+      prevCheckPoints.filter((_, i) => i !== index),
+    );
+  };
   return (
-    <View style={{flex: 1, backgroundColor: Color.white}}>
+    <View style={{flex: 1}}>
       <PlainHeader
         notification={true}
         bgColor={'#FB8456'}
@@ -25,157 +119,269 @@ const RoadWay = ({navigation}) => {
         handlePress={() => navigation.goBack()}
         text={'Road way'}
       />
-
-      <View
-        style={{
-          height: responsiveHeight(30),
-          width: responsiveWidth(90),
-          borderRadius: 10,
-          overflow: 'hidden',
-          alignSelf: 'center',
-          marginTop: responsiveHeight(8),
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: Color.white,
+          paddingBottom: responsiveHeight(2),
         }}>
-        <MapView
-          style={{flex: 1}}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
-      </View>
-
-  
-
-      <View style={{width: responsiveWidth(90), alignSelf: 'center',backgroundColor:'red'}}>
-        <View style={{flexDirection: 'row', marginTop: 30}}>
-          <View style={{alignItems: 'center', gap: 10}}>
-            <Ionicons
-              name="location-outline"
-              color={'#fb8456'}
-              size={responsiveHeight(5)}
-            />
-            <View style={{gap: 8}}>
-              <View style={currentStyles.distance}></View>
-              <View style={currentStyles.distance}></View>
-              <View style={currentStyles.distance}></View>
+        <View style={{padding: responsiveHeight(2)}}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{marginTop: responsiveHeight(1)}}>
+              <Ionicons
+                name="location-outline"
+                color={'#fb8456'}
+                size={responsiveHeight(5)}
+              />
             </View>
-            <Ionicons
-              name="location-outline"
-              color={'#fb8456'}
-              size={responsiveHeight(5)}
+            <GetSearchedLocation
+              placeholder="Your Pickup Location"
+              onLocationSelect={location => setPickupLocation(location)}
             />
           </View>
-
-          <View style={{flex: 1}}>
-            {/* <Input
-              flexGrow={1}
-              brdrWidth={0.1}
-              brbtmRightRds={30}
-              elevation={0.01}
-              bgColor={'#F3EDED'}
-              width={'100%'}
-              placeholder={'your pickup location'}
-              placeHolderColor={'#686666'}
-            /> */}
-             <GooglePlacesAutocomplete
-      placeholder='your pickup location'
-      //  keyboardShouldPersistTaps="handled" // Keeps list clickable after keyboard dismissal
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      
-      styles={{
-        textInput: {
-          backgroundColor: '#F3EDED',
-          borderRadius: 30,
-          paddingHorizontal:20,
-          // paddingVertical:20,
-          height:responsiveHeight(5.9)
-        },
-        
-        listView: {
-          backgroundColor: '#FFF', // Background color of suggestion box
-          borderRadius: 10, // Rounded corners
-          marginHorizontal: 10, // Optional: Add some spacing from the screen edges
-          elevation: 5, // For shadow on Android
-          shadowColor: '#000', // For shadow on iOS
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          zIndex:20
-        },
-        container:{
-          height:responsiveHeight(18.5),
-          zIndex:20
-        }
-      }}
-      query={{
-        key: 'AIzaSyCxPKJMEW5ko5BoDLW5F3K4bzs-faQaHU8',
-        language: 'en',
-      }}
-    />
-            <View style={{}}>
-            <GooglePlacesAutocomplete
-      placeholder='your pickup location'
-      //  keyboardShouldPersistTaps="handled" // Keeps list clickable after keyboard dismissal
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      
-      styles={{
-        textInput: {
-          backgroundColor: '#F3EDED',
-          borderRadius: 30,
-          paddingHorizontal:20,
-          // paddingVertical:20,
-          height:responsiveHeight(5.9)
-        },
-        
-        listView: {
-          backgroundColor: '#FFF', // Background color of suggestion box
-          borderRadius: 10, // Rounded corners
-          marginHorizontal: 10, // Optional: Add some spacing from the screen edges
-          elevation: 5, // For shadow on Android
-          shadowColor: '#000', // For shadow on iOS
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          zIndex:20
-
-        },
-        container:{
-          maxHeight:responsiveHeight(20.5)
-        }
-      }}
-      query={{
-        key: 'AIzaSyCxPKJMEW5ko5BoDLW5F3K4bzs-faQaHU8',
-        language: 'en',
-      }}
-    />
+          <View
+            style={{
+              gap: 8,
+              marginLeft: responsiveHeight(2.2),
+              bottom: responsiveHeight(0.01),
+            }}>
+            <View style={styles.distance}></View>
+            <View style={styles.distance}></View>
+            <View style={styles.distance}></View>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{marginTop: responsiveHeight(1)}}>
+              <Ionicons
+                name="location-outline"
+                color={'#fb8456'}
+                size={responsiveHeight(5)}
+              />
             </View>
+            <GetSearchedLocation
+              placeholder="Your Drop Off Location"
+              onLocationSelect={handlePickupLocationSelect}
+            />
+          </View>
+          <View style={{marginTop: responsiveHeight(2)}}>
+            <GetSearchedLocation
+              placeholder="Add Checkpoints"
+              onLocationSelect={location => setSelectedLocation(location)}
+            />
+
+            <TouchableOpacity
+              onPress={addCheckpoint}
+              style={{
+                height: responsiveHeight(4.5),
+                width: responsiveWidth(16),
+                top: responsiveHeight(1.2),
+                alignSelf: 'center',
+                borderRadius: responsiveHeight(2),
+                zIndex: 20,
+                position: 'absolute',
+                right: 10,
+                backgroundColor: Color.themeColor,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  color: Color.white,
+                  fontWeight: '500',
+                  fontSize: responsiveFontSize(2),
+                }}>
+                Add
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {checkPoints?.map((area, index) => {
+            return (
+              <View
+                style={{
+                  marginTop: responsiveHeight(1),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <Text
+                  style={{
+                    fontWeight: '600',
+                    width: '85%',
+                    fontSize: responsiveFontSize(2),
+                  }}>
+                  CheckPoint{index + 1}:{'  '}
+                  <Text
+                    style={{
+                      fontWeight: '400',
+                      fontSize: responsiveFontSize(2),
+                      alignSelf: 'center',
+                    }}>
+                    {area.locationName}
+                  </Text>
+                </Text>
+                <TouchableOpacity onPress={() => handleDelete(index)}>
+                  <FontAwesome6 name="trash" size={25} color={Color.black} />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+          <View style={{alignItems: 'center', marginTop: responsiveHeight(2)}}>
+            <Input
+              gap={2}
+              bgColor={'#fff'}
+              width={'100%'}
+              keyboardType={'numeric'}
+              handleInputChange={radius => setRadius(radius)}
+              placeholder={'Select Your Radius In Meters'}
+              placeHolderColor={'#bbb7b7'}
+            />
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <DatePickerComp
+              headingMrgn={0.1}
+              height={responsiveHeight(6.3)}
+              width={responsiveWidth(92)}
+              mrgnTop={responsiveHeight(0.01)}
+              bgColor={'#fff'}
+              onDateChange={date => setSelectedDate(date)}
+              txtColor={'#000'}
+              placeHolder={
+                selectedDate
+                  ? moment(selectedDate).format('hh:mm A')
+                  : 'Select Your Ride Start Time'
+              }
+              mode={'time'}
+            />
           </View>
         </View>
-      </View>
-     
-      {/* <Button txtColor={'#6b4132'} borderRadius={50}  height={responsiveHeight(5)} title={'fb8456'} color={'#FB8456'}  width={responsiveWidth(50)}/> */}
 
-      <TouchableOpacity style={{width:responsiveWidth(42),height:responsiveHeight(6),borderRadius:30,backgroundColor:'#FB8456',justifyContent:'center',alignItems:'center',alignSelf:'center',marginTop:responsiveHeight(5)}}>
-        <Text style={{color:'#6B4132',fontSize:18,fontWeight:'bold'}}>add route</Text>
-      </TouchableOpacity>
+        <View
+          style={{
+            height: responsiveHeight(30),
+            width: responsiveWidth(90),
+            borderRadius: 10,
+            overflow: 'hidden',
+            alignSelf: 'center',
+            marginTop: responsiveHeight(1),
+          }}>
+          <MapView
+            ref={mapRef}
+            style={{flex: 1}}
+            initialRegion={{
+              latitude: pickupLocation
+                ? parseFloat(pickupLocation.latitude)
+                : 37.78825,
+              longitude: pickupLocation
+                ? parseFloat(pickupLocation.longitude)
+                : -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}>
+            {pickupLocation && dropoffLocation && (
+              <MapViewDirections
+                origin={{
+                  latitude: parseFloat(pickupLocation.latitude),
+                  longitude: parseFloat(pickupLocation.longitude),
+                }}
+                strokeColor="red"
+                strokeWidth={4}
+                destination={{
+                  latitude: parseFloat(dropoffLocation.latitude),
+                  longitude: parseFloat(dropoffLocation.longitude),
+                }}
+                apikey={Apikey}
+              />
+            )}
+
+            {/* Corrected Markers */}
+            {pickupLocation && dropoffLocation && (
+              <>
+                <Marker
+                  pinColor="red"
+                  coordinate={{
+                    latitude: pickupLocation.latitude, // Ensure this exists
+                    longitude: pickupLocation.longitude,
+                  }}
+                />
+                <Marker
+                  pinColor="red"
+                  coordinate={{
+                    latitude: dropoffLocation.latitude, // Ensure this exists
+                    longitude: dropoffLocation.longitude,
+                  }}
+                />
+              </>
+            )}
+
+            {/* Checkpoints Mapping */}
+            {checkPoints?.map((area, index) => (
+              <Marker
+                key={index} // Always add a unique key when mapping over elements
+                title={`Checkpoint ${index + 1}: ${area?.locationName}`}
+                pinColor="green"
+                coordinate={{
+                  latitude: area.latitude,
+                  longitude: area.longitude,
+                }}
+              />
+            ))}
+          </MapView>
+        </View>
+        <Button
+          marginTop={responsiveHeight(3)}
+          alignSelf={'center'}
+          txtColor={Color.white}
+          handleOnPress={() => setRouteHandler()}
+          styleName={'plainButton'}
+          title={
+            isLoading ? (
+              <ActivityIndicator size={25} color={Color.white} />
+            ) : (
+              'Add Route'
+            )
+          }
+          padding={responsiveHeight(2)}
+          color={'#FB8456'}
+        />
+      </ScrollView>
     </View>
   );
 };
 
 export default RoadWay;
 
-const currentStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   distance: {
     height: responsiveHeight(2.6),
     width: responsiveWidth(1),
     backgroundColor: '#bebebe',
   },
 });
+
+// import {View, Text, ScrollView, LogBox} from 'react-native';
+// import React from 'react';
+// import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+// import {Color} from '../../assets/Utils';
+// import {Apikey} from '../../assets/ApiKey';
+
+// const RoadWay = () => {
+//   return (
+//     <ScrollView
+//       // nestedScrollEnabled={true}
+//       // keyboardShouldPersistTaps="handled"
+//       contentContainerStyle={{flexGrow: 1, backgroundColor: Color.black}}>
+//       <GooglePlacesAutocomplete
+//         placeholder="Search"
+//         onPress={(data, details = null) => console.log(data, details)}
+//         query={{
+//           key: Apikey,
+//           language: 'en',
+//         }}
+//       />
+//     </ScrollView>
+//   );
+// };
+
+// export default RoadWay;

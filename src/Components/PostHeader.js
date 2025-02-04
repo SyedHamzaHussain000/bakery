@@ -45,8 +45,8 @@ const PostHeader = ({handleProfilePress,prevResponse}) => {
         }}>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={handleProfilePress} style={{}}>
-            <Image 
-            // source={Images.profile} 
+            <Image
+            // source={Images.profile}
             style={userData?.profilePic ? {height: responsiveHeight(9.8),width:responsiveWidth(18.4),borderRadius:responsiveHeight(0.5),marginRight:responsiveHeight(1)}:{
               height: responsiveHeight(9),width:responsiveWidth(17.5),borderRadius:responsiveHeight(0.5),marginRight:responsiveHeight(1)
             }}

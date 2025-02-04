@@ -301,7 +301,6 @@ const EditProfile = ({navigation, route}) => {
           </>
         )}
 
-        {userType !== 'Rider' && (
           <View style={{gap: 10}}>
             <Text style={myStyles.textStyle}>Choose Location</Text>
             <TouchableOpacity
@@ -350,7 +349,6 @@ const EditProfile = ({navigation, route}) => {
               </TouchableOpacity>
             </TouchableOpacity>
           </View>
-        )}
 
         <View style={{marginTop: 10}}>
           <Button

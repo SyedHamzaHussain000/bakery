@@ -1,14 +1,15 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import RoutesScreen from '../screens/RiderScreens/RoutesScreen';
-import NeighbourHood from '../screens/RiderScreens/NeighbourHood';
+// import NeighbourHood from '../screens/RiderScreens/NeighbourHood';
 import Bakeries from '../screens/RiderScreens/Bakeries';
-import {useState} from 'react';
 import {Text, View} from 'react-native';
 import {Color} from '../assets/Utils';
 import {
   bakeryActive,
   bakeryIcon,
+  homeBlack,
+  homeWhite,
   menu,
   menuActive,
   routesActive,
@@ -24,14 +25,19 @@ import RiderNotification from '../screens/RiderScreens/RiderNotification';
 import NotifyDetailsRider from '../screens/RiderScreens/NotifyDetailsRider';
 import RoadWay from '../screens/RiderScreens/RoadWay';
 import {useSelector} from 'react-redux';
+import ViewRouteDetails from '../screens/common/ViewRouteDetails';
+import Home from '../screens/RiderScreens/Home';
+import {
+  responsiveHeight,
+  responsiveWidth,
+} from '../assets/Responsive_Dimensions';
+import NeighbourHood from '../screens/SubscriberScrees/NeighbourHood';
+import ChooseLocation from '../screens/common/ChooseLocation';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
-  const [activeTab, setActiveTab] = useState('');
-
-  console.log('activeTab', activeTab);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -48,29 +54,67 @@ function BottomTabs() {
           tabBarIcon: ({focused}) => (
             <View
               style={{
-                flexDirection: focused ? 'row' : 'column',
-                alignItems: focused ? 'center' : 'center',
-                gap: focused ? 10 : null,
+                alignItems: 'center',
+                // gap: focused ? 10 : null,
+                width: responsiveWidth(22),
                 backgroundColor: focused ? Color.themeColor : null,
-                justifyContent: 'center',
                 borderTopLeftRadius: 11,
                 borderTopRightRadius: 11,
                 borderBottomLeftRadius: 11,
+                // padding: 10,
+                padding: responsiveHeight(0.5),
                 marginTop: 15,
-                padding: 10,
               }}>
-              <SvgIcons
-                height={'30'}
-                width={'30'}
-                xml={focused ? routesActive : routesIcon}
-              />
-              <Text
-                style={{
-                  color: focused ? Color.white : Color.black,
-                  fontSize: 14,
-                }}>
-                Routes
-              </Text>
+              <>
+                <SvgIcons
+                  xml={focused ? homeWhite : homeBlack}
+                  height={'30'}
+                  width={'30'}
+                />
+                <Text
+                  style={{
+                    color: focused ? Color.white : Color.black,
+                    fontSize: 12,
+                  }}>
+                  Home
+                </Text>
+              </>
+            </View>
+          ),
+          tabBarLabel: '',
+        }}
+        name="Home"
+        component={Home}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({focused}) => (
+            <View
+              style={{
+                alignItems: 'center',
+                width: responsiveWidth(25),
+                backgroundColor: focused ? Color.themeColor : null,
+                borderTopLeftRadius: 11,
+                borderTopRightRadius: 11,
+                borderBottomLeftRadius: 11,
+                padding: responsiveHeight(0.5),
+
+                marginTop: 15,
+              }}>
+              <>
+                <SvgIcons
+                  xml={focused ? routesActive : routesIcon}
+                  height={'30'}
+                  width={'30'}
+                />
+                <Text
+                  style={{
+                    color: focused ? Color.white : Color.black,
+                    fontSize: 12,
+                  }}>
+                  Routes
+                </Text>
+              </>
             </View>
           ),
           tabBarLabel: '',
@@ -83,37 +127,29 @@ function BottomTabs() {
           tabBarIcon: ({focused}) => (
             <View
               style={{
-                flexDirection: focused ? 'row' : 'column',
-                alignItems: focused ? 'center' : 'center',
-                gap: focused ? 10 : null,
+                alignItems: 'center',
+                width: responsiveWidth(25),
                 backgroundColor: focused ? Color.themeColor : null,
                 borderTopLeftRadius: 11,
                 borderTopRightRadius: 11,
                 borderBottomLeftRadius: 11,
-                padding: 10,
+                padding: responsiveHeight(0.5),
                 marginTop: 15,
               }}>
-              <SvgIcons
-                height={'25'}
-                width={'25'}
-                xml={focused ? menuActive : menu}
-              />
-              <View style={{alignItems: 'center'}}>
+              <>
+                <SvgIcons
+                  xml={focused ? menuActive : menu}
+                  height={'30'}
+                  width={'30'}
+                />
                 <Text
                   style={{
                     color: focused ? Color.white : Color.black,
-                    fontSize: 10,
+                    fontSize: 12,
                   }}>
-                  NEIGHBOURHOOD
+                  NeighbourHood
                 </Text>
-                <Text
-                  style={{
-                    color: focused ? Color.white : Color.black,
-                    fontSize: 10,
-                  }}>
-                  WALL
-                </Text>
-              </View>
+              </>
             </View>
           ),
           tabBarLabel: '',
@@ -126,29 +162,29 @@ function BottomTabs() {
           tabBarIcon: ({focused}) => (
             <View
               style={{
-                flexDirection: focused ? 'row' : 'column',
-                alignItems: focused ? 'center' : 'center',
-                gap: focused ? 10 : null,
-                marginTop: 15,
-                padding: 10,
+                alignItems: 'center',
+                width: responsiveWidth(25),
+                backgroundColor: focused ? Color.themeColor : null,
                 borderTopLeftRadius: 11,
                 borderTopRightRadius: 11,
                 borderBottomLeftRadius: 11,
-                backgroundColor: focused ? Color.themeColor : null,
-                justifyContent: 'center',
+                padding: responsiveHeight(0.5),
+                marginTop: 15,
               }}>
-              <SvgIcons
-                height={'30'}
-                width={'30'}
-                xml={focused ? bakeryActive : bakeryIcon}
-              />
-              <Text
-                style={{
-                  color: focused ? Color.white : Color.black,
-                  fontSize: 12,
-                }}>
-                BAKERY
-              </Text>
+              <>
+                <SvgIcons
+                  xml={focused ? bakeryActive : bakeryIcon}
+                  height={'30'}
+                  width={'30'}
+                />
+                <Text
+                  style={{
+                    color: focused ? Color.white : Color.black,
+                    fontSize: 12,
+                  }}>
+                  Bakeries
+                </Text>
+              </>
             </View>
           ),
           tabBarLabel: '',
@@ -167,9 +203,9 @@ export function RiderStack() {
   return (
     <Stack.Navigator
       // initialRouteName={updatedProfile === 0 ?  'EditProfile' : 'BottomTabs'}
-      initialRouteName='BottomTabs'
+      initialRouteName="BottomTabs"
       screenOptions={{headerShown: false}}>
-      {updatedProfile == 0 ? (
+      {updatedProfile === 0 ? (
         <>
           <Stack.Screen name="EditProfile" component={EditProfile} />
         </>
@@ -180,8 +216,9 @@ export function RiderStack() {
           <Stack.Screen name="OrderComplete" component={OrderComplete} />
           <Stack.Screen name="Map" component={Map} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
-
+          <Stack.Screen name="ViewRouteDetails" component={ViewRouteDetails} />
           <Stack.Screen name="RoadWay" component={RoadWay} />
+          <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
           <Stack.Screen
             name="NotificationDetails"
             component={NotifyDetailsRider}

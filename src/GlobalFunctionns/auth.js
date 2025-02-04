@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { baseUrl } from '../baseUrl';
-import { UserLogin } from '../redux/Slices';
+import {baseUrl} from '../baseUrl';
+import {UserLogin} from '../redux/Slices';
 
 export const registeration = async (
   name,
@@ -81,7 +81,7 @@ export const handleLogin = (email, password, dispatch, userType) => {
 //   if (userType !== 'Owner') {
 //     data.append('state', state ? state : '');
 //     data.append('zipCode', zipCode ? zipCode : '');
-//   } 
+//   }
 //   else if (userType === 'Subscriber') {
 //     alert('hello world')
 //     // data.append('Longtitude', JS
@@ -136,7 +136,11 @@ export const EditProfileHandler = async (
   latLng,
   token,
 ) => {
-  console.log('userType and latLng:================>>>>>>>>>>>>>', userType, latLng);
+  console.log(
+    'userType and latLng:================>>>>>>>>>>>>>',
+    userType,
+    latLng,
+  );
   let data = new FormData();
   data.append('userName', username);
   data.append('phoneNumber', phone);
@@ -147,19 +151,19 @@ export const EditProfileHandler = async (
     name: 'Profile',
     type: mime,
   });
-  if (userType !== 'Rider' && latLng?.latitude && latLng?.longitude) {
-    data.append('Latitude', latLng.latitude);
-    data.append('Longtitude', latLng.longitude);
-  }
+  data.append('Latitude', latLng.latitude);
+  data.append('Longtitude', latLng.longitude);
   if (userType === 'Subscriber' || 'Rider') {
     data.append('state', state);
     data.append('zipCode', zipCode);
-  } if (userType === 'Owner') {
+  }
+  if (userType === 'Owner') {
     data.append('bakeryName', bakeryName);
     data.append('bakeryWebsite', bakeryWeb);
     data.append('businessHours', bakeryHours);
     data.append('categories', selectedCategories);
   }
+  console.log('complete data', data);
   let config = {
     method: 'post',
     maxBodyLength: Infinity,

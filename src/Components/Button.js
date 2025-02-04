@@ -22,6 +22,7 @@ const Button = ({
   styleName,
   padding,
   disable,
+  alignSelf,
 }) => {
   return (
     <TouchableOpacity
@@ -37,6 +38,7 @@ const Button = ({
           marginBottom: marginBottom,
           width: width ? width : responsiveWidth(90),
           marginTop: marginTop,
+          alignSelf:alignSelf ? alignSelf : null,
           alignItems: 'center',
         },
       ]}>

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Color} from '../assets/Utils';
 import {styles} from '../Styles';
 import {
@@ -31,16 +31,16 @@ const Input = ({
   bgColor,
   brdrWidth,
   flexGrow,
+  gap,
   secure,
 }) => {
-
-  const [passwordHidden,setPasswordHidden] = useState(true)
+  const [passwordHidden, setPasswordHidden] = useState(true);
   return (
     <View
       style={[
         null,
         {
-          gap: 10,
+          gap: gap ? gap : 10,
           width: width ? width : responsiveWidth(90),
           flexGrow: flexGrow,
         },
@@ -52,21 +52,24 @@ const Input = ({
       ) : null}
 
       {secure && (
-          <TouchableOpacity
-          onPress={()=>setPasswordHidden(!passwordHidden)}
-        style={{
-          position: 'absolute',
-          zIndex: 10,
-          right: 10,
-          height: '100%',
-          justifyContent: 'center',
-        }}>
-        <Ionicons name={passwordHidden ? "eye-off" : 'eye'} size={25} style={{}} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setPasswordHidden(!passwordHidden)}
+          style={{
+            position: 'absolute',
+            zIndex: 10,
+            right: 10,
+            height: '100%',
+            justifyContent: 'center',
+          }}>
+          <Ionicons
+            name={passwordHidden ? 'eye-off' : 'eye'}
+            size={25}
+            style={{}}
+          />
+        </TouchableOpacity>
       )}
-    
+
       <TextInput
-      
         keyboardType={keyboardType ? keyboardType : null}
         onChangeText={handleInputChange}
         multiline={multiline}

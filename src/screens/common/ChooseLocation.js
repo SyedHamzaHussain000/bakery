@@ -18,6 +18,7 @@ const ChooseLocation = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <MapView
+      mapType='terrain'
         ref={mapRef}
         style={styles.map}
         initialRegion={{

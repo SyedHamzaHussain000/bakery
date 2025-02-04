@@ -26,7 +26,7 @@ const Post = ({data, setUpdateLike}) => {
   const token = useSelector(state => state.user.token);
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [commentText, setCommentText] = useState('');
-  console.log('data._id', `${data.item._id}`);
+  console.log('data._id', `${data.item.postCreatorId.profilePic}`);
   const likePost = id => {
     let data = JSON.stringify({
       postId: id,
@@ -71,7 +71,7 @@ const Post = ({data, setUpdateLike}) => {
         <View>
           <Image
             style={{
-              height: responsiveHeight(4.9),
+              height: responsiveHeight(5.2),
               width: responsiveWidth(10.7),
               borderRadius: responsiveHeight(2.5),
               backgroundColor: 'gray',
@@ -121,7 +121,7 @@ const Post = ({data, setUpdateLike}) => {
         </Text>
         {data.item.PostImage && (
           <Image
-          resizeMode='stretch'
+            resizeMode="stretch"
             style={{width: '100%', aspectRatio: 1.3, borderRadius: 10}}
             source={{
               uri: `https://appsdemo.pro/Bakery/api/post/${data.item.PostImage}`,

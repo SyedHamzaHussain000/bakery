@@ -107,7 +107,6 @@ export const bookProducts = async (
   token,
   dispatch,
 ) => {
-
   let allSuccessful = true;
   for (const area of addToCartProducts) {
     // console.log('Booking product:', area._id);
@@ -125,7 +124,7 @@ export const bookProducts = async (
       'latitude',
       latitude,
       'longitude',
-      longitude
+      longitude,
     );
     const data = JSON.stringify({
       availabilty: area.availability,
@@ -471,7 +470,7 @@ export const getLocationName = async (latitude, longitude) => {
   const API_KEY = 'AIzaSyA8roKrUBUJzWBySsm9v5ig05B_wJNY2hE'; // Replace with your actual API key
   try {
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`,
     );
     const data = await response.json();
 
@@ -487,24 +486,178 @@ export const getLocationName = async (latitude, longitude) => {
   }
 };
 
+export const setRoutes = async (
+  checkPoints,
+  riderId,
+  startTime,
+  startLocationName,
+  startLocation,
+  endLocationName,
+  endLocation,
+  radius,
+  token,
+) => {
+  let data = JSON.stringify({
+    riderId: riderId,
+    startTime: startTime,
+    startLocationName: startLocationName,
+    startLocation: {
+      latitude: startLocation.latitude,
+      longitude: startLocation.longitude,
+    },
+    endLocationName: endLocationName,
+    endLocation: {
+      latitude: endLocation.latitude,
+      longitude: endLocation.longitude,
+    },
+    radius: radius,
+    checkPoints: checkPoints,
+  });
+  console.log('data====<<<<<<<<<<<<<<<', data);
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/addRoute`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  try {
+    const response = await axios.request(config);
+    console.log('response.data',response.data)
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateRoute = async (routeId, checkPointId, token) => {
+  let data = JSON.stringify({
+    routeId: routeId,
+    checkPointId: checkPointId,
+  });
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/updateRoute`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getNearbyBakeries = async (routeId, token) => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/getNearByBakeries?routeId=${routeId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRoutesByRadius = async token => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/getRoutesByRadius`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const res = await axios.request(config);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllRoutes = async token => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/getAllRoutes`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getRouteById = async token => {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/getRouteById`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteRouteById = async (token, id) => {
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `${baseUrl}rider/deleteRoute?routeId=${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 // Function to get the current location (latitude, longitude, and location name)
 export const getCurrentLocationHandler = async () => {
   try {
     // Wrapping Geolocation.getCurrentPosition in a promise to use with async/await
     const position = await new Promise((resolve, reject) => {
-      Geolocation.getCurrentPosition(
-        resolve,
-        reject,
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000 }
-      );
+      Geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 1000,
+      });
     });
 
-    const { latitude, longitude } = position.coords;
+    const {latitude, longitude} = position.coords;
 
     // Get the location name based on latitude and longitude
     const location = await getLocationName(latitude, longitude);
 
-    return { latitude, longitude, location };
+    return {latitude, longitude, location};
   } catch (error) {
     console.error('Error getting location:', error.message);
     throw error; // Propagate the error for the caller to handle

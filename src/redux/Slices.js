@@ -10,6 +10,13 @@ const initialState = {
   token: '',
   isLoading: false,
   addToCartProducts: [],
+  startRide:true,
+  nextCheckpoint:false,
+  reachedDestination:false,
+  checkpointId:null,
+  startRoute: {},
+  endRoute: {},
+  currentLocation: {},
   pickupLocation: {},
   dropoffLocation: {},
   error: null,
@@ -59,11 +66,33 @@ export const authSlice = createSlice({
     setUserData: (state, action) => {
       state.userData = action.payload;
     },
+    setStartRide: (state, action) => {
+      state.startRide = action.payload;
+    },
+    setNextCheckpoint: (state, action) => {
+      state.nextCheckpoint = action.payload;
+    },
+    setReachedDestination: (state, action) => {
+      state.reachedDestination = action.payload;
+    },
+    setCheckPointId: (state, action) => {
+      state.checkpointId = action.payload;
+    },
+    setStartRoute: (state, action) => {
+      state.startRoute = action.payload;
+    },
+    setEndRoute: (state, action) => {
+      state.endRoute = action.payload;
+    },
     setUpdatedProfile: (state, action) => {
       state.updatedProfile = action.payload;
     },
     setProfileData: (state, action) => {
       state.userData = action.payload;
+    },
+    setCurrentLocation: (state, action) => {
+      console.log('action.payload', action.payload);
+      state.currentLocation = action.payload;
     },
     setPickupLocation: (state, action) => {
       state.pickupLocation = action.payload;
@@ -103,6 +132,13 @@ export const {
   setProfileData,
   clearUserData,
   setUpdatedProfile,
+  setStartRoute,
+  setEndRoute,
+  setStartRide,
+  setNextCheckpoint,
+  setReachedDestination,
+  setCheckPointId,
+  setCurrentLocation,
   setPickupLocation,
   setDropoffLocation,
 } = authSlice.actions;

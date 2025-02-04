@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
   headerText: {
     fontSize: 30,
@@ -173,7 +173,6 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 3.84,
     elevation: 2,
-    backgroundColor: 'white',
     borderColor: '#D4D4D4',
     borderWidth: 1,
     paddingHorizontal: 20,

@@ -10,7 +10,6 @@ import React, {useEffect, useState} from 'react';
 import SvgIcons from '../../Components/SvgIcons';
 import {Notification} from '../../assets/icons';
 import {Color} from '../../assets/Utils';
-import {Images} from '../../assets';
 import PostHeader from '../../Components/PostHeader';
 import Post from '../../Components/Post';
 import {useSelector} from 'react-redux';
@@ -19,6 +18,8 @@ import {responsiveFontSize} from '../../assets/Responsive_Dimensions';
 const NeighbourHood = ({navigation}) => {
   const token = useSelector(state => state.user.token);
   const [isLoading, setIsLoading] = useState(false);
+  const {userType} = useSelector(state => state.user);
+  console.log('userdata===>>>',userType);
   const [postDetails, setPostDetails] = useState([]);
   const [postResponse, setPostResponse] = useState(null);
   const [updateLike, setUpdateLike] = useState();
@@ -51,7 +52,7 @@ const NeighbourHood = ({navigation}) => {
 
       <PostHeader
         prevResponse={data => setPostResponse(data.status)}
-        handleProfilePress={() => navigation.navigate('UserProfile')}
+        handleProfilePress={() => navigation.navigate(userType === 'Rider' ? 'EditProfile' : 'UserProfile')}
       />
       {isLoading && (
         <View
